@@ -5,7 +5,7 @@ import { AuthContext } from "./context/AuthContext";
 
 function Login() {
   const [formData, setFormData] = useState({ username: "", password: "" });
-  const [allPlants, setAllPlants] = useState([]); // store everything for filtering
+  const [allDrinks, setAllDrinks] = useState([]); // store everything for filtering
   const [error, setError] = useState("");
 
   const { token } = useContext(AuthContext);
@@ -16,16 +16,16 @@ function Login() {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // data fetching - GET all plants (GET is the default method)
+  // data fetching - GET all drinks (GET is the default method)
   useEffect(() => {
-    fetch("http://localhost:5000/api/plants")
+    fetch("http://localhost:5000/api/drinks")
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {
-          setAllPlants(data);
+          setAllDrinks(data);
         }
       })
-      .catch((err) => console.error("Error fetching public plants:", err));
+      .catch((err) => console.error("Error fetching public drinks:", err));
   }, []);
 
   useEffect(() => {
@@ -64,9 +64,9 @@ function Login() {
   }
 
   // search logic
-  const filteredPlants = allPlants
-    .filter((plant) => {
-      return (plant.common_name || "")
+  const filteredDrinks = allDrinks
+    .filter((drink) => {
+      return (drink.common_name || "")
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
     })
@@ -95,7 +95,7 @@ function Login() {
 
           {error && <div style={styles.errorBanner}>{error}</div>}
 
-          <form onSubmit={handleSubmit} className="plant-form">
+          <form onSubmit={handleSubmit} className="drink-form">
             <label>Username</label>
             <input
               name="username"
@@ -132,10 +132,10 @@ function Login() {
       <div className="card" style={styles.searchCard}>
         <div style={styles.searchRow}>
           <div style={styles.searchInputGroup}>
-            <label style={styles.searchLabel}>Search by Plant Name</label>
+            <label style={styles.searchLabel}>Search by Drink Name</label>
             <input
               type="text"
-              placeholder="Start typing a plant name (e.g. 'Janet' or 'Lily')..."
+              placeholder="Start typing a drink name (e.g. 'Cuba Libre' or 'Paloma')..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               style={styles.searchInput}
@@ -150,20 +150,20 @@ function Login() {
 
       {/* 5-col grid (top 10 results) */}
       <div style={styles.gridWrapper}>
-        <h2 style={styles.previewTitle}>PLANTS COLLECTION - PREVIEW</h2>
+        <h2 style={styles.previewTitle}>DRINKS DATABASE - PREVIEW</h2>
 
-        <div className="plant-grid" style={styles.plantGrid}>
-          {filteredPlants.length > 0 ? (
-            filteredPlants.map((plant) => (
-              <div key={plant._id} className="plant-card">
+        <div className="drink-grid" style={styles.drinkGrid}>
+          {filteredDrinks.length > 0 ? (
+            filteredDrinks.map((drink) => (
+              <div key={drink._id} className="drink-card">
                 <div
                   className="image-container"
                   style={styles.cardImageContainer}
                 >
-                  {plant.img_url ? (
+                  {drink.img_url ? (
                     <img
-                      src={getCleanImageUrl(plant.img_url)}
-                      alt={plant.common_name}
+                      src={getCleanImageUrl(drink.img_url)}
+                      alt={drink.common_name}
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src =
@@ -175,10 +175,10 @@ function Login() {
                   )}
                 </div>
                 <div className="card-details" style={styles.cardDetailsText}>
-                  <h3 style={styles.cardTitle}>{plant.common_name}</h3>
+                  <h3 style={styles.cardTitle}>{drink.common_name}</h3>
                   <p style={styles.cardFamily}>
                     <small>
-                      <strong>{plant.family}</strong>
+                      <strong>{drink.family}</strong>
                     </small>
                   </p>
                 </div>
@@ -186,7 +186,7 @@ function Login() {
             ))
           ) : (
             <div style={styles.noResults}>
-              <p>No plants match your search criteria.</p>
+              <p>No drinks match your search criteria.</p>
             </div>
           )}
         </div>
@@ -286,7 +286,7 @@ const styles = {
     borderBottom: "2px solid #a5d6a7",
     paddingBottom: "10px",
   },
-  plantGrid: {
+  drinkGrid: {
     display: "grid",
     gridTemplateColumns: "repeat(5, 1fr)",
     gap: "20px",

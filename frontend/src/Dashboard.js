@@ -3,34 +3,64 @@ import "./App.css";
 import { AuthContext } from "./context/AuthContext";
 
 function Dashboard() {
-  const [plants, setPlants] = useState([]);
+  const [drinks, setDrinks] = useState([]);
   const { token, user, logout } = useContext(AuthContext);
 
-  // local state for the form, match models/Plant.js and database
+  // local state for the form, match models/Drink.js and database
   const [formData, setFormData] = useState({
-    common_name: "",
-    family: "",
-    categories: "",
-    origin: "",
-    climate: "",
-    img_url: "",
+    strDrink: "",
+    strCategory: "",
+    strAlcoholic: "",
+    strGlass: "",
+    strInstructions: "",
+    strIngredient1: "",
+    strIngredient2: "",
+    strIngredient3: "",
+    strIngredient4: "",
+    strIngredient5: "",
+    strIngredient6: "",
+    strIngredient7: "",
+    strIngredient8: "",
+    strIngredient9: "",
+    strIngredient10: "",
+    strIngredient11: "",
+    strIngredient12: "",
+    strIngredient13: "",
+    strIngredient14: "",
+    strIngredient15: "",
+    strMeasure1: "",
+    strMeasure2: "",
+    strMeasure3: "",
+    strMeasure4: "",
+    strMeasure5: "",
+    strMeasure6: "",
+    strMeasure7: "",
+    strMeasure8: "",
+    strMeasure9: "",
+    strMeasure10: "",
+    strMeasure11: "",
+    strMeasure12: "",
+    strMeasure13: "",
+    strMeasure14: "",
+    strMeasure15: "",
+    strImageSource: "",
   });
 
   // initial load
-  // fetches only the plants belonging to the logged-in user.
+  // fetches only the drinks belonging to the logged-in user.
   useEffect(() => {
     if (!token) return;
 
-    fetch("http://localhost:5000/api/plants/my-plants", {
+    fetch("http://localhost:5000/api/drinks/my-drinks", {
       headers: {
         Authorization: token,
       },
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Could not retrieve your garden data.");
+        if (!res.ok) throw new Error("Could not retrieve your cocktail library.");
         return res.json();
       })
-      .then((data) => setPlants(data))
+      .then((data) => setDrinks(data))
       .catch((err) => console.error("Fetch error:", err));
   }, [token]);
 
@@ -40,11 +70,11 @@ function Dashboard() {
   }
 
   // create
-  // adds a new plant
+  // adds a new drink to the user's collection after validating the input and receiving a successful response from the server.
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:5000/api/plants", {
+      const res = await fetch("http://localhost:5000/api/drinks", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -54,21 +84,51 @@ function Dashboard() {
       });
 
       if (res.ok) {
-        const newPlant = await res.json();
+        const newDrink = await res.json();
         // update local state instantly for a smooth UI experience
-        setPlants([...plants, newPlant]);
+        setDrinks([...drinks, newDrink]);
         // reset the form
         setFormData({
-          common_name: "",
-          family: "",
-          categories: "",
-          origin: "",
-          climate: "",
-          img_url: "",
+          strDrink: "",
+          strCategory: "",
+          strAlcoholic: "",
+          strGlass: "",
+          strInstructions: "",
+          strIngredient1: "",
+          strIngredient2: "",
+          strIngredient3: "",
+          strIngredient4: "",
+          strIngredient5: "",
+          strIngredient6: "",
+          strIngredient7: "",
+          strIngredient8: "",
+          strIngredient9: "",
+          strIngredient10: "",
+          strIngredient11: "",
+          strIngredient12: "",
+          strIngredient13: "",
+          strIngredient14: "",
+          strIngredient15: "",
+          strMeasure1: "",
+          strMeasure2: "",
+          strMeasure3: "",
+          strMeasure4: "",
+          strMeasure5: "",
+          strMeasure6: "",
+          strMeasure7: "",
+          strMeasure8: "",
+          strMeasure9: "",
+          strMeasure10: "",
+          strMeasure11: "",
+          strMeasure12: "",
+          strMeasure13: "",
+          strMeasure14: "",
+          strMeasure15: "",
+          strImageSource: "",
         });
       } else {
         const errorData = await res.json();
-        alert(errorData.message || "Failed to add plant");
+        alert(errorData.message || "Failed to add drink");
       }
     } catch (err) {
       console.error("Submission error:", err);
@@ -76,10 +136,10 @@ function Dashboard() {
   }
 
   // delete
-  // removes a plant after ownership verification on the server.
+  // removes a drink after ownership verification on the server.
   async function handleDelete(id) {
     try {
-      const res = await fetch(`http://localhost:5000/api/plants/${id}`, {
+      const res = await fetch(`http://localhost:5000/api/drinks/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: token,
@@ -87,7 +147,7 @@ function Dashboard() {
       });
 
       if (res.ok) {
-        setPlants(plants.filter((p) => p._id !== id));
+        setDrinks(drinks.filter((d) => d._id !== id));
       } else {
         alert(
           "Delete failed. You might not have permission to remove this item.",
@@ -117,7 +177,7 @@ function Dashboard() {
     <div className="page-container">
       <header className="main-header" style={styles.header}>
         <div>
-          <h1>Plant Collection Dashboard</h1>
+          <h1>Drink Library</h1>
           {user && (
             <h3 style={styles.welcomeText}>Welcome back, {user.username}!</h3>
           )}
@@ -134,8 +194,8 @@ function Dashboard() {
       <div className="content-wrapper">
         <div className="left-panel">
           <div className="card">
-            <h3>Add New Plant</h3>
-            <form onSubmit={handleSubmit} className="plant-form">
+            <h3>Add New Drink</h3>
+            <form onSubmit={handleSubmit} className="drink-form">
               <label>Common Name</label>
               <input
                 name="common_name"
@@ -191,16 +251,16 @@ function Dashboard() {
         </div>
 
         <div className="right-panel">
-          <h2 style={styles.gardenTitle}>My Garden ({plants.length} Plants)</h2>
+          <h2 style={styles.gardenTitle}>My Cocktail Library ({drinks.length} Cocktails)</h2>
 
-          <div className="plant-grid">
-            {plants.map((plant) => (
-              <div key={plant._id} className="plant-card">
+          <div className="drink-grid">
+            {drinks.map((drink) => (
+              <div key={drink._id} className="drink-card">
                 <div className="image-container">
-                  {plant.img_url ? (
+                  {drink.img_url ? (
                     <img
-                      src={getCleanImageUrl(plant.img_url)}
-                      alt={plant.common_name}
+                      src={getCleanImageUrl(drink.img_url)}
+                      alt={drink.common_name}
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src =
@@ -217,22 +277,22 @@ function Dashboard() {
                   )}
                 </div>
                 <div className="card-details">
-                  <h3>{plant.common_name || "Unnamed Plant"}</h3>
+                  <h3>{drink.common_name || "Unnamed Cocktail"}</h3>
                   <p>
-                    <strong>Family:</strong> {plant.family || "N/A"}
+                    <strong>Family:</strong> {drink.family || "N/A"}
                   </p>
                   <p>
-                    <strong>Category:</strong> {plant.categories || "N/A"}
+                    <strong>Category:</strong> {drink.categories || "N/A"}
                   </p>
                   <p>
-                    <small>Origin: {plant.origin || "N/A"}</small>
+                    <small>Origin: {drink.origin || "N/A"}</small>
                   </p>
                   <p>
-                    <small>Climate: {plant.climate || "N/A"}</small>
+                    <small>Climate: {drink.climate || "N/A"}</small>
                   </p>
                   <button
                     className="delete-btn"
-                    onClick={() => handleDelete(plant._id)}
+                    onClick={() => handleDelete(drink._id)}
                   >
                     Delete
                   </button>
@@ -240,11 +300,10 @@ function Dashboard() {
               </div>
             ))}
 
-            {plants.length === 0 && (
+            {drinks.length === 0 && (
               <div style={styles.emptyMessage}>
                 <p>
-                  Your garden is currently empty. Add your first plant using the
-                  form on the left!
+                  Your cocktail library is currently empty. Add a cocktail using the form on the left!
                 </p>
               </div>
             )}
