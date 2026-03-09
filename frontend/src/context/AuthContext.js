@@ -4,48 +4,49 @@ import { createContext, useEffect, useState } from "react";
 // create the Context object to be consumed by other components
 export const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
-  // initialize state directly from localStorage
-  // this ensures that on page refresh, the 'token' is NOT null
-  // prevents the ProtectedRoute from redirecting to Login
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
-  const [user, setUser] = useState(null);
+export function AuthProvider({children}) {
+    //initialize state from localstorage
+    //on refresh: the 'token' is NOT null
+    //prevents protectedroute from redirecting to login
 
-  // useEffect runs whenever the token changes (login, logout, or initial load)
-  useEffect(() => {
-    if (token) {
-      try {
-        // decode the JWT to get user details (like username or id)
-        const decoded = jwtDecode(token);
-        setUser(decoded);
-      } catch (err) {
-        console.error("Token is invalid or corrupted:", err);
-        logout(); // wipe storage if the token is bad
-      }
-    } else {
-      setUser(null);
+    const [token,setToken] = useState(localStorage.getItem("token") || null);
+    const [user, setUser] = useState(null);
+
+    useEffect(()=> {
+        if (token){
+            try {
+                //decode JWT to get user details like username or password
+                const decoded = jwtDecode(token);
+                setUser(decoded);
+            } catch (err) {
+                console.error("Token is invalid or corrupted", err);
+                logout();
+            }
+        } else {
+            setUser(null);
+        }
+    }, [token]);
+
+    function login(newToken) {
+        //save token to browser memory
+        localStorage.setItem("token", newToken);
+        //update state to trigger re-render
+        setToken(newToken);
     }
-  }, [token]);
 
-  // function to handle login
-  function login(newToken) {
-    localStorage.setItem("token", newToken); // save to browser memory
-    setToken(newToken); // update state to trigger re-renders
-  }
+    //handle Logout function
+    function logout() {
+        localStorage.removeItem("token"); //remove from browser memory
+        setToken(null); //reset state
+        setUser(null);
+    }
 
-  // function to handle logout
-  function logout() {
-    localStorage.removeItem("token"); // remove from browser memory
-    setToken(null); // reset state
-    setUser(null);
-  }
+    return (
+        //provide 'token' and 'user' data
+        //and 'login' and 'logout' functions to the whole app
 
-  return (
-    // we provide 'token' and 'user' (data)
-    // and 'login' and 'logout' (functions) to the whole app
-
-    <AuthContext.Provider value={{ token, user, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+        <AuthContext.Provider value={{token, user, login, logout}}>
+            {children}
+        </AuthContext.Provider>
+    );
 }

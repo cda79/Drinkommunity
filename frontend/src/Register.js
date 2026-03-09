@@ -36,7 +36,7 @@ function Register() {
     <div className="auth-container" style={styles.container}>
       <div className="card" style={styles.card}>
         <h2 style={styles.title}>Create Account</h2>
-        <form onSubmit={handleSubmit} className="drink-form">
+        <form onSubmit={handleSubmit} className="plant-form">
           <label>Username</label>
           <input
             name="username"
