@@ -5,7 +5,7 @@ import { jwtDecode } from "jwt-decode"
 
 function Dashboard() {
   const [drinks, setDrinks] = useState([]);
-  const { token, user, logout } = useContext(AuthContext);
+  const { token, logout } = useContext(AuthContext);
 
   let username = "Guest";
   if (token) {
