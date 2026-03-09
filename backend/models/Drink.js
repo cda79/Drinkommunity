@@ -128,6 +128,12 @@ const DrinkSchema = new mongoose.Schema({
     type: String,
   },
 
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+
 });
 
 module.exports = mongoose.model("Drink", DrinkSchema);

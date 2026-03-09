@@ -1,10 +1,21 @@
 import { useContext, useEffect, useState } from "react";
 import "./App.css";
 import { AuthContext } from "./context/AuthContext";
+import { jwtDecode } from "jwt-decode"
 
 function Dashboard() {
   const [drinks, setDrinks] = useState([]);
   const { token, user, logout } = useContext(AuthContext);
+
+  let username = "Guest";
+  if (token) {
+    try {
+      const decoded = jwtDecode(token);
+      username = decoded.username;
+    } catch (error) {
+      console.error("Token decoding failed", error);
+    }
+  }
 
   // local state for the form, match models/Drink.js and database
   const [formData, setFormData] = useState({
@@ -178,9 +189,7 @@ function Dashboard() {
       <header className="main-header" style={styles.header}>
         <div>
           <h1>Drink Library</h1>
-          {user && (
-            <h3 style={styles.welcomeText}>Welcome back, {user.username}!</h3>
-          )}
+            <h3 style={styles.welcomeText}>Welcome back, {username}!</h3>
         </div>
         <button
           onClick={logout}

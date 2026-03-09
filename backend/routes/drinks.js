@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Drink = require("../models/Drink"); // Import the Drink model
+const verifyToken = require("../middleware/authMiddleware");
+
 
 // GET ROUTE (fetch first 3)
 router.get("/", async (req, res) => {
@@ -13,9 +15,9 @@ router.get("/", async (req, res) => {
 });
 
 // NEW POST ROUTE (create Drink)
-router.post("/", async (req, res) => {
+router.post("/", verifyToken, async (req, res) => {
   try {
-    const newDrink = new Drink(req.body);
+    const newDrink = new Drink({...req.body, user: req.userId});
     await newDrink.save();
     res.status(201).json(newDrink);
   } catch (err) {
@@ -23,9 +25,18 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyToken, async (req, res) => {
   try {
-    await Drink.findByIdAndDelete(req.params.id);
+    const deletedDrink = await Drink.findOneAndDelete({
+      _id: req.params.id,
+      user: req.userId
+    });
+
+    if (!deletedDrink) {
+      return res.status(403).json({message:"Forbidden: You do not have permission to delete this drink."
+      });
+    }
+
     res.json({ message: "Drink deleted" });
   } catch (err) {
     res.status(500).json({ message: err.message });
