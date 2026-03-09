@@ -17,8 +17,8 @@ export default function App() {
           {/* public routes: anyone can access these */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />{" "}
-          {/* ADD ROUTE HERE */}
-          {/* protected route: the Dashboard is nested inside ProtectedRoute.
+          
+          {/* protected routes: the Dashboard is nested inside ProtectedRoute.
               It checks for a token before allowing the 
               Dashboard component to render
           */}
@@ -30,6 +30,7 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+          
         </Routes>
       </Router>
     </AuthProvider>

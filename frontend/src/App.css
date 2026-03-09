@@ -61,26 +61,32 @@ html {
   top: 20px;
 }
 
-.plant-form {
+/* --------------------- DASHBOARD --------------------- */
+
+/* Styling for drink-form is also used for:
+  - LOGIN
+  - REGISTER */
+
+.drink-form {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.plant-form label {
+.drink-form label {
   font-size: 0.9rem;
   font-weight: 600;
   color: #444;
 }
 
-.plant-form input {
+.drink-form input {
   padding: 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
 }
 
-.plant-form button {
+.drink-form button {
   margin-top: 10px;
   padding: 10px;
   background-color: #2e7d32;
@@ -92,7 +98,7 @@ html {
   transition: background 0.2s;
 }
 
-.plant-form button:hover {
+.drink-form button:hover {
   background-color: #1b5e20;
 }
 
@@ -102,13 +108,13 @@ html {
   /* Takes up all remaining space */
 }
 
-.plant-grid {
+.drink-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
 }
 
-.plant-card {
+.drink-card {
   background: white;
   border-radius: 8px;
   overflow: hidden;
@@ -117,7 +123,7 @@ html {
   border: 1px solid #fff;
 }
 
-.plant-card:hover {
+.drink-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
@@ -136,6 +142,8 @@ html {
   height: 100%;
   object-fit: cover;
 }
+
+/* --------------------- HOMEPAGE DRINK CARDS/LIST --------------------- */
 
 .card-details {
   padding: 12px;

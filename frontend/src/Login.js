@@ -66,7 +66,7 @@ function Login() {
   // search logic
   const filteredDrinks = allDrinks
     .filter((drink) => {
-      return (drink.common_name || "")
+      return (drink.strDrink || "")
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
     })
@@ -162,8 +162,8 @@ function Login() {
                 >
                   {drink.img_url ? (
                     <img
-                      src={getCleanImageUrl(drink.img_url)}
-                      alt={drink.common_name}
+                      src={getCleanImageUrl(drink.img_url)} //We will need to look at this specifically
+                      alt={drink.strDrink}
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src =
@@ -175,10 +175,10 @@ function Login() {
                   )}
                 </div>
                 <div className="card-details" style={styles.cardDetailsText}>
-                  <h3 style={styles.cardTitle}>{drink.common_name}</h3>
+                  <h3 style={styles.cardTitle}>{drink.strDrink}</h3>
                   <p style={styles.cardFamily}>
                     <small>
-                      <strong>{drink.family}</strong>
+                      <strong>{drink.strCategory}</strong>
                     </small>
                   </p>
                 </div>
