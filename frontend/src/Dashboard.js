@@ -196,56 +196,48 @@ function Dashboard() {
           <div className="card">
             <h3>Add New Drink</h3>
             <form onSubmit={handleSubmit} className="drink-form">
-              <label>Common Name</label>
+              <label>Drink Name</label>
               <input
-                name="common_name"
-                value={formData.common_name}
+                name="strDrink"
+                value={formData.strDrink}
                 onChange={handleChange}
-                placeholder="e.g. Janet Craig"
+                placeholder="e.g. Negroni"
                 required
-              />
-
-              <label>Family</label>
-              <input
-                name="family"
-                value={formData.family}
-                onChange={handleChange}
-                placeholder="e.g. Liliaceae"
               />
 
               <label>Category</label>
               <input
-                name="categories"
-                value={formData.categories}
+                name="strCategory"
+                value={formData.strCategory}
                 onChange={handleChange}
-                placeholder="e.g. Dracaena"
+                placeholder="e.g. Apertif"
               />
 
-              <label>Origin</label>
+              <label>Alcoholic</label>
               <input
-                name="origin"
-                value={formData.origin}
+                name="strAlcoholic"
+                value={formData.strAlcoholic}
                 onChange={handleChange}
-                placeholder="e.g. Cultivar"
+                placeholder="e.g. Alcoholic"
               />
 
-              <label>Climate</label>
+              <label>Glass</label>
               <input
-                name="climate"
-                value={formData.climate}
+                name="strGlass"
+                value={formData.strGlass}
                 onChange={handleChange}
-                placeholder="e.g. Tropical"
+                placeholder="e.g. Tall Glass"
               />
 
               <label>Image URL</label>
               <input
-                name="img_url"
-                value={formData.img_url}
+                name="strImageSource"
+                value={formData.strImageSource}
                 onChange={handleChange}
                 placeholder="http://..."
               />
 
-              <button type="submit">Add to Garden</button>
+              <button type="submit">Add to Drink List</button>
             </form>
           </div>
         </div>
@@ -257,10 +249,10 @@ function Dashboard() {
             {drinks.map((drink) => (
               <div key={drink._id} className="drink-card">
                 <div className="image-container">
-                  {drink.img_url ? (
+                  {drink.strImageSource ? (
                     <img
-                      src={getCleanImageUrl(drink.img_url)}
-                      alt={drink.common_name}
+                      src={getCleanImageUrl(drink.strImageSource)}
+                      alt={drink.strDrink}
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src =
@@ -277,18 +269,15 @@ function Dashboard() {
                   )}
                 </div>
                 <div className="card-details">
-                  <h3>{drink.common_name || "Unnamed Cocktail"}</h3>
+                  <h3>{drink.strDrink || "Unnamed Cocktail"}</h3>
                   <p>
-                    <strong>Family:</strong> {drink.family || "N/A"}
+                    <strong>Category:</strong> {drink.strCategory || "N/A"}
                   </p>
                   <p>
-                    <strong>Category:</strong> {drink.categories || "N/A"}
+                    <strong>Alcoholic?:</strong> {drink.strAlcoholic || "N/A"}
                   </p>
                   <p>
-                    <small>Origin: {drink.origin || "N/A"}</small>
-                  </p>
-                  <p>
-                    <small>Climate: {drink.climate || "N/A"}</small>
+                    <small>Glass: {drink.strGlass || "N/A"}</small>
                   </p>
                   <button
                     className="delete-btn"

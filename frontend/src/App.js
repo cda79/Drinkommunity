@@ -4,8 +4,6 @@ import Dashboard from "./Dashboard";
 import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute"; // the "bounce" component
 import Register from "./Register";
-import { useEffect, useState } from 'react';
-
 
 export default function App() {
 
@@ -25,7 +23,7 @@ export default function App() {
               Dashboard component to render
           */}
           <Route
-            path="/dashboard"
+            path="/"
             element={
               <ProtectedRoute>
                 <Dashboard />

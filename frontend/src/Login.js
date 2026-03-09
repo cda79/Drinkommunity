@@ -30,7 +30,7 @@ function Login() {
 
   useEffect(() => {
     if (token) {
-      navigate("/dashboard"); // redirect to dashboard if already logged in
+      navigate("/"); // redirect to dashboard if already logged in
     }
   }, [token, navigate]);
 
