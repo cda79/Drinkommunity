@@ -12,6 +12,8 @@ export default function App() {
   const [drinks, setDrinks] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
+  // This is a function that calls the drinks as a card
+  // rather than hardcoding it into the return()
 function DrinkCard({ drink }) {
   return (
     <div className="card">
@@ -22,9 +24,11 @@ function DrinkCard({ drink }) {
   );
 }
 
+// This fetches the drinks from the API
   useEffect(() => {
     getDrink();
   }, []);
+
 
   async function getDrink() {
     const res = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`);
@@ -32,10 +36,12 @@ function DrinkCard({ drink }) {
     setDrinks(data.drinks || []);
   }
 
+//search logic - 
 const displayedDrinks = drinks.filter((drink) => {
     return drink.strDrink.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
+  // The card is directly placed like this so its cleaner but its up to you
   return (
     <div>
       <h1>Cocktails Database</h1>
