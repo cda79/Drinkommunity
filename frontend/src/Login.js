@@ -18,7 +18,7 @@ function Login() {
 
   // data fetching - GET all drinks (GET is the default method)
   useEffect(() => {
-    fetch("https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=Cocktail")
+    fetch("https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Alcoholic")
       .then((res) => res.json())
       .then((data) => {
         if (data.drinks && Array.isArray(data.drinks)) {
@@ -178,7 +178,7 @@ function Login() {
                   <h3 style={styles.cardTitle}>{drink.strDrink}</h3>
                   <p style={styles.cardFamily}>
                     <small>
-                      <strong>Cocktail</strong>
+                      <strong>{drink.strCategory}</strong>
                     </small>
                   </p>
                 </div>
