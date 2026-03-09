@@ -18,11 +18,11 @@ function Login() {
 
   // data fetching - GET all drinks (GET is the default method)
   useEffect(() => {
-    fetch("http://localhost:5000/api/drinks")
+    fetch("https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=Cocktail")
       .then((res) => res.json())
       .then((data) => {
-        if (Array.isArray(data)) {
-          setAllDrinks(data);
+        if (data.drinks && Array.isArray(data.drinks)) {
+          setAllDrinks(data.drinks);
         }
       })
       .catch((err) => console.error("Error fetching public drinks:", err));
@@ -72,19 +72,19 @@ function Login() {
     })
     .slice(0, 10); // Show only top 10 (5 per row)
 
-  // helper function to clean image URLs from Google Search redirects
-  function getCleanImageUrl(url) {
-    if (!url) return null;
-    if (url.includes("search?q=")) {
-      try {
-        const directUrl = url.split("search?q=")[1];
-        return decodeURIComponent(directUrl);
-      } catch (e) {
-        return url;
-      }
-    }
-    return url;
-  }
+  // helper function to clean image URLs from Google Search redirects [not necessary right now]
+  // function getCleanImageUrl(url) {
+  //   if (!url) return null;
+  //   if (url.includes("search?q=")) {
+  //     try {
+  //       const directUrl = url.split("search?q=")[1];
+  //       return decodeURIComponent(directUrl);
+  //     } catch (e) {
+  //       return url;
+  //     }
+  //   }
+  //   return url;
+  // }
 
   return (
     <div className="page-container" style={styles.pageContainer}>
@@ -155,14 +155,14 @@ function Login() {
         <div className="drink-grid" style={styles.drinkGrid}>
           {filteredDrinks.length > 0 ? (
             filteredDrinks.map((drink) => (
-              <div key={drink._id} className="drink-card">
+              <div key={drink.idDrink} className="drink-card">
                 <div
                   className="image-container"
                   style={styles.cardImageContainer}
                 >
-                  {drink.img_url ? (
+                  {drink.strDrinkThumb ? (
                     <img
-                      src={getCleanImageUrl(drink.img_url)} //We will need to look at this specifically
+                      src={drink.strDrinkThumb} //We will need to look at this specifically
                       alt={drink.strDrink}
                       onError={(e) => {
                         e.target.onerror = null;
@@ -178,7 +178,7 @@ function Login() {
                   <h3 style={styles.cardTitle}>{drink.strDrink}</h3>
                   <p style={styles.cardFamily}>
                     <small>
-                      <strong>{drink.strCategory}</strong>
+                      <strong>Cocktail</strong>
                     </small>
                   </p>
                 </div>
