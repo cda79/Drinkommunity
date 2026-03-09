@@ -30,6 +30,7 @@ router.post("/", verifyToken, async (req, res) => {
       strCategory: req.body.strCategory,
       strAlcoholic: req.body.strAlcoholic,
       strInstructions: req.body.strInstructions,
+      strGlass: req.body.strGlass,
       strImageSource: req.body.strImageSource,
       // Ingredients
       strIngredient1: req.body.strIngredient1,
@@ -72,21 +73,43 @@ router.post("/", verifyToken, async (req, res) => {
   }
 });
 
+
+// READ (personalized)
+// fetch only the drinks belonging to the currently logged-in user
+// this powers the personalized view in the Dashboard
+router.get("/my-drinks", verifyToken, async (req, res) => {
+  try {
+    // we filter the database search by the owner ID extracted from the JWT
+    const drinks = await Drink.find({ owner: req.userId });
+    res.json(drinks);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+// DELETE / REMOVE
+// removes a drink, but only after verifying that the requester
+//  is the actual owner of the document
 router.delete("/:id", verifyToken, async (req, res) => {
   try {
-    const deletedDrink = await Drink.findOneAndDelete({
-      _id: req.params.id,
-      user: req.userId
-    });
+    const drink = await Drink.findById(req.params.id);
 
-    if (!deletedDrink) {
-      return res.status(403).json({message:"Forbidden: You do not have permission to delete this drink."
+    // check if plant exists
+    if (!drink) {
+      return res.status(404).json({ message: "Drink not found" });
+    }
+
+    // authorization check: compare document owner ID to requester's ID
+    if (drink.owner.toString() !== req.userId) {
+      return res.status(403).json({
+        message: "Forbidden: You do not have permission to delete this drink.",
       });
     }
 
-    res.json({ message: "Drink deleted" });
+    await Drink.findByIdAndDelete(req.params.id);
+    res.json({ message: "Drink successfully deleted" });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 });
 

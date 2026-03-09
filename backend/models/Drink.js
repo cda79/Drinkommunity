@@ -1,12 +1,20 @@
 const mongoose = require("mongoose");
 
 const DrinkSchema = new mongoose.Schema({
+  // new Owner field:
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User", // points to the User collection
+    required: true,
+  },
+
   idDrink: { //id from thecocktaildb
     type: String,
     default: "Unknown Drink",
   },
   strDrink: { //name of the drink
     type: String,
+    default: "Unknown Drink",
   },
   strTags: { //tags for the drink (e.g. "IBA", "Classic", "Cocktail")
     type: String,
@@ -23,6 +31,9 @@ const DrinkSchema = new mongoose.Schema({
   strInstructions: { // instructions for making the drink in English (Other Laungages available as strInstructionsDE, strInstructionsIT, etc. but they are not relevant to our project)
     type: String,
   },
+  strGlass: { // type of glass drink is served in
+    type: String,
+  }, 
   strDrinkThumb: { // URL for the drink's thumbnail
     type: String,
   }, 
@@ -126,12 +137,6 @@ const DrinkSchema = new mongoose.Schema({
   },
   dateModified: { // date the drink was last modified in the cocktail database
     type: String,
-  },
-
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
   },
 
 });
