@@ -4,6 +4,7 @@ import "./App.css";
 import { AuthContext } from "./context/AuthContext";
 
 function Login() {
+  const [category, setCategory] = useState("Ordinary_Drink");
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [allDrinks, setAllDrinks] = useState([]); // store everything for filtering
   const [error, setError] = useState("");
@@ -18,7 +19,7 @@ function Login() {
 
   // data fetching - GET all drinks (GET is the default method)
   useEffect(() => {
-    fetch("https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Alcoholic")
+    fetch("https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}")
       .then((res) => res.json())
       .then((data) => {
         if (data.drinks && Array.isArray(data.drinks)) {
