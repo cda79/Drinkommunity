@@ -175,9 +175,12 @@ function Login() {
       <div style={styles.gridWrapper}>
         <div style={styles.drinkGrid}>
           {filteredDrinks.length > 0 ? (
-            filteredDrinks.map((drink) => (
-              <DrinkCard key={drink.idDrink || drink._id} drink={drink} />
-            ))
+            filteredDrinks.map((drink) => {
+              const uniqueKey = drink.uniqueKey || `api-${drink.idDrink}`;
+              return (
+                <DrinkCard key={uniqueKey} drink={drink} />
+              );
+            })
           ) : (
             <div style={styles.noResults}>
               <p>No drinks match your search criteria.</p>

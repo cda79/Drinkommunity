@@ -7,11 +7,10 @@ const DrinkSchema = new mongoose.Schema({
     ref: "User", // points to the User collection
     required: true,
   },
-
   idDrink: { //id from thecocktaildb
     type: String,
     ref: "ID",
-    default: "Unknown Drink",
+    required: true,
   },
   strDrink: { //name of the drink
     type: String,
@@ -141,5 +140,12 @@ const DrinkSchema = new mongoose.Schema({
   },
 
 });
+
+// Add a virtual field that combines source and ID
+DrinkSchema.virtual('uniqueKey').get(function() {
+  return `mongo-${this._id}`;
+});
+
+DrinkSchema.set('toJSON', { virtuals: true });
 
 module.exports = mongoose.model("Drink", DrinkSchema);
