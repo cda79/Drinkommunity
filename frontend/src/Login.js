@@ -1,7 +1,8 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./App.css";
 import { AuthContext } from "./context/AuthContext";
+
 
 function Login() {
   const [category, setCategory] = useState("Ordinary_Drink");
@@ -17,17 +18,46 @@ function Login() {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  // fetch drinks from API
+  const getDrink = useCallback(async() => {
+    try {
+      const apiPromise = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`);
+      const mongoPromise = await fetch(`http://localhost:5000/api/drinks`);
+
+      const [apiRes,  mongoRes] = await Promise.all([apiPromise, mongoPromise]);
+
+      const apiData = await apiRes.json();
+      const mongoData = await mongoRes.json();
+
+      const apiDrinks = apiData.drinks || [];
+      const mongoDrinks = Array.isArray(mongoData) ? mongoData : [];
+
+      setAllDrinks([...apiDrinks, ...mongoDrinks]);
+    } catch (err) {
+      console.error("Error fetching drinks:", err);
+    }
+  }, [category]);
+
+  // Drink cards in drink previews
+  function DrinkCard({ drink }) {
+  return (
+    <div className="drink-card">
+      <div className="image-container">
+        <img src={drink.strDrinkThumb} alt={drink.strDrink} />
+      </div>
+      <div className="card-details">
+        <h3>{drink.strDrink}</h3>
+        <p>id: {drink.idDrink}</p>
+        <small><strong>{category}</strong></small>
+      </div>
+    </div>
+  );
+}
+
   // data fetching - GET all drinks (GET is the default method)
   useEffect(() => {
-    fetch("https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.drinks && Array.isArray(data.drinks)) {
-          setAllDrinks(data.drinks);
-        }
-      })
-      .catch((err) => console.error("Error fetching public drinks:", err));
-  }, []);
+    getDrink();
+  }, [getDrink]);
 
   useEffect(() => {
     if (token) {
@@ -72,20 +102,6 @@ function Login() {
         .includes(searchTerm.toLowerCase());
     })
     .slice(0, 10); // Show only top 10 (5 per row)
-
-  // helper function to clean image URLs from Google Search redirects [not necessary right now]
-  // function getCleanImageUrl(url) {
-  //   if (!url) return null;
-  //   if (url.includes("search?q=")) {
-  //     try {
-  //       const directUrl = url.split("search?q=")[1];
-  //       return decodeURIComponent(directUrl);
-  //     } catch (e) {
-  //       return url;
-  //     }
-  //   }
-  //   return url;
-  // }
 
   return (
     <div className="page-container" style={styles.pageContainer}>
@@ -156,34 +172,7 @@ function Login() {
         <div className="drink-grid" style={styles.drinkGrid}>
           {filteredDrinks.length > 0 ? (
             filteredDrinks.map((drink) => (
-              <div key={drink.idDrink} className="drink-card">
-                <div
-                  className="image-container"
-                  style={styles.cardImageContainer}
-                >
-                  {drink.strDrinkThumb ? (
-                    <img
-                      src={drink.strDrinkThumb} //We will need to look at this specifically
-                      alt={drink.strDrink}
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src =
-                          "https://via.placeholder.com/200?text=No+Image";
-                      }}
-                    />
-                  ) : (
-                    <div className="placeholder">No Image</div>
-                  )}
-                </div>
-                <div className="card-details" style={styles.cardDetailsText}>
-                  <h3 style={styles.cardTitle}>{drink.strDrink}</h3>
-                  <p style={styles.cardFamily}>
-                    <small>
-                      <strong>{drink.strCategory}</strong>
-                    </small>
-                  </p>
-                </div>
-              </div>
+              <DrinkCard key={drink.idDrink || drink._id} drink={drink} />
             ))
           ) : (
             <div style={styles.noResults}>
