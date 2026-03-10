@@ -193,7 +193,7 @@ function Dashboard() {
         </div>
         <button
           onClick={logout}
-          className="delete-btn"
+          className="button"
           style={styles.logoutBtn}
         >
           Logout
@@ -319,18 +319,12 @@ const styles = {
     alignItems: "center",
   },
   welcomeText: {
-    color: "#2e7d32",
+    color: "#A12F0D",
     marginTop: "5px",
   },
-  logoutBtn: {
-    width: "auto",
-    padding: "10px 25px",
-    background: "#c62828",
-    color: "white",
-  },
   gardenTitle: {
-    color: "#2e7d32",
-    borderBottom: "2px solid #a5d6a7",
+    color: "#A12F0D",
+    borderBottom: "2px solid #EFE7DF",
     paddingBottom: "10px",
     marginBottom: "20px",
   },

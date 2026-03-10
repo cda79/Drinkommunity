@@ -2,17 +2,29 @@ body,
 html {
   margin: 0;
   padding: 0;
-  background-color: #e8f5e9;
+  background-color: #F9F9F9;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   height: 100%;
 }
 
 .page-container {
   max-width: none;
-
   margin: 0;
-
   padding: 20px;
+}
+
+.button {
+  padding: 10px 20px;
+  background-color: #A12F0D;
+  color: white;
+  height: 42px;
+  border-radius: 11px;
+  border: none;
+}
+
+.button:hover {
+  background-color: #DE3300;
+  transition: all 0.2s;
 }
 
 /* header */
@@ -23,7 +35,7 @@ html {
 }
 
 .main-header h1 {
-  color: #1b5e20;
+  color: #A12F0D;
   font-size: 2rem;
   margin: 0;
 }
@@ -41,17 +53,51 @@ html {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border: 1px solid #c8e6c9;
+  border: 1px solid #D4D4D4;
 }
 
 .card h3 {
   margin-top: 0;
-  color: #2e7d32;
-  border-bottom: 2px solid #a5d6a7;
+  color: #A12F0D;
+  border-bottom: 2px solid #EFE7DF;
   padding-bottom: 10px;
   margin-bottom: 15px;
   font-size: 1.1rem;
 }
+
+/* --------------------- LOGIN --------------------- */
+.login-form {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: end;
+}
+
+.login-form button {
+  align-self: bottom;
+}
+
+.login-input {
+  display: flex;
+  flex-direction: column;
+  gap:5px;
+  color:#8C665B;
+  font-weight: bold;
+}
+
+.login-input label {
+  font-size: 0.75rem;
+}
+
+.login-input input {
+  background-color: white;
+  height: 40px;
+  border-radius: 5px;
+  border: none;
+}
+
+
+/* --------------------- DASHBOARD --------------------- */
 
 /* left panel: the form to enter data */
 .left-panel {
@@ -60,12 +106,6 @@ html {
   position: sticky;
   top: 20px;
 }
-
-/* --------------------- DASHBOARD --------------------- */
-
-/* Styling for drink-form is also used for:
-  - LOGIN
-  - REGISTER */
 
 .drink-form {
   display: flex;
@@ -89,17 +129,18 @@ html {
 .drink-form button {
   margin-top: 10px;
   padding: 10px;
-  background-color: #2e7d32;
+  background-color: #A12F0D;
   color: white;
   border: none;
   border-radius: 4px;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s;
 }
 
 .drink-form button:hover {
-  background-color: #1b5e20;
+  background-color: #DE3300;
+  transition: all 0.2s;
 }
 
 /* right panel: the grid of plants */
@@ -109,18 +150,26 @@ html {
 }
 
 .drink-grid {
+  grid-template-columns: repeat(2, 1fr);
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
 }
 
+/* --------------------- LOGIN / HOMEPAGE DRINK CARDS --------------------- */
+
+/* DRINKS CARD DISPLAY */
 .drink-card {
   background: white;
-  border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s;
-  border: 1px solid #fff;
+  border: 1px solid #D4D4D4;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  padding: 15px;
 }
 
 .drink-card:hover {
@@ -130,11 +179,13 @@ html {
 
 .image-container {
   height: 160px;
+  max-width: 160px;
   overflow: hidden;
   background-color: #f1f8e9;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex:2;
 }
 
 .image-container img {
@@ -143,16 +194,30 @@ html {
   object-fit: cover;
 }
 
-/* --------------------- HOMEPAGE DRINK CARDS/LIST --------------------- */
+.view-details {
+  font-weight: bold;
+  text-align: center;
+  color:#843A24;
+  align-self: left;
+  flex: 0.5;
+  word-break: break-word;
+  transition: all 0.2s;
+}
+
+.view-details:hover {
+  color:#DE3300;
+  transition: all 0.2s;
+}
 
 .card-details {
   padding: 12px;
+  flex: 2;
 }
 
 .card-details h3 {
   margin: 0 0 5px 0;
-  color: #2e7d32;
-  font-size: 1.1rem;
+  color: #A12F0D;
+  font-size: 1rem;
 }
 
 .card-details p {
@@ -176,16 +241,4 @@ html {
 
 .delete-btn:hover {
   background-color: #ffcdd2;
-}
-
-
-/* PLACE HOLDER, DELETE LATER */
-
-.thumbnail {
-  width: 100px;
-}
-
-.card {
-  border: 1px solid black;
-  padding: 15px;
 }

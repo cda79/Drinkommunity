@@ -2,7 +2,7 @@ import { useContext, useEffect, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./App.css";
 import { AuthContext } from "./context/AuthContext";
-
+import logo from './assets/logo.png';
 
 function Login() {
   const [category, setCategory] = useState("Ordinary_Drink");
@@ -50,6 +50,7 @@ function Login() {
         <p>id: {drink.idDrink}</p>
         <small><strong>{category}</strong></small>
       </div>
+      <div className="view-details">View Details</div>
     </div>
   );
 }
@@ -105,14 +106,18 @@ function Login() {
 
   return (
     <div className="page-container" style={styles.pageContainer}>
+    <div>
+      <img src={logo} alt="Company Logo" style={{ width: '100px', marginBottom:'10px'}} />
+    </div>
+      
       {/* login form */}
       <div style={styles.formWrapper}>
-        <div className="card" style={styles.loginCard}>
-          <h2 style={styles.loginTitle}>Login</h2>
+        <div style={styles.loginCard}>
 
           {error && <div style={styles.errorBanner}>{error}</div>}
 
-          <form onSubmit={handleSubmit} className="drink-form">
+          <form onSubmit={handleSubmit} className="login-form">
+            <div className="login-input">
             <label>Username</label>
             <input
               name="username"
@@ -121,7 +126,9 @@ function Login() {
               onChange={handleChange}
               required
             />
+            </div>
 
+            <div className="login-input">
             <label>Password</label>
             <input
               name="password"
@@ -130,8 +137,9 @@ function Login() {
               onChange={handleChange}
               required
             />
+            </div>
 
-            <button type="submit" style={styles.submitBtn}>
+            <button type="submit" className="button">
               Sign In
             </button>
           </form>
@@ -146,10 +154,10 @@ function Login() {
       </div>
 
       {/* search by name only */}
-      <div className="card" style={styles.searchCard}>
+      <div style={styles.searchCard}>
         <div style={styles.searchRow}>
           <div style={styles.searchInputGroup}>
-            <label style={styles.searchLabel}>Search by Drink Name</label>
+            <label style={styles.searchLabel}>Drink Name</label>
             <input
               type="text"
               placeholder="Start typing a drink name (e.g. 'Cuba Libre' or 'Paloma')..."
@@ -159,7 +167,7 @@ function Login() {
             />
           </div>
 
-          <button onClick={() => setSearchTerm("")} style={styles.clearBtn}>
+          <button onClick={() => setSearchTerm("")} className="button">
             Clear
           </button>
         </div>
@@ -167,9 +175,7 @@ function Login() {
 
       {/* 5-col grid (top 10 results) */}
       <div style={styles.gridWrapper}>
-        <h2 style={styles.previewTitle}>DRINKS DATABASE - PREVIEW</h2>
-
-        <div className="drink-grid" style={styles.drinkGrid}>
+        <div style={styles.drinkGrid}>
           {filteredDrinks.length > 0 ? (
             filteredDrinks.map((drink) => (
               <DrinkCard key={drink.idDrink || drink._id} drink={drink} />
@@ -191,6 +197,7 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
   },
+  // -------LOGIN-----
   formWrapper: {
     width: "100%",
     display: "flex",
@@ -198,12 +205,14 @@ const styles = {
     marginBottom: "30px",
   },
   loginCard: {
-    width: "400px",
-  },
-  loginTitle: {
-    textAlign: "center",
-    color: "#2e7d32",
-    marginBottom: "20px",
+    width: "80%",
+    flexDirection: "row",
+    background: "#EFE7DF",
+    display:"flex",
+    padding: "20px",
+    alignItems: "end",
+    boxShadow: "0 4px 4px rgba(0, 0, 0, 0.25)",
+    borderRadius: "11px",
   },
   errorBanner: {
     backgroundColor: "#ffebee",
@@ -213,23 +222,23 @@ const styles = {
     marginBottom: "15px",
     textAlign: "center",
   },
-  submitBtn: {
-    marginTop: "10px",
-  },
   footerText: {
-    textAlign: "center",
     marginTop: "15px",
     fontSize: "0.9rem",
+    marginLeft: "0.5rem",
+    color:"#A12F0D"
   },
   registerLink: {
-    color: "#2e7d32",
+    color: "#A12F0D",
+    transition: "all 2s",
     fontWeight: "bold",
   },
+
+  // SEARCH CARD
   searchCard: {
     width: "100%",
     maxWidth: "1200px",
     marginBottom: "40px",
-    backgroundColor: "#f1f8e9",
   },
   searchRow: {
     display: "flex",
@@ -247,51 +256,27 @@ const styles = {
   searchLabel: {
     fontSize: "0.8rem",
     fontWeight: "bold",
-    color: "#2e7d32",
+    color: "#A12F0D",
   },
   searchInput: {
     padding: "10px",
     borderRadius: "4px",
-    border: "1px solid #c8e6c9",
+    border: "1px solid #C5C5C5",
     fontSize: "1rem",
   },
-  clearBtn: {
-    padding: "10px 20px",
-    background: "#666",
-    color: "white",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-    height: "42px",
-    fontWeight: "bold",
-  },
+
+  // DATABASE PREVIEW
   gridWrapper: {
-    width: "100%",
+    width: "85%",
     maxWidth: "1200px",
-  },
-  previewTitle: {
-    color: "#2e7d32",
-    textAlign: "center",
-    marginBottom: "30px",
-    borderBottom: "2px solid #a5d6a7",
-    paddingBottom: "10px",
+    background: "#F9F9F9",
+    padding:"20px",
+    border:"1px solid #D4D4D4"
   },
   drinkGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(5, 1fr)",
+    gridTemplateColumns: "repeat(2, 1fr)",
     gap: "20px",
-  },
-  cardImageContainer: {
-    height: "140px",
-  },
-  cardDetailsText: {
-    textAlign: "center",
-  },
-  cardTitle: {
-    fontSize: "1rem",
-  },
-  cardFamily: {
-    margin: 0,
   },
   noResults: {
     gridColumn: "1 / -1",
