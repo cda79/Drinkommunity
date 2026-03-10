@@ -1,4 +1,4 @@
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext"; // global state provider
 import Dashboard from "./Dashboard";
 import Login from "./Login";
@@ -30,7 +30,10 @@ export default function App() {
               </ProtectedRoute>
             }
           />
-          
+
+          {/* Catch-all route - redirect any undefined routes to login */}
+          <Route path="*" element={<Navigate to="/login" replace />} />
+
         </Routes>
       </Router>
     </AuthProvider>
