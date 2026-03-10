@@ -31,7 +31,7 @@ router.post("/", verifyToken, async (req, res) => {
       strAlcoholic: req.body.strAlcoholic,
       strInstructions: req.body.strInstructions,
       strGlass: req.body.strGlass,
-      strImageSource: req.body.strImageSource,
+      strDrinkThumb: req.body.strDrinkThumb,
       // Ingredients
       strIngredient1: req.body.strIngredient1,
       strIngredient2: req.body.strIngredient2,

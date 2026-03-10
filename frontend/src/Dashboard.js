@@ -54,7 +54,7 @@ function Dashboard() {
     strMeasure13: "",
     strMeasure14: "",
     strMeasure15: "",
-    strImageSource: "",
+    strDrinkThumb: "",
   });
 
   // initial load
@@ -135,7 +135,7 @@ function Dashboard() {
           strMeasure13: "",
           strMeasure14: "",
           strMeasure15: "",
-          strImageSource: "",
+          strDrinkThumb: "",
         });
       } else {
         const errorData = await res.json();
@@ -240,8 +240,8 @@ function Dashboard() {
 
               <label>Image URL</label>
               <input
-                name="strImageSource"
-                value={formData.strImageSource}
+                name="strDrinkThumb"
+                value={formData.strDrinkThumb}
                 onChange={handleChange}
                 placeholder="http://..."
               />
@@ -258,9 +258,9 @@ function Dashboard() {
             {drinks.map((drink) => (
               <div key={drink._id} className="drink-card">
                 <div className="image-container">
-                  {drink.strImageSource ? (
+                  {drink.strDrinkThumb ? (
                     <img
-                      src={getCleanImageUrl(drink.strImageSource)}
+                      src={getCleanImageUrl(drink.strDrinkThumb)}
                       alt={drink.strDrink}
                       onError={(e) => {
                         e.target.onerror = null;

@@ -20,6 +20,7 @@ function Login() {
 
   // fetch drinks from API
   const getDrink = useCallback(async() => {
+    setAllDrinks([]); // Clear previous results
     try {
       const apiPromise = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`);
       const mongoPromise = await fetch(`http://localhost:5000/api/drinks`);
@@ -96,11 +97,8 @@ function Login() {
   }
 
   // search logic
-  const filteredDrinks = allDrinks
-    .filter((drink) => {
-      return (drink.strDrink || "")
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
+  const filteredDrinks = allDrinks.filter((drink) => {
+    return drink.strDrink.toLowerCase().includes(searchTerm.toLowerCase());
     })
     .slice(0, 10); // Show only top 10 (5 per row)
 

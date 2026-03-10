@@ -10,6 +10,7 @@ const DrinkSchema = new mongoose.Schema({
 
   idDrink: { //id from thecocktaildb
     type: String,
+    ref: "ID",
     default: "Unknown Drink",
   },
   strDrink: { //name of the drink
@@ -128,7 +129,7 @@ const DrinkSchema = new mongoose.Schema({
   strMeasure15: {
     type: String,
   },
-  strImageSource: { // source of the drink's image for crediting purposes
+  strDrinkThumbSource: { // source of the drink's image for crediting purposes
     type: String,
   },
 
