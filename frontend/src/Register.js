@@ -75,7 +75,7 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     minHeight: "100vh",
-    backgroundColor: "#f4f7f4",
+    backgroundColor: "#EFE7DF",
   },
   card: {
     width: "100%",
@@ -87,12 +87,12 @@ const styles = {
   },
   title: {
     textAlign: "center",
-    color: "#2e7d32",
+    color: "#A12F0D",
     marginBottom: "1.5rem",
   },
   button: {
     marginTop: "1rem",
-    backgroundColor: "#2e7d32",
+    backgroundColor: "#A12F0D",
     color: "white",
     border: "none",
     padding: "10px",
@@ -107,7 +107,7 @@ const styles = {
     color: "#666",
   },
   link: {
-    color: "#2e7d32",
+    color: "#A12F0D",
     cursor: "pointer",
     fontWeight: "bold",
     textDecoration: "underline",
