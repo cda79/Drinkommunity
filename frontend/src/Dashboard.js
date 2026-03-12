@@ -63,6 +63,7 @@ function Dashboard() {
     if (!token) return;
 
     fetch("http://localhost:5000/api/drinks/my-drinks", {
+      method: "GET",
       headers: {
         Authorization: token,
       },

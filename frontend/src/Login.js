@@ -22,7 +22,9 @@ function Login() {
   const getDrink = useCallback(async() => {
     setAllDrinks([]); // Clear previous results
     try {
-      const apiPromise = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`);
+      const apiPromise = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`, 
+        {method: "GET"}
+      );
       const mongoPromise = await fetch(`http://localhost:5000/api/drinks`);
 
       const [apiRes,  mongoRes] = await Promise.all([apiPromise, mongoPromise]);
