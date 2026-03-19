@@ -297,6 +297,8 @@ function Dashboard() {
                   </button>
                 </div>
               </div>
+
+              
             ))}
 
             {drinks.length === 0 && (

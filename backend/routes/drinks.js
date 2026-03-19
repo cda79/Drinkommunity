@@ -97,25 +97,27 @@ router.get("/my-drinks", verifyToken, async (req, res) => {
 
 // DELETE / REMOVE
 // removes a drink, but only after verifying that the requester
-//  is the actual owner of the document
+// is the actual owner of the document or has an admin role
 router.delete("/:id", verifyToken, async (req, res) => {
   try {
     const drink = await Drink.findById(req.params.id);
 
-    // check if plant exists
+    // check if Drink exists
     if (!drink) {
       return res.status(404).json({ message: "Drink not found" });
     }
 
-    // authorization check: compare document owner ID to requester's ID
-    if (drink.owner.toString() !== req.userId) {
+    //allow admins to delete any drink, or owners to delete their own by checking the role and ID for ownership authorization 
+    if (req.userRole === "admin" || drink.owner.toString() === req.userId) {
+       await Drink.findByIdAndDelete(req.params.id);
+    res.json({ message: "Drink successfully deleted" });
+    }
+    else{
       return res.status(403).json({
         message: "Forbidden: You do not have permission to delete this drink.",
       });
-    }
-
-    await Drink.findByIdAndDelete(req.params.id);
-    res.json({ message: "Drink successfully deleted" });
+    } 
+   
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }

@@ -1,4 +1,5 @@
 require("dotenv").config();
+require('dns').setDefaultResultOrder('ipv4first');
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -21,6 +22,7 @@ const clientOptions = {
 
 async function connectDB() {
   try {
+    console.log(process.env.MONGO_URI)
     await mongoose.connect(uri, clientOptions);
 
     // optional: the "Ping" command just confirms everything is working
@@ -28,8 +30,6 @@ async function connectDB() {
     console.log("✅ Pinged the db. You successfully connected to MongoDB!");
   } catch (err) {
     console.error("❌ Connection failed:", err);
-    // If the DB is down, we might want to stop the server
-    // process.exit(1);
   }
 }
 

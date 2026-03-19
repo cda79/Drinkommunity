@@ -46,12 +46,13 @@ router.post("/login", async (req, res) => {
       {
         id: user._id,
         username: user.username,
+        role: user.role, // Include the user's role in the token to manage permissions 
       },
       process.env.JWT_SECRET || "fallbackSecret",
       { expiresIn: "1h" },
     );
 
-    res.json({ token, user: { id: user._id, username: user.username } });
+    res.json({ token, user: { id: user._id, username: user.username, role: user.role } });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -89,7 +89,8 @@ function Login() {
 
       if (response.ok) {
         login(data.token);
-        navigate("/");
+        // Navigate to dashboard; DashboardRouter will route based on user role
+        navigate("/dashboard");
       } else {
         setError(data.message || "Invalid credentials");
       }

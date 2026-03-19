@@ -14,6 +14,10 @@ function verifyToken(req, res, next) {
       process.env.JWT_SECRET || "fallbackSecret",
     );
     req.userId = decoded.id; // add user ID to request
+    req.userRole = decoded.role; // add user role to request
+    // Log decoded token and userRole for debugging
+    console.log("Decoded JWT payload:", decoded);
+    console.log("req.userId:", req.userId, "req.userRole:", req.userRole);
     next();
   } catch (error) {
     res.status(401).json({ error: "Invalid token" });
