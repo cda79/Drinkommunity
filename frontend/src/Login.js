@@ -9,7 +9,7 @@ function Login() {
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [allDrinks, setAllDrinks] = useState([]); // store everything for filtering
   const [error, setError] = useState("");
-
+  
   const { token } = useContext(AuthContext);
 
   // search state - the search term
@@ -53,7 +53,13 @@ function Login() {
         <p>id: {drink.idDrink}</p>
         <small><strong>{category}</strong></small>
       </div>
-      <div className="view-details">View Details</div>
+      <Link
+        to="/details"
+        state={{drinkData:drink}}
+      >
+        <div className="view-details">View Details</div>
+      </Link>
+
     </div>
   );
 }

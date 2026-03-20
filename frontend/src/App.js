@@ -3,6 +3,7 @@ import { AuthProvider } from "./context/AuthContext"; // global state provider
 import DashboardRouter from "./DashboardRouter"; // handles role-based routing
 import Login from "./Login";
 import Register from "./Register";
+import DrinkDetails from "./DrinkDetails";
 
 export default function App() {
 
@@ -16,6 +17,7 @@ export default function App() {
           {/* public routes: anyone can access these */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/details" element={<DrinkDetails />} />
           
           {/* dashboard route: routes to user or admin dashboard based on role */}
           <Route path="/dashboard" element={<DashboardRouter />} />

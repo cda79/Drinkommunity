@@ -123,4 +123,20 @@ router.delete("/:id", verifyToken, async (req, res) => {
   }
 });
 
+
+// get full drink details from single ID
+router.get("/:id", async (req, res) => {
+  try {
+    const drink = await Drink.findById(req.params.id);
+
+    if(!drink) {
+      return res.status(404).json({ error: "Drink not found" });
+    }
+
+    res.json(drink);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
