@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Drink = require("../models/Drink"); // Import the Drink model
 const verifyToken = require("../middleware/authMiddleware");
+const mongoose = require("mongoose");
 
 
 // public view
@@ -127,11 +128,19 @@ router.delete("/:id", verifyToken, async (req, res) => {
 // get full drink details from single ID
 router.get("/:id", async (req, res) => {
   try {
-    const drink = await Drink.findById(req.params.id);
+    const id = req.params.id;
+    let drink;
 
-    if(!drink) {
-      return res.status(404).json({ error: "Drink not found" });
+    // 1. Determine if we search by custom string or Mongo _id
+    if (id.startsWith("user-")) {
+      drink = await Drink.findOne({ idDrink: id }).populate("owner", "username");
+    } else if (mongoose.Types.ObjectId.isValid(id)) {
+      drink = await Drink.findById(id).populate("owner", "username");
+    } else {
+      return res.status(404).json({ error: "Invalid ID format" });
     }
+
+    if (!drink) return res.status(404).json({ error: "Drink not found" });
 
     res.json(drink);
   } catch (err) {

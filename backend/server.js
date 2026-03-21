@@ -39,6 +39,7 @@ connectDB();
 // routes
 app.use("/api/drinks", drinkRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/comments", commentRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
