@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const drinkRoutes = require("./routes/drinks");
 const authRoutes = require("./routes/auth");
+const commentRoutes = require("./routes/comments.js")
 
 const app = express();
 const PORT = 5000;

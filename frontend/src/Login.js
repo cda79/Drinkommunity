@@ -2,14 +2,29 @@ import { useContext, useEffect, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./App.css";
 import { AuthContext } from "./context/AuthContext";
-import logo from './assets/logo.png';
+import logo from "./assets/logo.png";
 
 function Login() {
-  const [category, setCategory] = useState("Ordinary_Drink");
+  const [category, setCategory] = useState("Ordinary Drink");
+  const [alcoholic, setAlcoholic] = useState("");
+  const alcholicTag = ["Non alcoholic", "Alcoholic", "Optional alcohol"];
+  const categories = [
+    "Ordinary Drink",
+    "Beer",
+    "Cocktail",
+    "Cocoa",
+    "Coffee / Tea",
+    "Homemade Liqueur",
+    "Other / Unknown",
+    "Punch / Party Drink",
+    "Shake",
+    "Soft Drink",
+  ];
+
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [allDrinks, setAllDrinks] = useState([]); // store everything for filtering
   const [error, setError] = useState("");
-  
+
   const { token } = useContext(AuthContext);
 
   // search state - the search term
@@ -19,15 +34,16 @@ function Login() {
   const navigate = useNavigate();
 
   // fetch drinks from API
-  const getDrink = useCallback(async() => {
+  const getDrink = useCallback(async () => {
     setAllDrinks([]); // Clear previous results
     try {
-      const apiPromise = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`, 
-        {method: "GET"}
+      const apiPromise = await fetch(
+        `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`,
+        { method: "GET" },
       );
       const mongoPromise = await fetch(`http://localhost:5000/api/drinks`);
 
-      const [apiRes,  mongoRes] = await Promise.all([apiPromise, mongoPromise]);
+      const [apiRes, mongoRes] = await Promise.all([apiPromise, mongoPromise]);
 
       const apiData = await apiRes.json();
       const mongoData = await mongoRes.json();
@@ -43,26 +59,24 @@ function Login() {
 
   // Drink cards in drink previews
   function DrinkCard({ drink }) {
-  return (
-    <div className="drink-card">
-      <div className="image-container">
-        <img src={drink.strDrinkThumb} alt={drink.strDrink} />
+    return (
+      <div className="drink-card">
+        <div className="image-container">
+          <img src={drink.strDrinkThumb} alt={drink.strDrink} />
+        </div>
+        <div className="card-details">
+          <h3>{drink.strDrink}</h3>
+          <p>id: {drink.idDrink}</p>
+          <small>
+            <strong>{category}</strong>
+          </small>
+        </div>
+        <Link to="/details" state={{ drinkData: drink }}>
+          <div className="view-details">View Details</div>
+        </Link>
       </div>
-      <div className="card-details">
-        <h3>{drink.strDrink}</h3>
-        <p>id: {drink.idDrink}</p>
-        <small><strong>{category}</strong></small>
-      </div>
-      <Link
-        to="/details"
-        state={{drinkData:drink}}
-      >
-        <div className="view-details">View Details</div>
-      </Link>
-
-    </div>
-  );
-}
+    );
+  }
 
   // data fetching - GET all drinks (GET is the default method)
   useEffect(() => {
@@ -106,44 +120,53 @@ function Login() {
   }
 
   // search logic
-  const filteredDrinks = allDrinks.filter((drink) => {
-    return drink.strDrink.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredDrinks = allDrinks
+    .filter((drink) => {
+      return drink.strDrink.toLowerCase().includes(searchTerm.toLowerCase());
     })
     .slice(0, 10); // Show only top 10 (5 per row)
 
+  const handleClearSearch = () => {
+    setCategory("Ordinary Drink");
+    setSearchTerm("");
+  };
+
   return (
     <div className="page-container" style={styles.pageContainer}>
-    <div>
-      <img src={logo} alt="Company Logo" style={{ width: '100px', marginBottom:'10px'}} />
-    </div>
-      
+      <div>
+        <img
+          src={logo}
+          alt="Company Logo"
+          style={{ width: "100px", marginBottom: "10px" }}
+        />
+      </div>
+
       {/* login form */}
       <div style={styles.formWrapper}>
         <div style={styles.loginCard}>
-
           {error && <div style={styles.errorBanner}>{error}</div>}
 
           <form onSubmit={handleSubmit} className="login-form">
             <div className="login-input">
-            <label>Username</label>
-            <input
-              name="username"
-              type="text"
-              placeholder="Username"
-              onChange={handleChange}
-              required
-            />
+              <label>Username</label>
+              <input
+                name="username"
+                type="text"
+                placeholder="Username"
+                onChange={handleChange}
+                required
+              />
             </div>
 
             <div className="login-input">
-            <label>Password</label>
-            <input
-              name="password"
-              type="password"
-              placeholder="Password"
-              onChange={handleChange}
-              required
-            />
+              <label>Password</label>
+              <input
+                name="password"
+                type="password"
+                placeholder="Password"
+                onChange={handleChange}
+                required
+              />
             </div>
 
             <button type="submit" className="button">
@@ -172,9 +195,27 @@ function Login() {
               onChange={(e) => setSearchTerm(e.target.value)}
               style={styles.searchInput}
             />
+            {/* Search by category */}
+            <div>
+              <select
+                name="category-select"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                style={{ width: "150px" }}
+              >
+                {/* Map categories to dropdown options */}
+                {categories
+                  .filter((m) => m !== "")
+                  .map((m) => (
+                    <option key={m} value={m}>
+                      {m}
+                    </option>
+                  ))}
+              </select>
+            </div>
           </div>
 
-          <button onClick={() => setSearchTerm("")} className="button">
+          <button onClick={handleClearSearch} className="button">
             Clear
           </button>
         </div>
@@ -186,9 +227,7 @@ function Login() {
           {filteredDrinks.length > 0 ? (
             filteredDrinks.map((drink) => {
               const uniqueKey = drink.uniqueKey || `api-${drink.idDrink}`;
-              return (
-                <DrinkCard key={uniqueKey} drink={drink} />
-              );
+              return <DrinkCard key={uniqueKey} drink={drink} />;
             })
           ) : (
             <div style={styles.noResults}>
@@ -218,7 +257,7 @@ const styles = {
     width: "80%",
     flexDirection: "row",
     background: "#EFE7DF",
-    display:"flex",
+    display: "flex",
     padding: "20px",
     alignItems: "end",
     boxShadow: "0 4px 4px rgba(0, 0, 0, 0.25)",
@@ -236,7 +275,7 @@ const styles = {
     marginTop: "15px",
     fontSize: "0.9rem",
     marginLeft: "0.5rem",
-    color:"#A12F0D"
+    color: "#A12F0D",
   },
   registerLink: {
     color: "#A12F0D",
@@ -280,8 +319,8 @@ const styles = {
     width: "85%",
     maxWidth: "1200px",
     background: "#F9F9F9",
-    padding:"20px",
-    border:"1px solid #D4D4D4"
+    padding: "20px",
+    border: "1px solid #D4D4D4",
   },
   drinkGrid: {
     display: "grid",
