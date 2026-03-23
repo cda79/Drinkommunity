@@ -10,12 +10,7 @@ function Login() {
   const [searchTerm, setSearchTerm] = useState("");
 
   // Alcohol filter
-  const alcholicTags = [
-    "All",
-    "Alcoholic",
-    "Non alcoholic",
-    "Optional alcohol",
-  ];
+  const alcholicTags = ["All", "Alcoholic", "Non alcoholic"];
   const [alcoholic, setAlcoholic] = useState("All");
 
   // Category
@@ -109,10 +104,12 @@ function Login() {
         const alchDrinks = Array.isArray(alchData.drinks)
           ? alchData.drinks
           : [];
-        
+        // get IDS for drinks that are alcoholic or not (usestate)
         const alchIds = new Set(alchDrinks.map((d) => d.idDrink));
         // Compare IDS from when we fetched the category ones to see if theyre the same
-        apiDrinks = apiDrinks.filter((d) => alchIds.has(d.idDrink));
+        apiDrinks = apiDrinks
+          .filter((d) => alchIds.has(d.idDrink))
+          .map((d) => ({ ...d, alcoholicStatus: alcoholic })); //object label
       }
 
       setAllDrinks([...apiDrinks, ...mongoDrinks]);
@@ -123,13 +120,27 @@ function Login() {
 
   // Drink Cards
   function DrinkCard({ drink }) {
+    const statusColor =
+      drink.alcoholicStatus === "Non alcoholic" ? "#2e7d32" : "#A12F0D";
     return (
       <div className="drink-card">
         <div className="image-container">
           <img src={drink.strDrinkThumb} alt={drink.strDrink} />
         </div>
         <div className="card-details">
+          {/* name */}
           <h3>{drink.strDrink}</h3>
+          {/* alcohol status */}
+          <p
+            style={{
+              fontSize: "0.8rem",
+              fontWeight: "600",
+              color: statusColor,
+              fontStyle: "italic",
+            }}
+          >
+            {drink.alcoholicStatus}
+          </p>
           <p>id: {drink.idDrink}</p>
           <small>
             <strong>{category}</strong>
