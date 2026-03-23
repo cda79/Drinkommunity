@@ -4,7 +4,6 @@ const Drink = require("../models/Drink"); // Import the Drink model
 const verifyToken = require("../middleware/authMiddleware");
 const mongoose = require("mongoose");
 
-
 // public view
 // returns every new drink from every user.
 router.get("/", async (req, res) => {
@@ -18,7 +17,7 @@ router.get("/", async (req, res) => {
 
 // CREATE / ADD A DRINK
 // Adds a new drink and automatically
-// adds an owner using the ID extracted 
+// adds an owner using the ID extracted
 // from the JWT token.
 
 // Generate a unique ID based on date and random string
@@ -36,6 +35,7 @@ router.post("/", verifyToken, async (req, res) => {
       idDrink: req.body.idDrink || generatedId,
       // Unique fields
       strDrink: req.body.strDrink,
+      strTags: req.body.strTags,
       strCategory: req.body.strCategory,
       strAlcoholic: req.body.strAlcoholic,
       strInstructions: req.body.strInstructions,
@@ -82,7 +82,6 @@ router.post("/", verifyToken, async (req, res) => {
   }
 });
 
-
 // READ (personalized)
 // fetch only the drinks belonging to the currently logged-in user
 // this powers the personalized view in the Dashboard
@@ -108,22 +107,19 @@ router.delete("/:id", verifyToken, async (req, res) => {
       return res.status(404).json({ message: "Drink not found" });
     }
 
-    //allow admins to delete any drink, or owners to delete their own by checking the role and ID for ownership authorization 
+    //allow admins to delete any drink, or owners to delete their own by checking the role and ID for ownership authorization
     if (req.userRole === "admin" || drink.owner.toString() === req.userId) {
-       await Drink.findByIdAndDelete(req.params.id);
-    res.json({ message: "Drink successfully deleted" });
-    }
-    else{
+      await Drink.findByIdAndDelete(req.params.id);
+      res.json({ message: "Drink successfully deleted" });
+    } else {
       return res.status(403).json({
         message: "Forbidden: You do not have permission to delete this drink.",
       });
-    } 
-   
+    }
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 });
-
 
 // get full drink details from single ID
 router.get("/:id", async (req, res) => {
@@ -133,7 +129,10 @@ router.get("/:id", async (req, res) => {
 
     // 1. Determine if we search by custom string or Mongo _id
     if (id.startsWith("user-")) {
-      drink = await Drink.findOne({ idDrink: id }).populate("owner", "username");
+      drink = await Drink.findOne({ idDrink: id }).populate(
+        "owner",
+        "username",
+      );
     } else if (mongoose.Types.ObjectId.isValid(id)) {
       drink = await Drink.findById(id).populate("owner", "username");
     } else {

@@ -5,9 +5,21 @@ import { AuthContext } from "./context/AuthContext";
 import logo from "./assets/logo.png";
 
 function Login() {
+  // Drink Browsing Initializations
+  // Search name
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Alcohol filter
+  const alcholicTags = [
+    "All",
+    "Alcoholic",
+    "Non alcoholic",
+    "Optional alcohol",
+  ];
+  const [alcoholic, setAlcoholic] = useState("All");
+
+  // Category
   const [category, setCategory] = useState("Ordinary Drink");
-  const [alcoholic, setAlcoholic] = useState("");
-  const alcholicTag = ["Non alcoholic", "Alcoholic", "Optional alcohol"];
   const categories = [
     "Ordinary Drink",
     "Beer",
@@ -21,43 +33,95 @@ function Login() {
     "Soft Drink",
   ];
 
-  const [formData, setFormData] = useState({ username: "", password: "" });
   const [allDrinks, setAllDrinks] = useState([]); // store everything for filtering
+
+  // Login Initializations
+  const [formData, setFormData] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
-
   const { token } = useContext(AuthContext);
-
-  // search state - the search term
-  const [searchTerm, setSearchTerm] = useState("");
-
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // fetch drinks from API
+  // -------------------------------------------------------------------------
+  // --------------------------- Functions -----------------------------------
+  // -------------------------------------------------------------------------
+
+  // --------------------- Browse Functions ---------------------
+
+  // search logic
+  const filteredDrinks = allDrinks
+    .filter((drink) => {
+      return drink.strDrink.toLowerCase().includes(searchTerm.toLowerCase());
+    })
+    .slice(0, 10); // Show only top 10 (5 per row)
+
+  const handleClearSearch = () => {
+    setCategory("Ordinary Drink");
+    setSearchTerm("");
+  };
+
+  // OLD CODE - Fetch drinks from API
+  // const getDrink = useCallback(async () => {
+  //   setAllDrinks([]); // Clear previous results
+  //   try {
+  //     const apiPromise = await fetch(
+  //       `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`,
+  //       { method: "GET" },
+  //     );
+  //     const mongoPromise = await fetch(`http://localhost:5000/api/drinks`);
+
+  //     const [apiRes, mongoRes] = await Promise.all([apiPromise, mongoPromise]);
+
+  //     const apiData = await apiRes.json();
+  //     const mongoData = await mongoRes.json();
+
+  //     const apiDrinks = apiData.drinks || [];
+  //     const mongoDrinks = Array.isArray(mongoData) ? mongoData : [];
+
+  //     setAllDrinks([...apiDrinks, ...mongoDrinks]);
+  //   } catch (err) {
+  //     console.error("Error fetching drinks:", err);
+  //   }
+  // }, [category]);
+
   const getDrink = useCallback(async () => {
     setAllDrinks([]); // Clear previous results
     try {
-      const apiPromise = await fetch(
-        `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`,
-        { method: "GET" },
-      );
+      //fetch category URL first
+      const categoryURL = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`;
+      const apiPromise = await fetch(categoryURL, { method: "GET" });
       const mongoPromise = await fetch(`http://localhost:5000/api/drinks`);
 
       const [apiRes, mongoRes] = await Promise.all([apiPromise, mongoPromise]);
-
       const apiData = await apiRes.json();
       const mongoData = await mongoRes.json();
 
-      const apiDrinks = apiData.drinks || [];
+      let apiDrinks = Array.isArray(apiData.drinks) ? apiData.drinks : [];
       const mongoDrinks = Array.isArray(mongoData) ? mongoData : [];
+
+      // Alcohol filtering -- seperate URL fetching
+      // We grab the ids of the drinks and then cross reference them
+      if (alcoholic !== "All") {
+        const alchUrl = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=${alcoholic.replace(/ /g, "_")}`;
+        const alchRes = await fetch(alchUrl);
+        const alchData = await alchRes.json();
+
+        const alchDrinks = Array.isArray(alchData.drinks)
+          ? alchData.drinks
+          : [];
+        
+        const alchIds = new Set(alchDrinks.map((d) => d.idDrink));
+        // Compare IDS from when we fetched the category ones to see if theyre the same
+        apiDrinks = apiDrinks.filter((d) => alchIds.has(d.idDrink));
+      }
 
       setAllDrinks([...apiDrinks, ...mongoDrinks]);
     } catch (err) {
       console.error("Error fetching drinks:", err);
     }
-  }, [category]);
+  }, [category, alcoholic]);
 
-  // Drink cards in drink previews
+  // Drink Cards
   function DrinkCard({ drink }) {
     return (
       <div className="drink-card">
@@ -82,6 +146,8 @@ function Login() {
   useEffect(() => {
     getDrink();
   }, [getDrink]);
+
+  // --------------------- Login Functions ---------------------
 
   useEffect(() => {
     if (token) {
@@ -119,17 +185,7 @@ function Login() {
     }
   }
 
-  // search logic
-  const filteredDrinks = allDrinks
-    .filter((drink) => {
-      return drink.strDrink.toLowerCase().includes(searchTerm.toLowerCase());
-    })
-    .slice(0, 10); // Show only top 10 (5 per row)
-
-  const handleClearSearch = () => {
-    setCategory("Ordinary Drink");
-    setSearchTerm("");
-  };
+  // --------------------- Render View ---------------------
 
   return (
     <div className="page-container" style={styles.pageContainer}>
@@ -182,8 +238,8 @@ function Login() {
           </p>
         </div>
       </div>
-
-      {/* search by name only */}
+      {/* ------------------------ Browse Drinks ------------------------ */}
+      {/* SEARCH - NAME */}
       <div style={styles.searchCard}>
         <div style={styles.searchRow}>
           <div style={styles.searchInputGroup}>
@@ -195,22 +251,33 @@ function Login() {
               onChange={(e) => setSearchTerm(e.target.value)}
               style={styles.searchInput}
             />
-            {/* Search by category */}
+            {/* CATEGORY (DROPDOWN) */}
             <div>
               <select
-                name="category-select"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 style={{ width: "150px" }}
               >
-                {/* Map categories to dropdown options */}
-                {categories
-                  .filter((m) => m !== "")
-                  .map((m) => (
-                    <option key={m} value={m}>
-                      {m}
-                    </option>
-                  ))}
+                {categories.map((m) => (
+                  <option key={m} value={m}>
+                    {m}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* ALCOHOLIC (DROPDOWN) */}
+            <div>
+              <select
+                value={alcoholic}
+                onChange={(e) => setAlcoholic(e.target.value)}
+                style={{ width: "150px" }}
+              >
+                {alcholicTags.map((m) => (
+                  <option key={m} value={m}>
+                    {m}
+                  </option>
+                ))}
               </select>
             </div>
           </div>

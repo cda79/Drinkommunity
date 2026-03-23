@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import "./App.css";
 import { AuthContext } from "./context/AuthContext";
-import { jwtDecode } from "jwt-decode"
+import { jwtDecode } from "jwt-decode";
 
 function Dashboard() {
   const [drinks, setDrinks] = useState([]);
@@ -20,6 +20,7 @@ function Dashboard() {
   // local state for the form, match models/Drink.js and database
   const [formData, setFormData] = useState({
     strDrink: "",
+    strTags: "",
     strCategory: "",
     strAlcoholic: "",
     strGlass: "",
@@ -69,7 +70,8 @@ function Dashboard() {
       },
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Could not retrieve your cocktail library.");
+        if (!res.ok)
+          throw new Error("Could not retrieve your cocktail library.");
         return res.json();
       })
       .then((data) => setDrinks(data))
@@ -190,13 +192,9 @@ function Dashboard() {
       <header className="main-header" style={styles.header}>
         <div>
           <h1>Drink Library</h1>
-            <h3 style={styles.welcomeText}>Welcome back, {username}!</h3>
+          <h3 style={styles.welcomeText}>Welcome back, {username}!</h3>
         </div>
-        <button
-          onClick={logout}
-          className="button"
-          style={styles.logoutBtn}
-        >
+        <button onClick={logout} className="button" style={styles.logoutBtn}>
           Logout
         </button>
       </header>
@@ -253,7 +251,9 @@ function Dashboard() {
         </div>
 
         <div className="right-panel">
-          <h2 style={styles.gardenTitle}>My Cocktail Library ({drinks.length} Cocktails)</h2>
+          <h2 style={styles.gardenTitle}>
+            My Cocktail Library ({drinks.length} Cocktails)
+          </h2>
 
           <div className="drink-grid">
             {drinks.map((drink) => (
@@ -297,14 +297,13 @@ function Dashboard() {
                   </button>
                 </div>
               </div>
-
-              
             ))}
 
             {drinks.length === 0 && (
               <div style={styles.emptyMessage}>
                 <p>
-                  Your cocktail library is currently empty. Add a cocktail using the form on the left!
+                  Your cocktail library is currently empty. Add a cocktail using
+                  the form on the left!
                 </p>
               </div>
             )}
