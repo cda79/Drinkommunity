@@ -108,7 +108,7 @@ router.delete("/:id", verifyToken, async (req, res) => {
     }
 
     //allow admins to delete any drink, or owners to delete their own by checking the role and ID for ownership authorization
-    if (req.userRole === "admin" || drink.owner.toString() === req.userId) {
+    if (req.userRole === 'admin'|| drink.owner.toString() === req.userId) {
       await Drink.findByIdAndDelete(req.params.id);
       res.json({ message: "Drink successfully deleted" });
     } else {

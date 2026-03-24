@@ -1,4 +1,3 @@
-import { jwtDecode } from "jwt-decode";
 import { createContext, useEffect, useState } from "react";
 
 // create the Context object to be consumed by other components
@@ -13,18 +12,33 @@ export function AuthProvider({children}) {
     const [user, setUser] = useState(null);
 
     useEffect(()=> {
-        if (token){
+        // When token is set, fetch authoritative user info from server
+        async function loadUser() {
+            if (!token) {
+                setUser(null);
+                return;
+            }
+
             try {
-                //decode JWT to get user details like username or password
-                const decoded = jwtDecode(token);
-                setUser(decoded);
+                const res = await fetch("http://localhost:5000/api/auth/me", {
+                    headers: { Authorization: token },
+                });
+
+                if (!res.ok) {
+                    // token invalid/expired or user not found
+                    logout();
+                    return;
+                }
+
+                const data = await res.json();
+                setUser(data);
             } catch (err) {
-                console.error("Token is invalid or corrupted", err);
+                console.error("Failed to load user from server", err);
                 logout();
             }
-        } else {
-            setUser(null);
         }
+
+        loadUser();
     }, [token]);
 
     function login(newToken) {

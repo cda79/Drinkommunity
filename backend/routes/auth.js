@@ -59,6 +59,19 @@ router.post("/login", async (req, res) => {
 });
 
 // get username by id
+// Return current user info (authenticated)
+router.get("/me", require("../middleware/authMiddleware"), (req, res) => {
+  // verifyToken already attached `req.user` (from DB) and `req.userRole` this allows us to check if the user is truly an admin without trusting the claim they're making (I.E. they can't just edit the token)
+  try {
+    if (!req.user) return res.status(401).json({ error: "Not authenticated" });
+    res.json({ id: req.user._id, username: req.user.username, role: req.user.role });
+  } catch (err) {
+    console.error("Error in /me handler:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// get username by id
 router.get("/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select("username");

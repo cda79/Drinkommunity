@@ -1,23 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import "./App.css";
 import { AuthContext } from "./context/AuthContext";
-import { jwtDecode } from "jwt-decode"
 
 function AdminDashboard() {
   const [drinks, setDrinks] = useState([]);
   const { token, logout } = useContext(AuthContext);
 
-  let username = "Guest";
-  let userRole = "user";
-  if (token) {
-    try {
-      const decoded = jwtDecode(token);
-      username = decoded.username;
-      userRole = decoded.role || "user";
-    } catch (error) {
-      console.error("Token decoding failed", error);
-    }
-  }
+  const { user } = useContext(AuthContext);
+  let username = user?.username || "Guest";
 
   // local state for the form, match models/Drink.js and database
   const [formData, setFormData] = useState({
@@ -65,14 +55,7 @@ function AdminDashboard() {
     if (!token) return;
 
     let endpoint = "http://localhost:5000/api/drinks/my-drinks";
-    try {
-      const decoded = jwtDecode(token);
-      if (decoded.role === "admin") {
-        endpoint = "http://localhost:5000/api/drinks";
-      }
-    } catch (e) {
-      // fallback to my-drinks
-    }
+    if (user?.role === "admin") endpoint = "http://localhost:5000/api/drinks";
 
     fetch(endpoint, {
       method: "GET",

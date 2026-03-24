@@ -1,21 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import "./App.css";
 import { AuthContext } from "./context/AuthContext";
-import { jwtDecode } from "jwt-decode";
 
 function Dashboard() {
   const [drinks, setDrinks] = useState([]);
   const { token, logout } = useContext(AuthContext);
-
+  const { user } = useContext(AuthContext);
+  const [otherDrinks, setOtherDrinks] = useState([]);
   let username = "Guest";
-  if (token) {
-    try {
-      const decoded = jwtDecode(token);
-      username = decoded.username;
-    } catch (error) {
-      console.error("Token decoding failed", error);
-    }
-  }
+  username = user?.username || username;
 
   // local state for the form, match models/Drink.js and database
   const [formData, setFormData] = useState({
@@ -59,10 +52,33 @@ function Dashboard() {
   });
 
   // initial load
-  // fetches only the drinks belonging to the logged-in user.
+  // fetches public drinks as read only and the user's drinks (editable).
   useEffect(() => {
+    // determine current user's id from server-provided user
+    const userId = user?.id || null;
+
+    // fetch public drinks for the user to just view
+    fetch("http://localhost:5000/api/drinks", { method: "GET" })
+      .then((res) => {
+        if (!res.ok) throw new Error("Could not retrieve drinks.");
+        return res.json();
+      })
+      .then((data) => {
+        if (userId) {
+          const filtered = data.filter((d) => {
+            const ownerId = d.owner && d.owner.toString ? d.owner.toString() : d.owner;
+            return ownerId !== userId.toString();
+          });
+          setOtherDrinks(filtered);
+        } else {
+          setOtherDrinks(data);
+        }
+      })
+      .catch((err) => console.error("Fetch error (public):", err));
+
     if (!token) return;
 
+    // fetch user's own drinks (requires authorization)
     fetch("http://localhost:5000/api/drinks/my-drinks", {
       method: "GET",
       headers: {
@@ -75,7 +91,7 @@ function Dashboard() {
         return res.json();
       })
       .then((data) => setDrinks(data))
-      .catch((err) => console.error("Fetch error:", err));
+      .catch((err) => console.error("Fetch error (my-drinks):", err));
   }, [token]);
 
   // handle input changes for the controlled form
@@ -83,6 +99,9 @@ function Dashboard() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   }
 
+  
+
+  
   // create
   // adds a new drink to the user's collection after validating the input and receiving a successful response from the server.
   async function handleSubmit(e) {
@@ -99,7 +118,7 @@ function Dashboard() {
 
       if (res.ok) {
         const newDrink = await res.json();
-        // update local state instantly for a smooth UI experience
+        // update local state 
         setDrinks([...drinks, newDrink]);
         // reset the form
         setFormData({
@@ -299,11 +318,69 @@ function Dashboard() {
               </div>
             ))}
 
+            
+
             {drinks.length === 0 && (
               <div style={styles.emptyMessage}>
                 <p>
                   Your cocktail library is currently empty. Add a cocktail using
                   the form on the left!
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="right-panel">
+          <h2 style={styles.gardenTitle}>
+            Others' Cocktails ({otherDrinks.length} Cocktails)
+          </h2>
+
+          <div className="drink-grid">
+            {otherDrinks.map((drink) => (
+              <div key={drink._id} className="drink-card">
+                <div className="image-container">
+                  {drink.strDrinkThumb ? (
+                    <img
+                      src={getCleanImageUrl(drink.strDrinkThumb)}
+                      alt={drink.strDrink}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src =
+                          "https://via.placeholder.com/260x180?text=Image+Not+Found";
+                      }}
+                    />
+                  ) : (
+                    <div
+                      className="placeholder"
+                      style={styles.imagePlaceholder}
+                    >
+                      No Image Provided
+                    </div>
+                  )}
+                </div>
+                <div className="card-details">
+                  <h3>{drink.strDrink || "Unnamed Cocktail"}</h3>
+                  <p>
+                    <strong>Category:</strong> {drink.strCategory || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Alcoholic?:</strong> {drink.strAlcoholic || "N/A"}
+                  </p>
+                  <p>
+                    <small>Glass: {drink.strGlass || "N/A"}</small>
+                  </p>
+                  {/* Read-only: no deleting others' drinks!!!!!!!! */}
+                </div>
+              </div>
+            ))}
+
+            
+
+            {otherDrinks.length === 0 && (
+              <div style={styles.emptyMessage}>
+                <p>
+                  Others' cocktail library is currently empty. Looks like you are the first person here! 
                 </p>
               </div>
             )}
