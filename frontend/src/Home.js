@@ -4,7 +4,7 @@ import "./App.css";
 import { AuthContext } from "./context/AuthContext";
 import logo from "./assets/logo.png";
 
-function Login() {
+function Home() {
   // Drink Browsing Initializations
   // Search name
   const [searchTerm, setSearchTerm] = useState("");
@@ -54,30 +54,6 @@ function Login() {
     setCategory("Ordinary Drink");
     setSearchTerm("");
   };
-
-  // OLD CODE - Fetch drinks from API
-  // const getDrink = useCallback(async () => {
-  //   setAllDrinks([]); // Clear previous results
-  //   try {
-  //     const apiPromise = await fetch(
-  //       `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`,
-  //       { method: "GET" },
-  //     );
-  //     const mongoPromise = await fetch(`http://localhost:5000/api/drinks`);
-
-  //     const [apiRes, mongoRes] = await Promise.all([apiPromise, mongoPromise]);
-
-  //     const apiData = await apiRes.json();
-  //     const mongoData = await mongoRes.json();
-
-  //     const apiDrinks = apiData.drinks || [];
-  //     const mongoDrinks = Array.isArray(mongoData) ? mongoData : [];
-
-  //     setAllDrinks([...apiDrinks, ...mongoDrinks]);
-  //   } catch (err) {
-  //     console.error("Error fetching drinks:", err);
-  //   }
-  // }, [category]);
 
   const getDrink = useCallback(async () => {
     setAllDrinks([]); // Clear previous results
@@ -160,12 +136,6 @@ function Login() {
 
   // --------------------- Login Functions ---------------------
 
-  useEffect(() => {
-    if (token) {
-      navigate("/dashboard"); // redirect to dashboard if already logged in
-    }
-  }, [token, navigate]);
-
   function handleChange(e) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   }
@@ -186,8 +156,6 @@ function Login() {
 
       if (response.ok) {
         login(data.token);
-        // Navigate to dashboard; DashboardRouter will route based on user role
-        navigate("/dashboard");
       } else {
         setError(data.message || "Invalid credentials");
       }
@@ -206,49 +174,57 @@ function Login() {
           alt="Company Logo"
           style={{ width: "100px", marginBottom: "10px" }}
         />
+        <div>
+          <Link to="/home">Home</Link>
+          <Link to="/dashboard">Dashboard</Link>
+          <Link to="/create">Create</Link>
+          <Link to="/account">Account</Link>
+        </div>
       </div>
 
       {/* login form */}
-      <div style={styles.formWrapper}>
-        <div style={styles.loginCard}>
-          {error && <div style={styles.errorBanner}>{error}</div>}
+      { !token && (
+        <div style={styles.formWrapper}>
+          <div style={styles.loginCard}>
+            {error && <div style={styles.errorBanner}>{error}</div>}
 
-          <form onSubmit={handleSubmit} className="login-form">
-            <div className="login-input">
-              <label>Username</label>
-              <input
-                name="username"
-                type="text"
-                placeholder="Username"
-                onChange={handleChange}
-                required
-              />
-            </div>
+            <form onSubmit={handleSubmit} className="login-form">
+              <div className="login-input">
+                <label>Username</label>
+                <input
+                  name="username"
+                  type="text"
+                  placeholder="Username"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-            <div className="login-input">
-              <label>Password</label>
-              <input
-                name="password"
-                type="password"
-                placeholder="Password"
-                onChange={handleChange}
-                required
-              />
-            </div>
+              <div className="login-input">
+                <label>Password</label>
+                <input
+                  name="password"
+                  type="password"
+                  placeholder="Password"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-            <button type="submit" className="button">
-              Sign In
-            </button>
-          </form>
+              <button type="submit" className="button">
+                Sign In
+              </button>
+            </form>
 
-          <p style={styles.footerText}>
-            Need an account?{" "}
-            <Link to="/register" style={styles.registerLink}>
-              Register here
-            </Link>
-          </p>
+            <p style={styles.footerText}>
+              Need an account?{" "}
+              <Link to="/register" style={styles.registerLink}>
+                Register here
+              </Link>
+            </p>
+          </div>
         </div>
-      </div>
+      )}
       {/* ------------------------ Browse Drinks ------------------------ */}
       {/* SEARCH - NAME */}
       <div style={styles.searchCard}>
@@ -412,4 +388,4 @@ const styles = {
   },
 };
 
-export default Login;
+export default Home;

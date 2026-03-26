@@ -9,7 +9,7 @@ export default function DashboardRouter() {
 
   // If no token, redirect to login
   if (!token) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/register" replace />;
   }
 
   // If user data hasn't decoded yet, wait (show nothing briefly)

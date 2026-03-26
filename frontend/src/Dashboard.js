@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import "./App.css";
 import { AuthContext } from "./context/AuthContext";
+import { Link } from "react-router-dom";
+import logo from "./assets/logo.png";
 
 function Dashboard() {
   const [drinks, setDrinks] = useState([]);
@@ -9,47 +11,6 @@ function Dashboard() {
   const [otherDrinks, setOtherDrinks] = useState([]);
   let username = "Guest";
   username = user?.username || username;
-
-  // local state for the form, match models/Drink.js and database
-  const [formData, setFormData] = useState({
-    strDrink: "",
-    strTags: "",
-    strCategory: "",
-    strAlcoholic: "",
-    strGlass: "",
-    strInstructions: "",
-    strIngredient1: "",
-    strIngredient2: "",
-    strIngredient3: "",
-    strIngredient4: "",
-    strIngredient5: "",
-    strIngredient6: "",
-    strIngredient7: "",
-    strIngredient8: "",
-    strIngredient9: "",
-    strIngredient10: "",
-    strIngredient11: "",
-    strIngredient12: "",
-    strIngredient13: "",
-    strIngredient14: "",
-    strIngredient15: "",
-    strMeasure1: "",
-    strMeasure2: "",
-    strMeasure3: "",
-    strMeasure4: "",
-    strMeasure5: "",
-    strMeasure6: "",
-    strMeasure7: "",
-    strMeasure8: "",
-    strMeasure9: "",
-    strMeasure10: "",
-    strMeasure11: "",
-    strMeasure12: "",
-    strMeasure13: "",
-    strMeasure14: "",
-    strMeasure15: "",
-    strDrinkThumb: "",
-  });
 
   // initial load
   // fetches public drinks as read only and the user's drinks (editable).
@@ -94,80 +55,6 @@ function Dashboard() {
       .catch((err) => console.error("Fetch error (my-drinks):", err));
   }, [token]);
 
-  // handle input changes for the controlled form
-  function handleChange(e) {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  }
-
-  
-
-  
-  // create
-  // adds a new drink to the user's collection after validating the input and receiving a successful response from the server.
-  async function handleSubmit(e) {
-    e.preventDefault();
-    try {
-      const res = await fetch("http://localhost:5000/api/drinks", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (res.ok) {
-        const newDrink = await res.json();
-        // update local state 
-        setDrinks([...drinks, newDrink]);
-        // reset the form
-        setFormData({
-          strDrink: "",
-          strCategory: "",
-          strAlcoholic: "",
-          strGlass: "",
-          strInstructions: "",
-          strIngredient1: "",
-          strIngredient2: "",
-          strIngredient3: "",
-          strIngredient4: "",
-          strIngredient5: "",
-          strIngredient6: "",
-          strIngredient7: "",
-          strIngredient8: "",
-          strIngredient9: "",
-          strIngredient10: "",
-          strIngredient11: "",
-          strIngredient12: "",
-          strIngredient13: "",
-          strIngredient14: "",
-          strIngredient15: "",
-          strMeasure1: "",
-          strMeasure2: "",
-          strMeasure3: "",
-          strMeasure4: "",
-          strMeasure5: "",
-          strMeasure6: "",
-          strMeasure7: "",
-          strMeasure8: "",
-          strMeasure9: "",
-          strMeasure10: "",
-          strMeasure11: "",
-          strMeasure12: "",
-          strMeasure13: "",
-          strMeasure14: "",
-          strMeasure15: "",
-          strDrinkThumb: "",
-        });
-      } else {
-        const errorData = await res.json();
-        alert(errorData.message || "Failed to add drink");
-      }
-    } catch (err) {
-      console.error("Submission error:", err);
-    }
-  }
-
   // delete
   // removes a drink after ownership verification on the server.
   async function handleDelete(id) {
@@ -208,6 +95,20 @@ function Dashboard() {
 
   return (
     <div className="page-container">
+        <div>
+          <img
+            src={logo}
+            alt="Company Logo"
+            style={{ width: "100px", marginBottom: "10px" }}
+          />
+          <div>
+            <Link to="/home">Home</Link>
+            <Link to="/dashboard">Dashboard</Link>
+            <Link to="/create">Create</Link>
+            <Link to="/account">Account</Link>
+          </div>
+        </div>
+
       <header className="main-header" style={styles.header}>
         <div>
           <h1>Drink Library</h1>
@@ -218,56 +119,9 @@ function Dashboard() {
         </button>
       </header>
 
+      
+
       <div className="content-wrapper">
-        <div className="left-panel">
-          <div className="card">
-            <h3>Add New Drink</h3>
-            <form onSubmit={handleSubmit} className="drink-form">
-              <label>Drink Name</label>
-              <input
-                name="strDrink"
-                value={formData.strDrink}
-                onChange={handleChange}
-                placeholder="e.g. Negroni"
-                required
-              />
-
-              <label>Category</label>
-              <input
-                name="strCategory"
-                value={formData.strCategory}
-                onChange={handleChange}
-                placeholder="e.g. Apertif"
-              />
-
-              <label>Alcoholic</label>
-              <input
-                name="strAlcoholic"
-                value={formData.strAlcoholic}
-                onChange={handleChange}
-                placeholder="e.g. Alcoholic"
-              />
-
-              <label>Glass</label>
-              <input
-                name="strGlass"
-                value={formData.strGlass}
-                onChange={handleChange}
-                placeholder="e.g. Tall Glass"
-              />
-
-              <label>Image URL</label>
-              <input
-                name="strDrinkThumb"
-                value={formData.strDrinkThumb}
-                onChange={handleChange}
-                placeholder="http://..."
-              />
-
-              <button type="submit">Add to Drink List</button>
-            </form>
-          </div>
-        </div>
 
         <div className="right-panel">
           <h2 style={styles.gardenTitle}>

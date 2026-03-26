@@ -59,8 +59,8 @@ function Register() {
           </button>
         </form>
         <p style={styles.footerText}>
-          Already have an account?{" "}
-          <span onClick={() => navigate("/login")} style={styles.link}>
+          Already have an account? {" "}
+          <span onClick={() => navigate("/home")} style={styles.link}>
             Login here
           </span>
         </p>
