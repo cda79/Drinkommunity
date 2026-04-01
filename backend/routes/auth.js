@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const verifyToken = require("../middleware/authMiddleware")
 
 // register
 router.post("/register", async (req, res) => {
@@ -64,7 +65,12 @@ router.get("/me", require("../middleware/authMiddleware"), (req, res) => {
   // verifyToken already attached `req.user` (from DB) and `req.userRole` this allows us to check if the user is truly an admin without trusting the claim they're making (I.E. they can't just edit the token)
   try {
     if (!req.user) return res.status(401).json({ error: "Not authenticated" });
-    res.json({ id: req.user._id, username: req.user.username, role: req.user.role });
+    res.json({ 
+      id: req.user._id, 
+      username: req.user.username, 
+      role: req.user.role, 
+      favourites: req.user.favourites || [] 
+    });
   } catch (err) {
     console.error("Error in /me handler:", err);
     res.status(500).json({ error: "Server error" });
@@ -84,6 +90,38 @@ router.get("/:id", async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+// toggle favourite drinks and get all favourited drinks
+
+router.post("/favourite/:drinkId", verifyToken, async (req, res) => {
+  try{ 
+    const user = await User.findById(req.userId);
+    const drinkId = req.params.drinkId;
+
+    const index = user.favourites.indexOf(drinkId);
+
+    if (index > -1) {
+      user.favourites.splice(index, 1);
+      await user.save();
+      return res.json({ message: "Removed from favourites", favourites: user.favourites })
+    } else {
+      user.favourites.push(drinkId);
+      await user.save()
+      return res.json({ message: "Added to favourites", favourites: user.favourites })
+    }
+  } catch (err) {
+    res.status(500).json({error: err.message });
+  };
+});
+
+router.get("/favourites", verifyToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).populate("favourites");
+    res.json(user.favourites);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  };
 });
 
 module.exports = router;
