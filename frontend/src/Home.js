@@ -168,14 +168,23 @@ function Home() {
 
   return (
     <div style={styles.pageContainer}>
+      {/* Header */}
       <div className="header-container">
         <img src={logo} alt="Company Logo" className="logo-container" />
         <hr className="plain-line" />
-        <div>
-          <Link to="/home">Home</Link>
-          <Link to="/dashboard">Dashboard</Link>
-          <Link to="/create">Create</Link>
-          <Link to="/account">Account</Link>
+        <div className="header-wrapper">
+          <Link className="header-item-active" to="/home">
+            Home
+          </Link>
+          <Link className="header-item" to="/dashboard">
+            Dashboard
+          </Link>
+          <Link className="header-item" to="/create">
+            Create
+          </Link>
+          <Link className="header-item" to="/account">
+            Account
+          </Link>
         </div>
       </div>
 
@@ -183,42 +192,43 @@ function Home() {
       {!token && (
         <div style={styles.formWrapper}>
           <div style={styles.loginCard}>
-            {error && <div style={styles.errorBanner}>{error}</div>}
+            <div style={styles.loginWrapper}>
+              <form onSubmit={handleSubmit} className="login-form">
+                <div className="login-input">
+                  <label>Username</label>
+                  <input
+                    name="username"
+                    type="text"
+                    placeholder="Username"
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
 
-            <form onSubmit={handleSubmit} className="login-form">
-              <div className="login-input">
-                <label>Username</label>
-                <input
-                  name="username"
-                  type="text"
-                  placeholder="Username"
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+                <div className="login-input">
+                  <label>Password</label>
+                  <input
+                    name="password"
+                    type="password"
+                    placeholder="Password"
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
 
-              <div className="login-input">
-                <label>Password</label>
-                <input
-                  name="password"
-                  type="password"
-                  placeholder="Password"
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+                <button type="submit" className="button">
+                  Sign In
+                </button>
+                <p style={styles.footerText}>
+                  Need an account?{" "}
+                  <Link to="/register" style={styles.registerLink}>
+                    Register here
+                  </Link>
+                </p>
+              </form>
 
-              <button type="submit" className="button">
-                Sign In
-              </button>
-            </form>
-
-            <p style={styles.footerText}>
-              Need an account?{" "}
-              <Link to="/register" style={styles.registerLink}>
-                Register here
-              </Link>
-            </p>
+              {error && <div style={styles.errorBanner}>{error}</div>}
+            </div>
           </div>
         </div>
       )}
@@ -306,7 +316,7 @@ const styles = {
   },
   loginCard: {
     width: "80%",
-    flexDirection: "row",
+    flexDirection: "column",
     background: "#EFE7DF",
     display: "flex",
     padding: "20px",
@@ -314,24 +324,27 @@ const styles = {
     boxShadow: "0 4px 4px rgba(0, 0, 0, 0.25)",
     borderRadius: "11px",
   },
+  loginWrapper: {
+    width: "100%",
+    flexDirection: "row",
+  },
   errorBanner: {
-    backgroundColor: "#ffebee",
     color: "#c62828",
-    padding: "10px",
-    borderRadius: "4px",
-    marginBottom: "15px",
-    textAlign: "center",
+    paddingTop: "2px",
   },
   footerText: {
     marginTop: "15px",
     fontSize: "0.9rem",
     marginLeft: "0.5rem",
     color: "#A12F0D",
+    display: "flex",
+    flexDirection: "row",
   },
   registerLink: {
     color: "#A12F0D",
     transition: "all 2s",
     fontWeight: "bold",
+    margin: "0px 5px",
   },
 
   // SEARCH CARD

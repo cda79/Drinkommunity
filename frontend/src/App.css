@@ -29,19 +29,23 @@ html {
   height: 100%;
 }
 
-/* Navigation Header */
+/*--------Navigation Header------------*/
 .logo-container {
-  width: 4vw;
+  height: 90%;
 }
 
 .header-container {
   width: 100%;
-  height: 20%;
+  height: 10vh;
   background-color: var(--header);
   display: flex;
   flex-direction: row;
+
   align-items: center;
-  margin-bottom: 1vh;
+  justify-content: center;
+
+  margin-bottom: 3vh;
+  gap: 1rem;
 }
 
 .plain-line {
@@ -50,7 +54,44 @@ html {
   margin: 0 10px;
 }
 
-/*--------------------*/
+.header-item {
+  height: 90%;
+  display: flex;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+  flex:1;
+  text-decoration: none;
+  color: var(--text-brown);
+  transition: all 0.25s ease-in-out;
+  border-bottom: 0px solid var(--text-brown);
+}
+
+.header-item:hover {
+  border-bottom: 5px solid var(--text-brown);
+  transition: all 0.25s ease-in-out;
+}
+
+.header-item-active {
+  border-bottom: 5px solid var(--primary-red);
+  height: 90%;
+  display: flex;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+  flex:1;
+  text-decoration: none;
+  color: var(--primary-red);
+}
+
+.header-wrapper {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 30%;
+  gap: 2rem;
+}
+/*--------------------------------------*/
 
 
 .button {
@@ -135,7 +176,6 @@ html {
   border-radius: 5px;
   border: none;
 }
-
 
 /* --------------------- DASHBOARD --------------------- */
 
