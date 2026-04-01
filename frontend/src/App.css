@@ -1,17 +1,57 @@
+/* import font */
+@import url('https://fonts.googleapis.com/css2?family=Gabarito:wght@400..900&display=swap');
+
+/* global colors */
+:root {
+  --bg: #F9F9F9;
+  --button-brown: #BFB1A4;
+  --header: #EFE7DF;
+
+  --primary-red: #A12F0D;
+  --text-brown: #8C665B;
+  --text-red: #843A24;
+  --active-red: #DE3300;
+
+  --gray1: #D4D4D4;
+  --gray2: #B9B9B9;
+  --gray3: #7E7E7E;
+  --gray4: #3A3432;
+
+}
+
+
 body,
 html {
   margin: 0;
   padding: 0;
-  background-color: #F9F9F9;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg);
+  font-family: "Gabarito", Tahoma, sans-serif;
   height: 100%;
 }
 
-.page-container {
-  max-width: none;
-  margin: 0;
-  padding: 20px;
+/* Navigation Header */
+.logo-container {
+  width: 4vw;
 }
+
+.header-container {
+  width: 100%;
+  height: 20%;
+  background-color: var(--header);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 1vh;
+}
+
+.plain-line {
+  border-left: 1px solid var(--primary-red);
+  height: 50px;
+  margin: 0 10px;
+}
+
+/*--------------------*/
+
 
 .button {
   padding: 10px 20px;

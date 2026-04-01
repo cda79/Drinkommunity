@@ -2,7 +2,7 @@ import { useContext, useEffect, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./App.css";
 import { AuthContext } from "./context/AuthContext";
-import logo from "./assets/logo.png";
+import logo from "./assets/logo.svg";
 
 function Home() {
   // Drink Browsing Initializations
@@ -167,13 +167,10 @@ function Home() {
   // --------------------- Render View ---------------------
 
   return (
-    <div className="page-container" style={styles.pageContainer}>
-      <div>
-        <img
-          src={logo}
-          alt="Company Logo"
-          style={{ width: "100px", marginBottom: "10px" }}
-        />
+    <div style={styles.pageContainer}>
+      <div className="header-container">
+        <img src={logo} alt="Company Logo" className="logo-container" />
+        <hr className="plain-line" />
         <div>
           <Link to="/home">Home</Link>
           <Link to="/dashboard">Dashboard</Link>
@@ -183,7 +180,7 @@ function Home() {
       </div>
 
       {/* login form */}
-      { !token && (
+      {!token && (
         <div style={styles.formWrapper}>
           <div style={styles.loginCard}>
             {error && <div style={styles.errorBanner}>{error}</div>}
