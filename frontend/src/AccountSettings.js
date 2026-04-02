@@ -14,7 +14,7 @@ function AccountSettings() {
 
     useEffect(() => {
         if (!token) {
-        navigate("/register");
+        navigate("/home");
         }
     }, [token, navigate]);
 
