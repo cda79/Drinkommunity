@@ -20,7 +20,7 @@ async function verifyToken(req, res, next) {
     req.userId = decoded.id;
 
     try {
-      const user = await User.findById(req.userId).select("username role favourites");
+      const user = await User.findById(req.userId).select("username role favourites nickname imageThumb");
       if (!user) return res.status(401).json({ error: "User not found" });
 
       // Use the role stored in DB (do NOT trust the token's role claim)

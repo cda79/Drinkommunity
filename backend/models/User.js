@@ -18,6 +18,12 @@ const UserSchema = new mongoose.Schema({
     favourites: [{
         type: String
     }],
+    imageThumb:{ //thumbnail for the user profile pic
+        type: String,
+    },
+    nickname: { //nickname for the user profile
+        type: String,
+    }
 });
 
 module.exports = mongoose.model("User", UserSchema);

@@ -24,6 +24,9 @@ router.post("/register", async (req, res) => {
 
     res.status(201).json({ message: "User registered successfully" });
   } catch (err) {
+    if (err && err.code === 11000) {
+      return res.status(400).json({ message: "Username already exists" });
+    }
     res.status(500).json({ error: err.message });
   }
 });
@@ -69,7 +72,9 @@ router.get("/me", require("../middleware/authMiddleware"), (req, res) => {
       id: req.user._id, 
       username: req.user.username, 
       role: req.user.role, 
-      favourites: req.user.favourites || [] 
+      favourites: req.user.favourites || [],
+      nickname: req.user.nickname || null,
+      imageThumb: req.user.imageThumb || null,
     });
   } catch (err) {
     console.error("Error in /me handler:", err);
@@ -122,6 +127,73 @@ router.get("/favourites", verifyToken, async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   };
+});
+
+router.put("/update-thumbnail", verifyToken, async (req, res) => { //updating user profile pic
+  try {
+    const user = await User.findById(req.userId);
+    const { imageThumb } = req.body;
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.imageThumb = imageThumb;
+    await user.save();
+
+    res.json({ message: "Thumbnail updated successfully", imageThumb: user.imageThumb });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+router.put("/update", verifyToken, async (req, res) => { //updating user settings (username, password, nickname)
+    try {
+        const user = await User.findById(req.userId);
+        const { newNickname, newUsername, newPassword, confirmNewPassword } = req.body;
+        const updateData = {};
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // only update if the field is filled out
+        if (typeof newNickname === 'string' && newNickname.trim() !== '') {
+            updateData.nickname = newNickname.trim();
+        }
+
+        if (typeof newUsername === 'string' && newUsername.trim() !== '' && newUsername !== user.username) {
+          const trimmed = newUsername.trim();
+          // check if the new username is already taken by another user
+          const usernameTaken = await User.findOne({ username: trimmed });
+          if (usernameTaken && usernameTaken._id.toString() !== user._id.toString()) {
+            return res.status(400).json({ message: "Username already taken" });
+          }
+          updateData.username = trimmed;
+        }
+
+        if (typeof newPassword === 'string' && newPassword !== '') {
+            if (typeof confirmNewPassword !== 'string' || newPassword !== confirmNewPassword) {
+                return res.status(400).json({ message: "Passwords do not match!" });
+            }
+            updateData.password = await bcrypt.hash(newPassword, 10);
+        }
+
+        if (Object.keys(updateData).length === 0) {
+            return res.status(400).json({ message: "Please enter at least one field to update." });
+        }
+
+        Object.assign(user, updateData);
+        await user.save();
+        res.json({ message: "User settings updated successfully!" });
+    } catch (error) {
+      console.error("Error updating user settings:", error);
+      if (error && error.code === 11000) {
+        return res.status(400).json({ message: "Username already exists" });
+      }
+      res.status(500).json({ error: "An error occurred while updating user settings." });
+    }
 });
 
 module.exports = router;
