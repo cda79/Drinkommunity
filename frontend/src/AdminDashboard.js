@@ -1,53 +1,15 @@
 import { useContext, useEffect, useState } from "react";
 import "./App.css";
 import { AuthContext } from "./context/AuthContext";
+import { Link } from "react-router-dom";
+import logo from "./assets/logo.png";
 
 function AdminDashboard() {
   const [drinks, setDrinks] = useState([]);
   const { token, logout } = useContext(AuthContext);
 
   const { user } = useContext(AuthContext);
-  let username = user?.username || "Guest";
-
-  // local state for the form, match models/Drink.js and database
-  const [formData, setFormData] = useState({
-    strDrink: "",
-    strCategory: "",
-    strAlcoholic: "",
-    strGlass: "",
-    strInstructions: "",
-    strIngredient1: "",
-    strIngredient2: "",
-    strIngredient3: "",
-    strIngredient4: "",
-    strIngredient5: "",
-    strIngredient6: "",
-    strIngredient7: "",
-    strIngredient8: "",
-    strIngredient9: "",
-    strIngredient10: "",
-    strIngredient11: "",
-    strIngredient12: "",
-    strIngredient13: "",
-    strIngredient14: "",
-    strIngredient15: "",
-    strMeasure1: "",
-    strMeasure2: "",
-    strMeasure3: "",
-    strMeasure4: "",
-    strMeasure5: "",
-    strMeasure6: "",
-    strMeasure7: "",
-    strMeasure8: "",
-    strMeasure9: "",
-    strMeasure10: "",
-    strMeasure11: "",
-    strMeasure12: "",
-    strMeasure13: "",
-    strMeasure14: "",
-    strMeasure15: "",
-    strDrinkThumb: "",
-  });
+  let username = user?.username || "Admin";
 
   // initial load
   // fetches all drinks for admin, only owned drinks for regular users.
@@ -64,103 +26,35 @@ function AdminDashboard() {
       },
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Could not retrieve your cocktail library.");
+        if (!res.ok)
+          throw new Error("Could not retrieve your cocktail library.");
         return res.json();
       })
       .then((data) => setDrinks(data))
       .catch((err) => console.error("Fetch error:", err));
   }, [token]);
 
-  // handle input changes for the controlled form
-  function handleChange(e) {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  }
-
-  // create
-  // adds a new drink to the user's collection after validating the input and receiving a successful response from the server.
-  async function handleSubmit(e) {
-    e.preventDefault();
-    try {
-      const res = await fetch("http://localhost:5000/api/drinks", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (res.ok) {
-        const newDrink = await res.json();
-        // update local state instantly for a smooth UI experience
-        setDrinks([...drinks, newDrink]);
-        // reset the form
-        setFormData({
-          strDrink: "",
-          strCategory: "",
-          strAlcoholic: "",
-          strGlass: "",
-          strInstructions: "",
-          strIngredient1: "",
-          strIngredient2: "",
-          strIngredient3: "",
-          strIngredient4: "",
-          strIngredient5: "",
-          strIngredient6: "",
-          strIngredient7: "",
-          strIngredient8: "",
-          strIngredient9: "",
-          strIngredient10: "",
-          strIngredient11: "",
-          strIngredient12: "",
-          strIngredient13: "",
-          strIngredient14: "",
-          strIngredient15: "",
-          strMeasure1: "",
-          strMeasure2: "",
-          strMeasure3: "",
-          strMeasure4: "",
-          strMeasure5: "",
-          strMeasure6: "",
-          strMeasure7: "",
-          strMeasure8: "",
-          strMeasure9: "",
-          strMeasure10: "",
-          strMeasure11: "",
-          strMeasure12: "",
-          strMeasure13: "",
-          strMeasure14: "",
-          strMeasure15: "",
-          strDrinkThumb: "",
-        });
-      } else {
-        const errorData = await res.json();
-        alert(errorData.message || "Failed to add drink");
-      }
-    } catch (err) {
-      console.error("Submission error:", err);
-    }
-  }
-
   // delete
   // removes a drink after ownership verification on the server.
   async function handleDelete(id) {
     try {
-      const res = await fetch(`http://localhost:5000/api/drinks/${id}`, { //DELETE ID from db 
+      const res = await fetch(`http://localhost:5000/api/drinks/${id}`, {
+        //DELETE ID from db
         method: "DELETE",
         headers: {
           Authorization: token, // Include the auth token
         },
       });
-      
+
       if (!res.ok) {
         const errorData = await res.json();
-        const errorMsg = errorData.message || `Failed to delete drink (Status: ${res.status})`;
+        const errorMsg =
+          errorData.message || `Failed to delete drink (Status: ${res.status})`;
         alert("Error: " + errorMsg);
         console.error("Delete failed:", errorMsg);
         return;
       }
-      
+
       // Remove from the UI after successful deletion from the db
       setDrinks(drinks.filter((d) => d._id !== id));
       console.log("Drink deleted successfully");
@@ -187,73 +81,73 @@ function AdminDashboard() {
 
   return (
     <div className="page-container">
-      <header className="main-header" style={styles.header}>
-        <div>
-          <h1>Drink Library (ADMIN DASHBOARD --PROCEED WITH CAUTION)</h1>
-            <h3 style={styles.welcomeText}>Welcome back, {username}!</h3>
+      {/* Header */}
+      <div className="header-container">
+        <Link to="/home">
+          <img src={logo} alt="Company Logo" className="logo-container" />{" "}
+        </Link>
+        <hr className="plain-line" />
+        <div className="header-wrapper">
+          <Link className="header-item" to="/home">
+            Home
+          </Link>
+          <Link className="header-item-active" to="/dashboard">
+            Dashboard
+          </Link>
+          <Link className="header-item" to="/create">
+            Create
+          </Link>
+          <Link className="header-item" to="/account">
+            Account
+          </Link>
         </div>
-        <button
-          onClick={logout}
-          className="button"
-          style={styles.logoutBtn}
-        >
-          Logout
-        </button>
-      </header>
+      </div>
+
+      <div className="user-panel-container">
+        <header className="user-header">
+          <div>
+            {user?.imageThumb ? (
+              <img
+                src={getCleanImageUrl(user.imageThumb)}
+                crossOrigin="anonymous"
+                alt="User Icon"
+                className="user-icon"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src =
+                    "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
+                }}
+              />
+            ) : (
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
+                alt="No Avatar"
+                className="user-icon"
+              />
+            )}
+          </div>
+          <div>
+            <h1>Drink Library (ADMIN DASHBOARD -- PROCEED WITH CAUTION)</h1>
+            <h2>
+              <strong>{username}'s</strong> Dashboard
+            </h2>
+            <button
+              onClick={logout}
+              className="button"
+              id="logout-button"
+              style={styles.logoutBtn}
+            >
+              Logout
+            </button>
+          </div>
+        </header>
+      </div>
 
       <div className="content-wrapper">
-        <div className="left-panel">
-          <div className="card">
-            <h3>Add New Drink</h3>
-            <form onSubmit={handleSubmit} className="drink-form">
-              <label>Drink Name</label>
-              <input
-                name="strDrink"
-                value={formData.strDrink}
-                onChange={handleChange}
-                placeholder="e.g. Negroni"
-                required
-              />
-
-              <label>Category</label>
-              <input
-                name="strCategory"
-                value={formData.strCategory}
-                onChange={handleChange}
-                placeholder="e.g. Apertif"
-              />
-
-              <label>Alcoholic</label>
-              <input
-                name="strAlcoholic"
-                value={formData.strAlcoholic}
-                onChange={handleChange}
-                placeholder="e.g. Alcoholic"
-              />
-
-              <label>Glass</label>
-              <input
-                name="strGlass"
-                value={formData.strGlass}
-                onChange={handleChange}
-                placeholder="e.g. Tall Glass"
-              />
-
-              <label>Image URL</label>
-              <input
-                name="strDrinkThumb"
-                value={formData.strDrinkThumb}
-                onChange={handleChange}
-                placeholder="http://..."
-              />
-
-              <button type="submit">Add to Drink List</button>
-            </form>
-          </div>
-        </div>
-
         <div className="right-panel">
-          <h2 style={styles.gardenTitle}>Complete Cocktail Library ({drinks.length} Cocktails)</h2>
+          <h2 style={styles.gardenTitle}>
+            All User Created Cocktails ({drinks.length} Cocktails)
+          </h2>
 
           <div className="drink-grid">
             {drinks.map((drink) => (
@@ -266,7 +160,7 @@ function AdminDashboard() {
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src =
-                         "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
+                          "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
                       }}
                     />
                   ) : (
@@ -302,7 +196,8 @@ function AdminDashboard() {
             {drinks.length === 0 && (
               <div style={styles.emptyMessage}>
                 <p>
-                  The cocktail library is currently empty. Add a cocktail using the form on the left!
+                  The cocktail library is currently empty. Add a cocktail using
+                  the form on the left!
                 </p>
               </div>
             )}
