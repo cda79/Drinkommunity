@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import "./App.css";
+import logo from "./assets/logo.svg";
 
 function Register() {
   const [formData, setFormData] = useState({ username: "", password: "" });
@@ -33,7 +35,21 @@ function Register() {
   }
 
   return (
-    <div className="auth-container" style={styles.container}>
+    <div className="page-container">
+      {/* Header */}
+      <div className="header-container">
+        <Link to="/home">
+          {" "}
+          <img src={logo} alt="Company Logo" className="logo-container" />{" "}
+        </Link>
+        <hr className="plain-line" />
+        <div className="header-wrapper">
+          <Link className="header-item" to="/home">
+            Go Back to Homepage
+          </Link>
+        </div>
+      </div>
+
       <div className="card" style={styles.card}>
         <h2 style={styles.title}>Create Account</h2>
         <form onSubmit={handleSubmit} className="drink-form">
@@ -59,7 +75,7 @@ function Register() {
           </button>
         </form>
         <p style={styles.footerText}>
-          Already have an account? {" "}
+          Already have an account?{" "}
           <span onClick={() => navigate("/home")} style={styles.link}>
             Login here
           </span>

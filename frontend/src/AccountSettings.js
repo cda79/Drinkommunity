@@ -128,9 +128,9 @@ function AccountSettings() {
   }
 
   return (
-    <div className="page-container">
+    <div>
       {token && (
-        <div>
+        <div className="page-container">
           {/* Header */}
           <div className="header-container">
             <Link to="/home">
@@ -156,33 +156,33 @@ function AccountSettings() {
               </Link>
             </div>
           </div>
-
-          <header className="main-header" style={styles.header}>
-            <div>
-              <h1>Account</h1>
-              <h3 style={styles.welcomeText}>{username}</h3>
-              <h4 style={styles.welcomeText}>{nickname}</h4>
-              {userThumbnail ? (
-                <img
-                  src={getCleanImageUrl(userThumbnail)}
-                  crossOrigin="anonymous"
-                  alt="User Thumbnail"
-                  className="user-icon-thumb"
-                  onError={(e) => {
-                    e.currentTarget.onerror = null;
-                    e.currentTarget.src =
-                      "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
-                  }}
-                />
-              ) : (
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
-                  alt="No avatar"
-                  className="user-icon-thumb"
-                />
-              )}
-
-              <div>
+          {/* Title */}
+          <header className="user-settings-container">
+            <h1>Account settings</h1>
+            <h2>
+              {username} - {nickname}
+            </h2>
+            <div className="settings-container">
+              <div className="icon-settings-wrapper">
+                {userThumbnail ? (
+                  <img
+                    src={getCleanImageUrl(userThumbnail)}
+                    crossOrigin="anonymous"
+                    alt="User Thumbnail"
+                    className="user-icon-thumb"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src =
+                        "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
+                    }}
+                  />
+                ) : (
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
+                    alt="No avatar"
+                    className="user-icon-thumb"
+                  />
+                )}
                 <label htmlFor="updateThumbURL">Update Thumbnail URL:</label>
                 <input
                   type="text"
@@ -197,7 +197,7 @@ function AccountSettings() {
                   Confirm
                 </button>
               </div>
-              <div>
+              <div className="options-settings-wrapper">
                 <label htmlFor="nickname">Set Nickname:</label>
                 <input
                   type="text"
@@ -234,11 +234,7 @@ function AccountSettings() {
                 </button>
               </div>
             </div>
-            <button
-              onClick={logout}
-              className="button"
-              style={styles.logoutBtn}
-            >
+            <button onClick={logout} id="logout-button">
               Logout
             </button>
           </header>
@@ -248,31 +244,6 @@ function AccountSettings() {
   );
 }
 
-const styles = {
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  welcomeText: {
-    color: "#A12F0D",
-    marginTop: "5px",
-  },
-  gardenTitle: {
-    color: "#A12F0D",
-    borderBottom: "2px solid #EFE7DF",
-    paddingBottom: "10px",
-    marginBottom: "20px",
-  },
-  imagePlaceholder: {
-    color: "#999",
-  },
-  emptyMessage: {
-    gridColumn: "1 / -1",
-    textAlign: "center",
-    padding: "40px",
-    color: "#666",
-  },
-};
+const styles = {};
 
 export default AccountSettings;
