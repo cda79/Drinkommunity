@@ -113,17 +113,18 @@ function Home() {
               fontSize: "0.8rem",
               fontWeight: "600",
               color: statusColor,
-              fontStyle: "italic",
             }}
           >
             {drink.alcoholicStatus}
           </p>
-          <p>id: {drink.idDrink}</p>
-          <p>{category}</p>
+          <p id="category-text">{category}</p>
+          <p id="id-text">id: {drink.idDrink}</p>
         </div>
-        <Link to="/details" state={{ drinkData: drink }}>
-          <div className="view-details">View Details</div>
-        </Link>
+        <div className="view-details-container">
+          <Link className="details-link" to="/details" state={{ drinkData: drink }}>
+            View <div>Details</div>
+          </Link>
+        </div>
       </div>
     );
   }

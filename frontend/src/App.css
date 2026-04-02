@@ -348,31 +348,6 @@ html {
   flex: 2;
 }
 
-.image-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.view-details {
-  font-weight: bold;
-  text-align: center;
-  color: #843a24;
-  align-self: left;
-  flex: 0.5;
-  word-break: break-word;
-  transition: all 0.2s;
-}
-
-.view-details:hover {
-  color: #de3300;
-  transition: all 0.2s;
-}
-
 .card-details {
   padding: 12px;
   flex: 2;
@@ -388,6 +363,47 @@ html {
   margin: 3px 0;
   color: #555;
   font-size: 0.85rem;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.view-details-container {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  font-weight: bold;
+}
+
+.details-link {
+  text-decoration: none;
+  color: var(--text-brown);
+  transition: all 0.2s;
+  margin: 1rem;
+}
+
+.details-link:hover {
+  text-decoration: none;
+  color: var(--active-red);
+  transition: all 0.2s;
+  font-size: 1.1rem;
+}
+
+#id-text {
+  margin-top: 1rem;
+  color: var(--gray3);
+}
+
+#category-text {
+  color: var(--gray4);
+  font-size: 1rem;
 }
 
 /* ------------------------------------ */
