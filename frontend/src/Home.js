@@ -53,6 +53,7 @@ function Home() {
   const handleClearSearch = () => {
     setCategory("Ordinary Drink");
     setSearchTerm("");
+    setAlcoholic("All");
   };
 
   const getDrink = useCallback(async () => {
@@ -233,49 +234,46 @@ function Home() {
         </div>
       )}
       {/* ------------------------ Browse Drinks ------------------------ */}
-      {/* SEARCH - NAME */}
-      <div style={styles.searchCard}>
-        <div style={styles.searchRow}>
-          <div style={styles.searchInputGroup}>
-            <label style={styles.searchLabel}>Drink Name</label>
-            <input
-              type="text"
-              placeholder="Start typing a drink name (e.g. 'Cuba Libre' or 'Paloma')..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              style={styles.searchInput}
-            />
-            {/* CATEGORY (DROPDOWN) */}
-            <div>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                style={{ width: "150px" }}
-              >
-                {categories.map((m) => (
-                  <option key={m} value={m}>
-                    {m}
-                  </option>
-                ))}
-              </select>
-            </div>
 
-            {/* ALCOHOLIC (DROPDOWN) */}
-            <div>
-              <select
-                value={alcoholic}
-                onChange={(e) => setAlcoholic(e.target.value)}
-                style={{ width: "150px" }}
-              >
-                {alcholicTags.map((m) => (
-                  <option key={m} value={m}>
-                    {m}
-                  </option>
-                ))}
-              </select>
-            </div>
+      {/* Search bar */}
+      <div className="search-container">
+        <div className="search-wrapper">
+          {/* Name */}
+          <label>Drink Name</label>
+          <input
+            type="text"
+            placeholder="Start typing a drink name (e.g. 'Cuba Libre' or 'Paloma')..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          {/* Category */}
+          <div>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              style={{ width: "150px" }}
+            >
+              {categories.map((m) => (
+                <option key={m} value={m}>
+                  {m}
+                </option>
+              ))}
+            </select>
           </div>
 
+          {/* ALCOHOLIC (DROPDOWN) */}
+          <div>
+            <select
+              value={alcoholic}
+              onChange={(e) => setAlcoholic(e.target.value)}
+            >
+              {alcholicTags.map((m) => (
+                <option key={m} value={m}>
+                  {m}
+                </option>
+              ))}
+            </select>
+          </div>
           <button onClick={handleClearSearch} className="button">
             Clear
           </button>
@@ -305,36 +303,6 @@ const styles = {
   errorBanner: {
     color: "#c62828",
     marginTop: "5px",
-  },
-  // SEARCH CARD
-  searchCard: {
-    width: "100%",
-    maxWidth: "1200px",
-    marginBottom: "40px",
-  },
-  searchRow: {
-    display: "flex",
-    gap: "20px",
-    justifyContent: "center",
-    alignItems: "flex-end",
-  },
-  searchInputGroup: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "5px",
-    width: "100%",
-    maxWidth: "500px",
-  },
-  searchLabel: {
-    fontSize: "0.8rem",
-    fontWeight: "bold",
-    color: "#A12F0D",
-  },
-  searchInput: {
-    padding: "10px",
-    borderRadius: "4px",
-    border: "1px solid #C5C5C5",
-    fontSize: "1rem",
   },
 
   // DATABASE PREVIEW
