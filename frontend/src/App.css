@@ -1,24 +1,22 @@
 /* import font */
-@import url('https://fonts.googleapis.com/css2?family=Gabarito:wght@400..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Gabarito:wght@400..900&display=swap");
 
 /* global colors */
 :root {
-  --bg: #F9F9F9;
-  --button-brown: #BFB1A4;
-  --header: #EFE7DF;
+  --bg: #f9f9f9;
+  --button-brown: #bfb1a4;
+  --header: #efe7df;
 
-  --primary-red: #A12F0D;
-  --text-brown: #8C665B;
-  --text-red: #843A24;
-  --active-red: #DE3300;
+  --primary-red: #a12f0d;
+  --text-brown: #8c665b;
+  --text-red: #843a24;
+  --active-red: #de3300;
 
-  --gray1: #D4D4D4;
-  --gray2: #B9B9B9;
-  --gray3: #7E7E7E;
-  --gray4: #3A3432;
-
+  --gray1: #d4d4d4;
+  --gray2: #b9b9b9;
+  --gray3: #7e7e7e;
+  --gray4: #3a3432;
 }
-
 
 body,
 html {
@@ -29,7 +27,73 @@ html {
   height: 100%;
 }
 
-/*--------Navigation Header------------*/
+/* ------------------------------------ */
+/*-----------General Elements-----------*/
+/* ------------------------------------ */
+
+.page-container {
+  display: "flex";
+  flex-direction: "column";
+  align-items: "center";
+}
+
+.button {
+  padding: 10px 20px;
+  background-color: var(--primary-red);
+  color: white;
+  height: 42px;
+  border-radius: 11px;
+  border: none;
+  transition: all 0.2s;
+}
+
+.button:hover {
+  background-color: var(--active-red);
+  transition: all 0.2s;
+}
+
+/* header */
+.main-header {
+  margin-bottom: 20px;
+  text-align: left;
+  /* Align title to the left */
+}
+
+.main-header h1 {
+  color: #a12f0d;
+  font-size: 2rem;
+  margin: 0;
+}
+
+/* 2-column layout */
+.content-wrapper {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #d4d4d4;
+}
+
+.card h3 {
+  margin-top: 0;
+  color: #a12f0d;
+  border-bottom: 2px solid #efe7df;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+}
+
+/* ------------------------------------ */
+/*------------Navigation Header---------*/
+/* ------------------------------------ */
+
 .logo-container {
   height: 90%;
 }
@@ -60,7 +124,7 @@ html {
   align-self: center;
   align-items: center;
   justify-content: center;
-  flex:1;
+  flex: 1;
   text-decoration: none;
   color: var(--text-brown);
   transition: all 0.25s ease-in-out;
@@ -79,7 +143,7 @@ html {
   align-self: center;
   align-items: center;
   justify-content: center;
-  flex:1;
+  flex: 1;
   text-decoration: none;
   color: var(--primary-red);
 }
@@ -91,67 +155,42 @@ html {
   width: 30%;
   gap: 2rem;
 }
-/*--------------------------------------*/
 
+/* ------------------------------------ */
+/*--------------- Home Page ------------*/
+/* ------------------------------------ */
 
-.button {
-  padding: 10px 20px;
-  background-color: #A12F0D;
-  color: white;
-  height: 42px;
-  border-radius: 11px;
-  border: none;
-}
+/* -------- LOGIN -------- */
 
-.button:hover {
-  background-color: #DE3300;
-  transition: all 0.2s;
-}
-
-/* header */
-.main-header {
-  margin-bottom: 20px;
-  text-align: left;
-  /* Align title to the left */
-}
-
-.main-header h1 {
-  color: #A12F0D;
-  font-size: 2rem;
-  margin: 0;
-}
-
-/* 2-column layout */
-.content-wrapper {
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
+.form-wrapper {
   width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
 }
 
-.card {
-  background: white;
+.login-card {
+  width: auto;
+  flex-direction: column;
+  background-color: var(--header);
+  display: flex;
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border: 1px solid #D4D4D4;
+  align-items: end;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 11px;
 }
 
-.card h3 {
-  margin-top: 0;
-  color: #A12F0D;
-  border-bottom: 2px solid #EFE7DF;
-  padding-bottom: 10px;
-  margin-bottom: 15px;
-  font-size: 1.1rem;
+.login-wrapper {
+  width: 100%;
+  flex-direction: row;
 }
 
-/* --------------------- LOGIN --------------------- */
 .login-form {
   display: flex;
   flex-direction: row;
   gap: 20px;
-  align-items: end;
+  align-items: center;
+  justify-content: center;
 }
 
 .login-form button {
@@ -161,13 +200,14 @@ html {
 .login-input {
   display: flex;
   flex-direction: column;
-  gap:5px;
-  color:#8C665B;
+  gap: 5px;
+  color: var(--text-brown);
   font-weight: bold;
 }
 
 .login-input label {
-  font-size: 0.75rem;
+  font-size: 0.85rem;
+  font-weight: lighter;
 }
 
 .login-input input {
@@ -175,9 +215,37 @@ html {
   height: 40px;
   border-radius: 5px;
   border: none;
+  color: var(--gray2);
 }
 
-/* --------------------- DASHBOARD --------------------- */
+.footer-text {
+  margin: 1rem 0rem 0rem 0rem;
+  font-size: 0.9rem;
+  color: var(--primary-red);
+  display: flex;
+  flex-direction: column;
+}
+
+#button-login {
+  margin: 1.25rem 0rem 0rem 0rem;
+}
+
+.register-link {
+  color: var(--primary-red);
+  font-weight: bold;
+}
+
+.register-link:hover {
+  color: var(--active-red);
+}
+
+/* -------- SEARCH -------- */
+
+
+
+/* ------------------------------------ */
+/*--------------- Dashboard ------------*/
+/* ------------------------------------ */
 
 /* left panel: the form to enter data */
 .left-panel {
@@ -209,7 +277,7 @@ html {
 .drink-form button {
   margin-top: 10px;
   padding: 10px;
-  background-color: #A12F0D;
+  background-color: #a12f0d;
   color: white;
   border: none;
   border-radius: 4px;
@@ -219,7 +287,7 @@ html {
 }
 
 .drink-form button:hover {
-  background-color: #DE3300;
+  background-color: #de3300;
   transition: all 0.2s;
 }
 
@@ -243,7 +311,7 @@ html {
   overflow: hidden;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s;
-  border: 1px solid #D4D4D4;
+  border: 1px solid #d4d4d4;
 
   display: flex;
   flex-direction: row;
@@ -265,7 +333,7 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex:2;
+  flex: 2;
 }
 
 .image-container img {
@@ -277,7 +345,7 @@ html {
 .view-details {
   font-weight: bold;
   text-align: center;
-  color:#843A24;
+  color: #843a24;
   align-self: left;
   flex: 0.5;
   word-break: break-word;
@@ -285,7 +353,7 @@ html {
 }
 
 .view-details:hover {
-  color:#DE3300;
+  color: #de3300;
   transition: all 0.2s;
 }
 
@@ -296,7 +364,7 @@ html {
 
 .card-details h3 {
   margin: 0 0 5px 0;
-  color: #A12F0D;
+  color: #a12f0d;
   font-size: 1rem;
 }
 

@@ -167,7 +167,7 @@ function Home() {
   // --------------------- Render View ---------------------
 
   return (
-    <div style={styles.pageContainer}>
+    <div className="page-container">
       {/* Header */}
       <div className="header-container">
         <img src={logo} alt="Company Logo" className="logo-container" />
@@ -190,9 +190,9 @@ function Home() {
 
       {/* login form */}
       {!token && (
-        <div style={styles.formWrapper}>
-          <div style={styles.loginCard}>
-            <div style={styles.loginWrapper}>
+        <div className="form-wrapper">
+          <div className="login-card">
+            <div className="login-wrapper">
               <form onSubmit={handleSubmit} className="login-form">
                 <div className="login-input">
                   <label>Username</label>
@@ -216,18 +216,18 @@ function Home() {
                   />
                 </div>
 
-                <button type="submit" className="button">
+                <button type="submit" className="button" id="button-login">
                   Sign In
                 </button>
-                <p style={styles.footerText}>
+                <p className="footer-text">
                   Need an account?{" "}
-                  <Link to="/register" style={styles.registerLink}>
+                  <Link to="/register" className="register-link">
                     Register here
                   </Link>
                 </p>
               </form>
 
-              {error && <div style={styles.errorBanner}>{error}</div>}
+              {error && <div style={styles.errorBanner}>X {error}</div>}
             </div>
           </div>
         </div>
@@ -302,51 +302,10 @@ function Home() {
 }
 
 const styles = {
-  pageContainer: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  // -------LOGIN-----
-  formWrapper: {
-    width: "100%",
-    display: "flex",
-    justifyContent: "center",
-    marginBottom: "30px",
-  },
-  loginCard: {
-    width: "80%",
-    flexDirection: "column",
-    background: "#EFE7DF",
-    display: "flex",
-    padding: "20px",
-    alignItems: "end",
-    boxShadow: "0 4px 4px rgba(0, 0, 0, 0.25)",
-    borderRadius: "11px",
-  },
-  loginWrapper: {
-    width: "100%",
-    flexDirection: "row",
-  },
   errorBanner: {
     color: "#c62828",
-    paddingTop: "2px",
+    marginTop: "5px",
   },
-  footerText: {
-    marginTop: "15px",
-    fontSize: "0.9rem",
-    marginLeft: "0.5rem",
-    color: "#A12F0D",
-    display: "flex",
-    flexDirection: "row",
-  },
-  registerLink: {
-    color: "#A12F0D",
-    transition: "all 2s",
-    fontWeight: "bold",
-    margin: "0px 5px",
-  },
-
   // SEARCH CARD
   searchCard: {
     width: "100%",
