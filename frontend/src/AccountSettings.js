@@ -5,55 +5,63 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "./assets/logo.png";
 
 function AccountSettings() {
-    const { token, logout } = useContext(AuthContext);
-    const { user } = useContext(AuthContext);
-    const navigate = useNavigate();
+  const { token, logout } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [userThumbnail, setUserThumbnail] = useState(user?.imageThumb || null); // Add state for thumbnail
 
-    let username = "Guest";
-    username = user?.username || username;
+  let username = "Guest";
+  username = user?.username || username;
 
+  let nickname = user?.nickname || "No nickname set! Set one here";
 
-    let nickname = user?.nickname || "No nickname set! Set one here";
+  useEffect(() => {
+    if (!token) {
+      navigate("/home");
+    }
+  }, [token, navigate]);
 
-    let userThumbnail = null;
+  // Update thumbnail state when user context changes
+  useEffect(() => {
     if (user?.imageThumb) {
-        userThumbnail = user.imageThumb;
+      setUserThumbnail(user.imageThumb);
     }
+  }, [user?.imageThumb]);
 
-    useEffect(() => {
-        if (!token) {
-        navigate("/home");
-        }
-    }, [token, navigate]);
-
-    async function updateThumbnail() { // updating user thumbnail handler
+  async function updateThumbnail() {
     const newThumbnail = document.getElementById("updateThumbURL").value;
-    
-    if (!newThumbnail) {
-        alert("Please enter a thumbnail URL.");
-        return;
-    }
-    try {        const res = await fetch("http://localhost:5000/api/auth/update-thumbnail", {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: token,
-            },
-            body: JSON.stringify({ imageThumb: newThumbnail }),
-        });
-        const data = await res.json();
-        if (res.ok) {
-            alert("Thumbnail updated successfully!");
-        } else {
-            alert(data.message || "Failed to update thumbnail.");
-        }
-    } catch (error) {
-        console.error("Error updating thumbnail:", error);
-        alert("An error occurred while updating thumbnail.");
-    }
-}
 
-function getCleanImageUrl(url) {
+    if (!newThumbnail) {
+      alert("Please enter a thumbnail URL.");
+      return;
+    }
+    try {
+      const res = await fetch(
+        "http://localhost:5000/api/auth/update-thumbnail",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+          body: JSON.stringify({ imageThumb: newThumbnail }),
+        },
+      );
+      const data = await res.json();
+      if (res.ok) {
+        setUserThumbnail(newThumbnail); // Update state immediately on success
+        document.getElementById("updateThumbURL").value = ""; // Clear input
+        alert("Thumbnail updated successfully!");
+      } else {
+        alert(data.message || "Failed to update thumbnail.");
+      }
+    } catch (error) {
+      console.error("Error updating thumbnail:", error);
+      alert("An error occurred while updating thumbnail.");
+    }
+  }
+
+  function getCleanImageUrl(url) {
     if (!url) return null;
     if (url.includes("search?q=")) {
       try {
@@ -66,128 +74,178 @@ function getCleanImageUrl(url) {
     return url;
   }
 
-    async function updateUserSettings() { // updating user data handler 
-        
-       
-        const newNickname = document.getElementById("nickname").value;
-        const newUsername = document.getElementById("username").value;
-        const blank = "";
-        const newPassword = document.getElementById("password").value;
-        const confirmNewPassword = document.getElementById("confirmPassword").value;  
-        const updateData = {};
+  async function updateUserSettings() {
+    const newNickname = document.getElementById("nickname").value;
+    const newUsername = document.getElementById("username").value;
+    const blank = "";
+    const newPassword = document.getElementById("password").value;
+    const confirmNewPassword = document.getElementById("confirmPassword").value;
+    const updateData = {};
 
-        if (newNickname !== blank) {
-            updateData.newNickname = newNickname;
-        }
-        if (newUsername !== blank) {
-            updateData.newUsername = newUsername;
-        }
-        if (newPassword !== blank) {
-            if (newPassword !== confirmNewPassword) {
-                alert("Passwords do not match!");
-                return;
-            }
-            updateData.newPassword = newPassword;
-        }
-        if (Object.keys(updateData).length === 0) {
-            alert("Please enter at least one field to update.");
-            return;
-        }
-        try {
-            const res = await fetch("http://localhost:5000/api/auth/update", { //send the updated data to the backend
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: token,
-                },
-                body: JSON.stringify(updateData), //updating user data with the new info, only sends fields that are filled out
-            });
-            let data;
-            const contentType = res.headers.get("content-type") || "";
-            if (contentType.includes("application/json")) {
-                data = await res.json();
-            } else {
-                const text = await res.text();
-                data = { message: text };
-            }
-            if (res.ok) {
-                alert("User settings updated successfully!");
-            } else {
-                alert(data.message || "Failed to update user settings.");
-            }
-        } catch (error) {
-            console.error("Error updating user settings:", error);
-            alert("An error occurred while updating user settings.");
-        }
+    if (newNickname !== blank) {
+      updateData.newNickname = newNickname;
     }
+    if (newUsername !== blank) {
+      updateData.newUsername = newUsername;
+    }
+    if (newPassword !== blank) {
+      if (newPassword !== confirmNewPassword) {
+        alert("Passwords do not match!");
+        return;
+      }
+      updateData.newPassword = newPassword;
+    }
+    if (Object.keys(updateData).length === 0) {
+      alert("Please enter at least one field to update.");
+      return;
+    }
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/update", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+        body: JSON.stringify(updateData),
+      });
+      let data;
+      const contentType = res.headers.get("content-type") || "";
+      if (contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        const text = await res.text();
+        data = { message: text };
+      }
+      if (res.ok) {
+        alert("User settings updated successfully!");
+      } else {
+        alert(data.message || "Failed to update user settings.");
+      }
+    } catch (error) {
+      console.error("Error updating user settings:", error);
+      alert("An error occurred while updating user settings.");
+    }
+  }
 
+  return (
+    <div className="page-container">
+      {token && (
+        <div>
+          {/* Header */}
+          <div className="header-container">
+            <Link to="/home">
+              <img
+                src={logo}
+                alt="Company Logo"
+                className="logo-container"
+              />{" "}
+            </Link>
+            <hr className="plain-line" />
+            <div className="header-wrapper">
+              <Link className="header-item" to="/home">
+                Home
+              </Link>
+              <Link className="header-item" to="/dashboard">
+                Dashboard
+              </Link>
+              <Link className="header-item" to="/create">
+                Create
+              </Link>
+              <Link className="header-item-active" to="/account">
+                Account
+              </Link>
+            </div>
+          </div>
 
-    return (
-        
-        <div className="page-container">
-            { token && (
-                <div>
-                    <div>
-                        <img
-                            src={logo}
-                            alt="Company Logo"
-                            style={{ width: "100px", marginBottom: "10px" }}
-                        />
-                        <div>
-                            <Link to="/home">Home</Link>
-                            <Link to="/dashboard">Dashboard</Link>
-                            <Link to="/create">Create</Link>
-                            <Link to="/account">Account</Link>
-                        </div>
-                    </div>
-            
-                    <header className="main-header" style={styles.header}>
-                        <div>
-                        <h1>Account</h1>
-                        <h3 style={styles.welcomeText}>{username}</h3>
-                        <h4 style={styles.welcomeText}>{nickname}</h4>
-                        {userThumbnail ? (
-                        <img
-                            src={getCleanImageUrl(userThumbnail)}
-                            crossOrigin="anonymous"
-                            alt="User Thumbnail"
-                            style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-                            onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src =  "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"; }}
-                        />
-                        ) : (
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg" alt="No avatar" style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
-                        )}
-                        
-                        <div> 
-                            <label htmlFor="updateThumbURL">Update Thumbnail URL:</label>
-                            <input type="text" id="updateThumbURL" placeholder="Enter new thumbnail URL" />
-                            <button onClick={updateThumbnail} className="button" style={styles.logoutBtn}>Confirm</button>
-                        </div>
-                        <div>
-                            <label htmlFor="nickname">Set Nickname:</label>
-                            <input type="text" id="nickname" placeholder="Enter new nickname" />
+          <header className="main-header" style={styles.header}>
+            <div>
+              <h1>Account</h1>
+              <h3 style={styles.welcomeText}>{username}</h3>
+              <h4 style={styles.welcomeText}>{nickname}</h4>
+              {userThumbnail ? (
+                <img
+                  src={getCleanImageUrl(userThumbnail)}
+                  crossOrigin="anonymous"
+                  alt="User Thumbnail"
+                  className="user-icon-thumb"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src =
+                      "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
+                  }}
+                />
+              ) : (
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
+                  alt="No avatar"
+                  className="user-icon-thumb"
+                />
+              )}
 
-                            <label htmlFor="username">Update Username:</label>
-                            <input type="text" id="username" placeholder="Enter new username" />
+              <div>
+                <label htmlFor="updateThumbURL">Update Thumbnail URL:</label>
+                <input
+                  type="text"
+                  id="updateThumbURL"
+                  placeholder="Enter new thumbnail URL"
+                />
+                <button
+                  onClick={updateThumbnail}
+                  className="button"
+                  style={styles.logoutBtn}
+                >
+                  Confirm
+                </button>
+              </div>
+              <div>
+                <label htmlFor="nickname">Set Nickname:</label>
+                <input
+                  type="text"
+                  id="nickname"
+                  placeholder="Enter new nickname"
+                />
 
-                            <label htmlFor="password">Update Password:</label>
-                            <input type="password" id="password" placeholder="Enter new password"  />
-                            <label htmlFor="confirmPassword">Confirm Password:</label>
-                            <input type="password" id="confirmPassword" placeholder="Confirm new password" />
-                            
-                             <button onClick={updateUserSettings} className="button" style={styles.logoutBtn}>Confirm</button>
-                        </div>
-                        
-                        </div>
-                        <button onClick={logout} className="button" style={styles.logoutBtn}>
-                        Logout
-                        </button>
-                    </header>
-                </div>
-            )}
-            
+                <label htmlFor="username">Update Username:</label>
+                <input
+                  type="text"
+                  id="username"
+                  placeholder="Enter new username"
+                />
+
+                <label htmlFor="password">Update Password:</label>
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="Enter new password"
+                />
+                <label htmlFor="confirmPassword">Confirm Password:</label>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  placeholder="Confirm new password"
+                />
+
+                <button
+                  onClick={updateUserSettings}
+                  className="button"
+                  style={styles.logoutBtn}
+                >
+                  Confirm
+                </button>
+              </div>
+            </div>
+            <button
+              onClick={logout}
+              className="button"
+              style={styles.logoutBtn}
+            >
+              Logout
+            </button>
+          </header>
         </div>
-    )
+      )}
+    </div>
+  );
 }
 
 const styles = {

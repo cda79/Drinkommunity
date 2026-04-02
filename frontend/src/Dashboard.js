@@ -27,7 +27,8 @@ function Dashboard() {
       .then((data) => {
         if (userId) {
           const filtered = data.filter((d) => {
-            const ownerId = d.owner && d.owner.toString ? d.owner.toString() : d.owner;
+            const ownerId =
+              d.owner && d.owner.toString ? d.owner.toString() : d.owner;
             return ownerId !== userId.toString();
           });
           setOtherDrinks(filtered);
@@ -95,36 +96,71 @@ function Dashboard() {
 
   return (
     <div className="page-container">
-        <div>
-          <img
-            src={logo}
-            alt="Company Logo"
-            style={{ width: "100px", marginBottom: "10px" }}
-          />
+      {/* Header */}
+      <div className="header-container">
+        <Link to="/home">
+          <img src={logo} alt="Company Logo" className="logo-container" />{" "}
+        </Link>
+        <hr className="plain-line" />
+        <div className="header-wrapper">
+          <Link className="header-item" to="/home">
+            Home
+          </Link>
+          <Link className="header-item-active" to="/dashboard">
+            Dashboard
+          </Link>
+          <Link className="header-item" to="/create">
+            Create
+          </Link>
+          <Link className="header-item" to="/account">
+            Account
+          </Link>
+        </div>
+      </div>
+
+      <div className="user-panel-container">
+        <header className="user-header">
           <div>
-            <Link to="/home">Home</Link>
-            <Link to="/dashboard">Dashboard</Link>
-            <Link to="/create">Create</Link>
-            <Link to="/account">Account</Link>
+            {user?.imageThumb ? (
+              <img
+                src={getCleanImageUrl(user.imageThumb)}
+                crossOrigin="anonymous"
+                alt="User Icon"
+                className="user-icon"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src =
+                    "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
+                }}
+              />
+            ) : (
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
+                alt="No Avatar"
+                className="user-icon"
+              />
+            )}
           </div>
-        </div>
-
-      <header className="main-header" style={styles.header}>
-        <div>
-          <h1>Drink Library</h1>
-          <h3 style={styles.welcomeText}>Welcome back, {username}!</h3>
-        </div>
-        <button onClick={logout} className="button" style={styles.logoutBtn}>
-          Logout
-        </button>
-      </header>
-
-      
+          <div>
+            <h1>My Drink Library</h1>
+            <h2>
+              <strong>{username}'s</strong> Dashboard
+            </h2>
+            <button
+              onClick={logout}
+              className="button"
+              id="logout-button"
+              style={styles.logoutBtn}
+            >
+              Logout
+            </button>
+          </div>
+        </header>
+      </div>
 
       <div className="content-wrapper">
-
         <div className="right-panel">
-          <h2 style={styles.gardenTitle}>
+          <h2 className="library-title">
             My Cocktail Library ({drinks.length} Cocktails)
           </h2>
 
@@ -156,12 +192,7 @@ function Dashboard() {
                   <p>
                     <strong>Category:</strong> {drink.strCategory || "N/A"}
                   </p>
-                  <p>
-                    <strong>Alcoholic?:</strong> {drink.strAlcoholic || "N/A"}
-                  </p>
-                  <p>
-                    <small>Glass: {drink.strGlass || "N/A"}</small>
-                  </p>
+                  <p>{drink.strAlcoholic || "N/A"}</p>
                   <button
                     className="delete-btn"
                     onClick={() => handleDelete(drink._id)}
@@ -171,8 +202,6 @@ function Dashboard() {
                 </div>
               </div>
             ))}
-
-            
 
             {drinks.length === 0 && (
               <div style={styles.emptyMessage}>
@@ -186,7 +215,7 @@ function Dashboard() {
         </div>
 
         <div className="right-panel">
-          <h2 style={styles.gardenTitle}>
+          <h2 className="library-title">
             Others' Cocktails ({otherDrinks.length} Cocktails)
           </h2>
 
@@ -218,23 +247,17 @@ function Dashboard() {
                   <p>
                     <strong>Category:</strong> {drink.strCategory || "N/A"}
                   </p>
-                  <p>
-                    <strong>Alcoholic?:</strong> {drink.strAlcoholic || "N/A"}
-                  </p>
-                  <p>
-                    <small>Glass: {drink.strGlass || "N/A"}</small>
-                  </p>
+                  <p>{drink.strAlcoholic || "N/A"}</p>
                   {/* Read-only: no deleting others' drinks!!!!!!!! */}
                 </div>
               </div>
             ))}
 
-            
-
             {otherDrinks.length === 0 && (
               <div style={styles.emptyMessage}>
                 <p>
-                  Others' cocktail library is currently empty. Looks like you are the first person here! 
+                  Others' cocktail library is currently empty. Looks like you
+                  are the first person here!
                 </p>
               </div>
             )}
@@ -246,21 +269,6 @@ function Dashboard() {
 }
 
 const styles = {
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  welcomeText: {
-    color: "#A12F0D",
-    marginTop: "5px",
-  },
-  gardenTitle: {
-    color: "#A12F0D",
-    borderBottom: "2px solid #EFE7DF",
-    paddingBottom: "10px",
-    marginBottom: "20px",
-  },
   imagePlaceholder: {
     color: "#999",
   },

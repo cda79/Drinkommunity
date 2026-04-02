@@ -51,27 +51,6 @@ html {
   transition: all 0.2s;
 }
 
-/* header */
-.main-header {
-  margin-bottom: 20px;
-  text-align: left;
-  /* Align title to the left */
-}
-
-.main-header h1 {
-  color: var(--primary-red);
-  font-size: 2rem;
-  margin: 0;
-}
-
-/* 2-column layout */
-.content-wrapper {
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
-  width: 100%;
-}
-
 .card {
   background: white;
   padding: 20px;
@@ -338,7 +317,7 @@ html {
   background:
     url("assets/drink-placeholder.png") no-repeat,
     var(--gray2);
-  background-size: contain;
+  background-size: cover;
 
   display: flex;
   align-items: center;
@@ -410,6 +389,81 @@ html {
 /*--------------- Dashboard ------------*/
 /* ------------------------------------ */
 
+.user-panel-container {
+  width: 100%;
+}
+
+.user-header {
+  text-align: left;
+  padding: 0rem 5rem;
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  align-items: center;
+}
+
+.user-header h1 {
+  color: var(--primary-red);
+  margin: 0px;
+  font-size: 1.5rem;
+}
+
+.user-header h2 {
+  color: var(--text-red);
+  margin: 0px;
+  font-weight: 100;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+#logout-button {
+  background-color: var(--button-brown);
+  color: white;
+  border-radius: 5px;
+  padding: 0.5rem 3rem;
+  margin: 5px 0px 0px 0px;
+  transition: all 0.1s;
+}
+
+#logout-button:hover {
+  background-color: var(--active-red);
+}
+
+.user-icon {
+  width: 8vw;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 50%;
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 90%;
+}
+
+.library-title {
+  color: var(--text-brown);
+  border-bottom: 1.5px solid var(--text-brown);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  font-weight: 100;
+  font-size: 1.1rem;
+}
+
+/* ------------------------------------ */
+/*--------------- Settings ------------*/
+/* ------------------------------------ */
+
+.user-icon-thumb {
+  width: 50px;
+  height: 50px;
+  border: none;
+  border-radius: 50%;
+}
+
+/* ------------------------------------- */
 /* left panel: the form to enter data */
 .left-panel {
   width: 280px;
