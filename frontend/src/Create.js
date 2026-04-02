@@ -6,7 +6,7 @@ import logo from "./assets/logo.png";
 
 function Create() {
     const [drinks, setDrinks] = useState([]);
-    const { token, logout } = useContext(AuthContext);
+    const { token } = useContext(AuthContext);
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
     let username = "Guest";
@@ -16,8 +16,8 @@ function Create() {
     const [formData, setFormData] = useState({
         strDrink: "",
         strTags: "",
-        strCategory: "",
-        strAlcoholic: "",
+        strCategory: "Ordinary Drink",
+        strAlcoholic: "Alcoholic",
         strGlass: "",
         strInstructions: "",
         strIngredient1: "",
@@ -61,14 +61,26 @@ function Create() {
             unit: "",
             ingredient: "",
         }))
-    )
+    );
 
-    function handleIngredientChange(field, value) {
+    const [tags, setTags] = useState(
+        {
+            tag1: "",
+            tag2: "",
+            tag3: "",
+            tag4: "",
+        }
+    );
+
+    function handleIngredientChange(index, field, value) {
         const updatedParts = [...ingredientParts];
-        updatedParts[field] = value;
+        updatedParts[index] = { ...updatedParts[index], [field]: value };
         setIngredientParts(updatedParts)
     }
 
+    function handleTagsChange(e) {
+        setTags({ ...tags, [e.target.name]: e.target.value })
+    }
 
     // handle input changes for the controlled form
     function handleChange(e) {
@@ -91,8 +103,11 @@ function Create() {
         ingredientParts.forEach((item, index) => {
             const slot = index + 1;
             finalSubmissionData[`strMeasure${slot}`] = `${item.quantity} ${item.unit}`.trim();
-            finalSubmissionData[`strIngredient${slot}`] = item.name;
+            finalSubmissionData[`strIngredient${slot}`] = item.ingredient;
         });
+
+        const filledTags = Object.values(tags).filter(t => t.trim() !== "");
+        finalSubmissionData.strTags = filledTags.join(",");
 
         try {
         const res = await fetch("http://localhost:5000/api/drinks", {
@@ -111,8 +126,9 @@ function Create() {
             // reset the form
             setFormData({
             strDrink: "",
-            strCategory: "",
-            strAlcoholic: "",
+            strTags: "",
+            strCategory: "Ordinary Drink",
+            strAlcoholic: "Alcoholic",
             strGlass: "",
             strInstructions: "",
             strIngredient1: "",
@@ -147,6 +163,21 @@ function Create() {
             strMeasure15: "",
             strDrinkThumb: "",
             });
+
+            setTags({
+            tag1: "",
+            tag2: "",
+            tag3: "",
+            tag4: "",
+            })
+
+            setIngredientParts(
+                Array.from({ length: 15 }, (_, i)  => ({
+                quantity: "",
+                unit: "",
+                ingredient: "",
+            })))
+
         } else {
             const errorData = await res.json();
             alert(errorData.message || "Failed to add drink");
@@ -188,13 +219,13 @@ function Create() {
                 />
                 
                 <label>Alcoholic?</label>
-                <select name="strAlcoholic" value={formData.strDrink} onChange={handleChange} required>
+                <select name="strAlcoholic" value={formData.strAlcoholic} onChange={handleChange} required>
                     <option value="Alcoholic">Alcoholic</option>
                     <option value="Non-Alcoholic">Non-Alcoholic</option>
                 </select>
 
                 <label>Category</label>
-                <select name="strCategory" value={formData.strDrink} onChange={handleChange} required>
+                <select name="strCategory" value={formData.strCategory} onChange={handleChange} required>
                     <option value="Ordinary Drink">Ordinary Drink</option>
                     <option value="Beer">Beer</option>
                     <option value="Cocktail">Cocktail</option>
@@ -206,6 +237,38 @@ function Create() {
                     <option value="Shake">Shake</option>
                     <option value="Soft Drink">Soft Drink</option>
                 </select>
+
+                <label>Tag-1</label>
+                <input
+                    name="tag1"
+                    type="text"
+                    value={tags.tag1}
+                    onChange={handleTagsChange}
+                />
+
+                <label>Tag-2</label>
+                <input
+                    name="tag2"
+                    type="text"
+                    value={tags.tag2}
+                    onChange={handleTagsChange}
+                />
+
+                <label>Tag-3</label>
+                <input
+                    name="tag3"
+                    type="text"
+                    value={tags.tag3}
+                    onChange={handleTagsChange}
+                />
+
+                <label>Tag-4</label>
+                <input
+                    name="tag4"
+                    type="text"
+                    value={tags.tag4}
+                    onChange={handleTagsChange}
+                />
 
                 <label>Image URL</label>
                 <input
@@ -247,7 +310,7 @@ function Create() {
                         <input
                             type="text"
                             placeholder="ingredient"
-                            value={item.name}
+                            value={item.ingredient}
                             onChange={(e) => handleIngredientChange(index, "ingredient", e.target.value)}
                         />
                     </div>
