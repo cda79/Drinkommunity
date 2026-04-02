@@ -319,9 +319,10 @@ html {
 }
 
 .image-container {
-  height: 160px;
   max-width: 160px;
   overflow: hidden;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
 
   background:
     url("assets/drink-placeholder.png") no-repeat,
