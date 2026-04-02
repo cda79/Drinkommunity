@@ -240,8 +240,44 @@ html {
 }
 
 /* -------- SEARCH -------- */
+.search-container {
+  display: flex;
+  width: 100%;
+  margin-bottom: 40px;
+  justify-content: center;
+  flex-direction: row;
 
+  background-color: burlywood;
+}
 
+.search-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  width: 100%;
+  max-width: 500px;
+  align-items: center;
+}
+
+.search-wrapper label {
+  font-size: 0.85rem;
+  font-weight: lighter;
+  color: var(--primary-red);
+}
+
+.search-wrapper input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid var(--gray2);
+  font-size: 1rem;
+  color: var(--gray3);
+}
+
+.search-input-row select {
+  width: 150px;
+}
+
+/* -------- BROWSE GRID -------- */
 
 /* ------------------------------------ */
 /*--------------- Dashboard ------------*/
