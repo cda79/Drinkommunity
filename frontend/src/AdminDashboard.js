@@ -266,7 +266,7 @@ function AdminDashboard() {
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src =
-                          "https://via.placeholder.com/260x180?text=Image+Not+Found";
+                         "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
                       }}
                     />
                   ) : (
