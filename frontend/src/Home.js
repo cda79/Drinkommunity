@@ -95,7 +95,7 @@ function Home() {
     }
   }, [category, alcoholic]);
 
-  // Drink Cards
+  // Drink Cards (Appearance)
   function DrinkCard({ drink }) {
     const statusColor =
       drink.alcoholicStatus === "Non alcoholic" ? "#2e7d32" : "#A12F0D";
@@ -119,9 +119,7 @@ function Home() {
             {drink.alcoholicStatus}
           </p>
           <p>id: {drink.idDrink}</p>
-          <small>
-            <strong>{category}</strong>
-          </small>
+          <p>{category}</p>
         </div>
         <Link to="/details" state={{ drinkData: drink }}>
           <div className="view-details">View Details</div>
@@ -164,14 +162,18 @@ function Home() {
       setError("Server error. Please try again later.");
     }
   }
-
-  // --------------------- Render View ---------------------
+  //-------------------------------------------------------------------------
+  // --------------------------- Render View --------------------------------
+  // ------------------------------------------------------------------------
 
   return (
     <div className="page-container">
       {/* Header */}
       <div className="header-container">
-        <img src={logo} alt="Company Logo" className="logo-container" />
+        <Link to="/home">
+          {" "}
+          <img src={logo} alt="Company Logo" className="logo-container" />{" "}
+        </Link>
         <hr className="plain-line" />
         <div className="header-wrapper">
           <Link className="header-item-active" to="/home">
@@ -233,25 +235,28 @@ function Home() {
           </div>
         </div>
       )}
-      {/* ------------------------ Browse Drinks ------------------------ */}
+
+      {/* ------------------- Browse Drinks ------------------- */}
 
       {/* Search bar */}
       <div className="search-container">
         <div className="search-wrapper">
           {/* Name */}
-          <label>Drink Name</label>
-          <input
-            type="text"
-            placeholder="Start typing a drink name (e.g. 'Cuba Libre' or 'Paloma')..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+          <div className="search-input" id="search-name">
+            <label>Drink Name</label>
+            <input
+              type="text"
+              placeholder="Start typing a drink name (e.g. 'Cuba Libre' or 'Paloma')..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
           {/* Category */}
-          <div>
+          <div className="search-input">
+            <label>Category</label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              style={{ width: "150px" }}
             >
               {categories.map((m) => (
                 <option key={m} value={m}>
@@ -261,8 +266,9 @@ function Home() {
             </select>
           </div>
 
-          {/* ALCOHOLIC (DROPDOWN) */}
-          <div>
+          {/* Alcohol Content */}
+          <div className="search-input">
+            <label>Alcoholic</label>
             <select
               value={alcoholic}
               onChange={(e) => setAlcoholic(e.target.value)}
@@ -274,15 +280,19 @@ function Home() {
               ))}
             </select>
           </div>
-          <button onClick={handleClearSearch} className="button">
+          <button
+            onClick={handleClearSearch}
+            className="button"
+            id="category-button"
+          >
             Clear
           </button>
         </div>
       </div>
 
-      {/* 5-col grid (top 10 results) */}
-      <div style={styles.gridWrapper}>
-        <div style={styles.drinkGrid}>
+      {/* ------------------- Grid ------------------- */}
+      <div className="grid-container">
+        <div className="grid-wrapper">
           {filteredDrinks.length > 0 ? (
             filteredDrinks.map((drink) => {
               const uniqueKey = drink.uniqueKey || `api-${drink.idDrink}`;
@@ -303,20 +313,6 @@ const styles = {
   errorBanner: {
     color: "#c62828",
     marginTop: "5px",
-  },
-
-  // DATABASE PREVIEW
-  gridWrapper: {
-    width: "85%",
-    maxWidth: "1200px",
-    background: "#F9F9F9",
-    padding: "20px",
-    border: "1px solid #D4D4D4",
-  },
-  drinkGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
-    gap: "20px",
   },
   noResults: {
     gridColumn: "1 / -1",
