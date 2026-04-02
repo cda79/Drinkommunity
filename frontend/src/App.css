@@ -441,10 +441,10 @@ html {
 
 .user-icon {
   width: 8vw;
-  aspect-ratio: 1 / 1;
   border: none;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   border-radius: 50%;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
 }
 
@@ -508,6 +508,8 @@ html {
   border: none;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   border-radius: 50%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
 }
 
 .options-settings-wrapper {
