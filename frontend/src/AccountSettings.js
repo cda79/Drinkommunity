@@ -152,10 +152,10 @@ function getCleanImageUrl(url) {
                             crossOrigin="anonymous"
                             alt="User Thumbnail"
                             style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-                            onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = "/fallback-avatar.png"; }}
+                            onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src =  "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"; }}
                         />
                         ) : (
-                        <img src="/fallback-avatar.png" alt="No avatar" style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg" alt="No avatar" style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
                         )}
                         
                         <div> 
