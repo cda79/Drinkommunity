@@ -43,7 +43,7 @@ function Register() {
           <img src={logo} alt="Company Logo" className="logo-container" />{" "}
         </Link>
         <hr className="plain-line" />
-        <div className="header-wrapper">
+        <div className="header-wrapper" style={{ width: "15%" }}>
           <Link className="header-item" to="/home">
             Go Back to Homepage
           </Link>
@@ -51,7 +51,7 @@ function Register() {
       </div>
 
       <div className="card" style={styles.card}>
-        <h2 style={styles.title}>Create Account</h2>
+        <h1>Create Account</h1>
         <form onSubmit={handleSubmit} className="drink-form">
           <label>Username</label>
           <input
@@ -70,13 +70,13 @@ function Register() {
             required
             placeholder="Choose a password"
           />
-          <button type="submit" style={styles.button}>
+          <button type="submit">
             Register
           </button>
         </form>
         <p style={styles.footerText}>
           Already have an account?{" "}
-          <span onClick={() => navigate("/home")} style={styles.link}>
+          <span onClick={() => navigate("/home")} className="register-link">
             Login here
           </span>
         </p>
@@ -86,48 +86,12 @@ function Register() {
 }
 
 const styles = {
-  container: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    minHeight: "100vh",
-    backgroundColor: "#EFE7DF",
-  },
   card: {
     width: "100%",
     maxWidth: "400px",
     padding: "2rem",
-    backgroundColor: "white",
-    borderRadius: "8px",
-    boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-  },
-  title: {
-    textAlign: "center",
-    color: "#A12F0D",
-    marginBottom: "1.5rem",
-  },
-  button: {
-    marginTop: "1rem",
-    backgroundColor: "#A12F0D",
-    color: "white",
-    border: "none",
-    padding: "10px",
-    borderRadius: "4px",
-    cursor: "pointer",
-    width: "100%",
-  },
-  footerText: {
-    marginTop: "1.5rem",
-    textAlign: "center",
-    fontSize: "0.9rem",
-    color: "#666",
-  },
-  link: {
-    color: "#A12F0D",
-    cursor: "pointer",
-    fontWeight: "bold",
-    textDecoration: "underline",
-  },
+    marginTop: "10vh",
+  }
 };
 
 export default Register;

@@ -135,6 +135,13 @@ html {
   justify-content: center;
 }
 
+.card h1 {
+  text-align: center;
+  color: var(--primary-red);
+  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
+}
+
 .card h3 {
   margin-top: 0;
   color: var(--primary-red);
@@ -221,6 +228,7 @@ html {
 .register-link {
   color: var(--primary-red);
   font-weight: bold;
+  text-decoration: underline;
 }
 
 .register-link:hover {
