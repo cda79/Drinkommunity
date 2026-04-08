@@ -78,8 +78,8 @@ function AccountSettings() {
     const newNickname = document.getElementById("nickname").value;
     const newUsername = document.getElementById("username").value;
     const blank = "";
-    const newPassword = document.getElementById("password").value;
-    const confirmNewPassword = document.getElementById("confirmPassword").value;
+    const newPassword = (document.getElementById("password").value || "").normalize("NFKC").trim();
+    const confirmNewPassword = (document.getElementById("confirmPassword").value || "").normalize("NFKC").trim();
     const updateData = {};
 
     if (newNickname !== blank) {
@@ -89,11 +89,17 @@ function AccountSettings() {
       updateData.newUsername = newUsername;
     }
     if (newPassword !== blank) {
+      if (confirmNewPassword === blank) {
+        alert("Please confirm your new password.");
+        return;
+      }
+      
       if (newPassword !== confirmNewPassword) {
         alert("Passwords do not match!");
         return;
       }
       updateData.newPassword = newPassword;
+      updateData.confirmNewPassword = confirmNewPassword;
     }
     if (Object.keys(updateData).length === 0) {
       alert("Please enter at least one field to update.");
