@@ -1,11 +1,11 @@
 require("dotenv").config();
-require('dns').setDefaultResultOrder('ipv4first');
+require("dns").setDefaultResultOrder("ipv4first");
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const drinkRoutes = require("./routes/drinks");
 const authRoutes = require("./routes/auth");
-const commentRoutes = require("./routes/comments.js")
+const commentRoutes = require("./routes/comments.js");
 
 const app = express();
 const PORT = 5000;
@@ -23,7 +23,7 @@ const clientOptions = {
 
 async function connectDB() {
   try {
-    console.log(process.env.MONGO_URI)
+    console.log(process.env.MONGO_URI);
     await mongoose.connect(uri, clientOptions);
 
     // optional: the "Ping" command just confirms everything is working
@@ -33,6 +33,26 @@ async function connectDB() {
     console.error("❌ Connection failed:", err);
   }
 }
+
+// Proxy backend since I got restricted/blocked when directly connecting to the URL
+app.get("/api/proxy/cocktails", async (req, res) => {
+  try {
+    const { c, a, i } = req.query;
+    let url = "https://www.thecocktaildb.com/api/json/v1/1/";
+
+    if (c) url += `filter.php?c=${c}`;
+    if (a) url += `filter.php?a=${a}`;
+    if (i) url += `lookup.php?i=${i}`;
+
+    const response = await fetch(url);
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.listen(5000, () => console.log("Backend running on :5000"));
 
 // execute the connection function
 connectDB();

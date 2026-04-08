@@ -60,7 +60,7 @@ function Home() {
     setAllDrinks([]); // Clear previous results
     try {
       //fetch category URL first
-      const categoryURL = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`;
+      const categoryURL = `http://localhost:5000/api/proxy/cocktails?c=${category}`;
       const apiPromise = await fetch(categoryURL, { method: "GET" });
       const mongoPromise = await fetch(`http://localhost:5000/api/drinks`);
 
@@ -74,7 +74,7 @@ function Home() {
       // Alcohol filtering -- seperate URL fetching
       // We grab the ids of the drinks and then cross reference them
       if (alcoholic !== "All") {
-        const alchUrl = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=${alcoholic.replace(/ /g, "_")}`;
+        const alchUrl = `http://localhost:5000/api/proxy/cocktails?a=${alcoholic.replace(/ /g, "_")}`;
         const alchRes = await fetch(alchUrl);
         const alchData = await alchRes.json();
 

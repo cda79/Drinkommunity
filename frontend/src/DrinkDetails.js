@@ -26,7 +26,8 @@ function DrinkDetails() {
 
         const url = isMongo
           ? `http://localhost:5000/api/drinks/${id}`
-          : `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
+          : `http://localhost:5000/api/proxy/cocktails?i=${id}`;
+        // `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
 
         const res = await fetch(url);
         const data = await res.json();
