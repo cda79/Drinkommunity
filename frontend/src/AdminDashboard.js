@@ -32,7 +32,7 @@ function AdminDashboard() {
       })
       .then((data) => setDrinks(data))
       .catch((err) => console.error("Fetch error:", err));
-  }, [token]);
+  }, [token, user.role]);
 
   // delete
   // removes a drink after ownership verification on the server.

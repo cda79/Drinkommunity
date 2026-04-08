@@ -35,6 +35,7 @@ function Home() {
   const [error, setError] = useState("");
   const { token } = useContext(AuthContext);
   const { login } = useContext(AuthContext);
+  const [inputs, setInputs] = useState({});
   const navigate = useNavigate();
 
   // -------------------------------------------------------------------------
@@ -153,6 +154,11 @@ function Home() {
 
   function handleChange(e) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+
+    const target = e.target;
+    const value = target.type === "checkbox" ? target.checked : target.value;
+    const name = target.name;
+    setInputs((values) => ({ ...values, [name]: value }));
   }
 
   // authentication logic
@@ -305,6 +311,38 @@ function Home() {
           </button>
         </div>
       </div>
+
+      {/* ------------------- Checkbox Filters ------------------- */}
+      <form className="checkmark-filter-wrapper">
+        <h3>Filters:</h3>
+        <label>
+          Favourited:
+          <input
+            type="checkbox"
+            name="favourited"
+            checked={inputs.favourited}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+          Official:
+          <input
+            type="checkbox"
+            name="official"
+            checked={inputs.official}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+          User Submitted:
+          <input
+            type="checkbox"
+            name="userSubmitted"
+            checked={inputs.userSubmitted}
+            onChange={handleChange}
+          />
+        </label>
+      </form>
 
       {/* ------------------- Grid ------------------- */}
       <div className="grid-container">

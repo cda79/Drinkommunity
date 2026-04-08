@@ -239,7 +239,6 @@ html {
 .search-container {
   display: flex;
   width: 100%;
-  margin-bottom: 40px;
   justify-content: center;
   flex-direction: row;
 }
@@ -291,6 +290,25 @@ html {
   align-self: flex-end;
 }
 
+/* -------- FILTER -------- */
+.checkmark-filter-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 40px;
+  gap: 20px;
+}
+
+.checkmark-filter-wrapper h3 {
+  font-size: 1rem;
+  color: var(--primary-red);
+  font-weight: 100;
+}
+
+.checkmark-filter-wrapper label {
+  color: var(--text-brown);
+}
+
 /* -------- BROWSE GRID -------- */
 
 .grid-container {
@@ -339,7 +357,7 @@ html {
 
   display: flex;
   align-items: center;
-  text-align: center;
+  /* text-align: center; */
   justify-content: center;
 
   flex: 2;
@@ -535,6 +553,18 @@ html {
 /* ------------------------------------ */
 
 .details-container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--gray1);
+  padding: 2rem;
+}
+
+.details-container-row-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.details-container-column-wrapper {
   display: flex;
   flex-direction: column;
 }

@@ -183,26 +183,27 @@ function DrinkDetails() {
       </div>
 
       <div className="details-container">
-        <h1>{drinkDetails.strDrink}</h1>
-        <img
-          className="details-image-container"
-          src={drinkDetails.strDrinkThumb}
-        />
+        <div className="details-container-row-wrapper">
+          <img
+            className="details-image-container"
+            src={drinkDetails.strDrinkThumb}
+          />
+          <div className="details-container-column-wrapper">
+            <h1>{drinkDetails.strDrink}</h1>
+            <small>
+              <strong>{drinkDetails.strCategory}</strong>
+            </small>
+            <p>
+              <strong>Tags:</strong> * WORK IN PROGRESS *
+            </p>
 
-        <small>
-          <strong>{drinkDetails.strCategory}</strong>
-        </small>
-        <p>
-          <strong>Tags:</strong> * WORK IN PROGRESS *
-        </p>
-
+            <h3>Ingredients</h3>
+            <ul>{renderIngredients()}</ul>
+          </div>
+        </div>
         <button onClick={toggleFavourite}>
           {isFavourited ? "Favourited" : "Favourite"}
         </button>
-
-        <h3>Ingredients</h3>
-        <ul>{renderIngredients()}</ul>
-
         <h3>Instructions</h3>
         <p>{drinkDetails.strInstructions || "No instructions provided."}</p>
 
