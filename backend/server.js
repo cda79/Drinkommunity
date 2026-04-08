@@ -46,6 +46,7 @@ app.get("/api/proxy/cocktails", async (req, res) => {
 
     const response = await fetch(url);
     const data = await response.json();
+
     res.json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });

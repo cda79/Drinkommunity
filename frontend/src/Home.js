@@ -71,6 +71,10 @@ function Home() {
       let apiDrinks = Array.isArray(apiData.drinks) ? apiData.drinks : [];
       const mongoDrinks = Array.isArray(mongoData) ? mongoData : [];
 
+      // DEBUG: Log the actual data structure
+      console.log("API Drinks sample:", apiDrinks[0]);
+      console.log("MongoDB Drinks sample:", mongoDrinks[0]);
+
       // Alcohol filtering -- seperate URL fetching
       // We grab the ids of the drinks and then cross reference them
       if (alcoholic !== "All") {
@@ -89,7 +93,9 @@ function Home() {
           .map((d) => ({ ...d, alcoholicStatus: alcoholic })); //object label
       }
 
-      setAllDrinks([...apiDrinks, ...mongoDrinks]);
+      const allDrinksData = [...apiDrinks, ...mongoDrinks];
+      console.log("Final drinks to display:", allDrinksData);
+      setAllDrinks(allDrinksData);
     } catch (err) {
       console.error("Error fetching drinks:", err);
     }
@@ -99,6 +105,11 @@ function Home() {
   function DrinkCard({ drink }) {
     const statusColor =
       drink.alcoholicStatus === "Non alcoholic" ? "#2e7d32" : "#A12F0D";
+
+    const imageUrl = drink.strDrinkThumb?.includes("thecocktaildb")
+      ? `/api/proxy/image?url=${encodeURIComponent(drink.strDrinkThumb)}`
+      : drink.strDrinkThumb;
+
     return (
       <div className="drink-card">
         <div className="image-container">
