@@ -223,7 +223,7 @@ function DrinkDetails() {
             {drinkDetails.strCategory} - {drinkDetails.strAlcoholic}
             <div className="details-text-wrapper">
               <h2>Tags: </h2>
-              <p>* WORK IN PROGRESS *</p>
+              <p>{drinkDetails.strTags}</p>
             </div>
             <h2>Ingredients:</h2>
             <div className="ingredients-grid">{renderIngredients()}</div>
