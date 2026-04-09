@@ -51,6 +51,7 @@ app.get("/api/proxy/cocktails", async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+
 });
 
 app.listen(5000, () => console.log("Backend running on :5000"));
