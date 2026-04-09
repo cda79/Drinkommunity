@@ -279,6 +279,13 @@ function Dashboard() {
                   <p>{drink.strAlcoholic || "N/A"}</p>
                   {/* Read-only: no deleting others' drinks!!!!!!!! */}
                 </div>
+                <Link
+                    className="details-link"
+                    to="/details"
+                    state={{ drinkData: drink }}
+                  >
+                    View <div>Details</div>
+                  </Link>
               </div>
             ))}
 
