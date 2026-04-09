@@ -499,6 +499,12 @@ html {
   font-size: 1.1rem;
 }
 
+.drink-grid {
+  grid-template-columns: repeat(2, 1fr);
+  display: grid;
+  gap: 20px;
+}
+
 /* ------------------------------------ */
 /*--------------- Settings ------------*/
 /* ------------------------------------ */
@@ -776,13 +782,12 @@ ingredient {
   gap: 10px;
 }
 
-/* --------------------------------------------------------------- */
-/* left panel: the form to enter data */
-.left-panel {
-  width: 280px;
-  flex-shrink: 0;
-  position: sticky;
-  top: 20px;
+/* ------------------------------------ */
+/*------------ Drink Creation ---------*/
+/* ------------------------------------ */
+
+.form-container {
+  width: 75%;
 }
 
 .drink-form {
@@ -791,10 +796,92 @@ ingredient {
   gap: 10px;
 }
 
+.creation-row-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  height: auto;
+  width: 100%;
+}
+
+.creation-row-column-element {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 1rem;
+}
+
+.creation-image {
+  width: 100%;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+
+  background:
+    url("assets/drink-placeholder.png") no-repeat,
+    var(--gray2);
+  background-size: cover;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.create-ingredient-wrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.create-ingredient-wrapper span {
+  width: 20px;
+  padding-left: 1rem;
+}
+
+.create-ingredient-wrapper input {
+  flex: 1;
+}
+
+.creation-measurement-dropdown {
+  display: flex;
+  flex: 0.5;
+}
+
+.creation-measurement-dropdown label {
+  font-size: 0.85rem;
+  font-weight: lighter;
+  color: var(--primary-red);
+  margin-bottom: 10px;
+}
+
+.creation-measurement-dropdown input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid var(--gray2);
+  color: var(--gray3);
+}
+
+.creation-measurement-dropdown select {
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid var(--gray2);
+  color: var(--gray4);
+}
+
 .drink-form label {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #444;
+  font-size: 1rem;
+  font-weight: 100;
+  color: var(--text-brown);
+}
+
+#drink-form-ingredients {
+  margin: 2rem 0 1rem 0;
 }
 
 .drink-form input {
@@ -805,33 +892,23 @@ ingredient {
 }
 
 .drink-form button {
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #a12f0d;
+  padding: 10px 20px;
+  background-color: var(--primary-red);
   color: white;
+  border-radius: 5px;
   border: none;
-  border-radius: 4px;
-  font-weight: bold;
-  cursor: pointer;
   transition: all 0.2s;
+  width: 50%;
+  align-self: center;
+  margin: 1rem 0;
 }
 
 .drink-form button:hover {
-  background-color: #de3300;
+  background-color: var(--active-red);
   transition: all 0.2s;
 }
 
-/* right panel: the grid of plants */
-.right-panel {
-  flex-grow: 1;
-  /* Takes up all remaining space */
-}
-
-.drink-grid {
-  grid-template-columns: repeat(2, 1fr);
-  display: grid;
-  gap: 20px;
-}
+/* --------------------------------------------------------------- */
 
 .delete-btn {
   width: 100%;
