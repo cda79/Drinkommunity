@@ -176,6 +176,7 @@ function Create() {
             ingredient: "",
           })),
         );
+        alert("Drink successfully added.");
       } else {
         const errorData = await res.json();
         alert(errorData.message || "Failed to add drink");
