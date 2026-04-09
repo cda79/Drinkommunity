@@ -17,6 +17,7 @@ function DrinkDetails() {
   const [isFavourited, setIsFavourited] = useState(false);
   // Current user
   const { user } = useContext(AuthContext);
+  const { loadUser } = useContext(AuthContext)
 
   // fetch drink details
   useEffect(() => {
@@ -98,6 +99,7 @@ function DrinkDetails() {
 
       if (res.ok) {
         setIsFavourited(!isFavourited);
+        await loadUser();
       } else {
         console.error("Server rejected the favourite toggle");
       }

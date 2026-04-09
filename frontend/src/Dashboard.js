@@ -9,6 +9,7 @@ function Dashboard() {
   const [drinks, setDrinks] = useState([]);
   const { token } = useContext(AuthContext);
   const { user } = useContext(AuthContext);
+  const { loadUser } = useContext(AuthContext);
   const [favouritedDrinks, setFavouritedDrinks] = useState([]);
   let username = "Guest";
   username = user?.username || username;
