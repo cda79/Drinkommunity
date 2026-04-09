@@ -50,7 +50,7 @@ function Create() {
     strMeasure13: "",
     strMeasure14: "",
     strMeasure15: "",
-    strDrinkThumb: "https://thumbs.dreamstime.com/b/web-324671699.jpg",
+    strDrinkThumb: "",
   });
 
   // some janky thing to handle quantity + unit of measurement inputs into one strMeasure //
@@ -210,93 +210,97 @@ function Create() {
       </div>
 
       {/* main drink creation content */}
-      <div>
-        <h3>Create Drink</h3>
+      <h1>Create Drink</h1>
+      <div className="form-container">
         <form onSubmit={handleSubmit} className="drink-form">
-          <img
-            src={formData.strDrinkThumb}
-            style={{ width: "100px", marginBottom: "10px" }}
-          />
+          <div className="creation-row-wrapper">
+            <div className="creation-row-column-element" style={{ flex: 1 }}>
+              <img src={formData.strDrinkThumb} className="creation-image" />
+            </div>
+            <div className="creation-row-column-element">
+              <label>Drink Name</label>
+              <input
+                name="strDrink"
+                value={formData.strDrink}
+                onChange={handleChange}
+                placeholder="e.g. Negroni"
+                required
+              />
 
-          <label>Drink Name</label>
-          <input
-            name="strDrink"
-            value={formData.strDrink}
-            onChange={handleChange}
-            placeholder="e.g. Negroni"
-            required
-          />
+              <label>Category</label>
+              <div className="search-input">
+                <select
+                  name="strCategory"
+                  value={formData.strCategory}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="Ordinary Drink">Ordinary Drink</option>
+                  <option value="Beer">Beer</option>
+                  <option value="Cocktail">Cocktail</option>
+                  <option value="Cocoa">Cocoa</option>
+                  <option value="Coffee/Tea">Coffee/Tea</option>
+                  <option value="Handmade Liqueur">Handmade Liqueur</option>
+                  <option value="Other/Unknown">Other/Unknown</option>
+                  <option value="Punch/Party Drink">Punch/Party Drink</option>
+                  <option value="Shake">Shake</option>
+                  <option value="Soft Drink">Soft Drink</option>
+                </select>
+              </div>
+              <label>Alcoholic?</label>
+              <div className="search-input">
+                <select
+                  name="strAlcoholic"
+                  value={formData.strAlcoholic}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="Alcoholic">Alcoholic</option>
+                  <option value="Non-Alcoholic">Non-Alcoholic</option>
+                </select>
+              </div>
+              <label>Image URL</label>
+              <input
+                name="strDrinkThumb"
+                value={formData.strDrinkThumb}
+                onChange={handleChange}
+                placeholder="http://..."
+              />
+            </div>
+            <div className="creation-row-column-element">
+              <label>Tag - 1</label>
+              <input
+                name="tag1"
+                type="text"
+                value={tags.tag1}
+                onChange={handleTagsChange}
+              />
 
-          <label>Alcoholic?</label>
-          <select
-            name="strAlcoholic"
-            value={formData.strAlcoholic}
-            onChange={handleChange}
-            required
-          >
-            <option value="Alcoholic">Alcoholic</option>
-            <option value="Non-Alcoholic">Non-Alcoholic</option>
-          </select>
+              <label>Tag - 2</label>
+              <input
+                name="tag2"
+                type="text"
+                value={tags.tag2}
+                onChange={handleTagsChange}
+              />
 
-          <label>Category</label>
-          <select
-            name="strCategory"
-            value={formData.strCategory}
-            onChange={handleChange}
-            required
-          >
-            <option value="Ordinary Drink">Ordinary Drink</option>
-            <option value="Beer">Beer</option>
-            <option value="Cocktail">Cocktail</option>
-            <option value="Cocoa">Cocoa</option>
-            <option value="Coffee/Tea">Coffee/Tea</option>
-            <option value="Handmade Liqueur">Handmade Liqueur</option>
-            <option value="Other/Unknown">Other/Unknown</option>
-            <option value="Punch/Party Drink">Punch/Party Drink</option>
-            <option value="Shake">Shake</option>
-            <option value="Soft Drink">Soft Drink</option>
-          </select>
+              <label>Tag - 3</label>
+              <input
+                name="tag3"
+                type="text"
+                value={tags.tag3}
+                onChange={handleTagsChange}
+              />
 
-          <label>Tag-1</label>
-          <input
-            name="tag1"
-            type="text"
-            value={tags.tag1}
-            onChange={handleTagsChange}
-          />
-
-          <label>Tag-2</label>
-          <input
-            name="tag2"
-            type="text"
-            value={tags.tag2}
-            onChange={handleTagsChange}
-          />
-
-          <label>Tag-3</label>
-          <input
-            name="tag3"
-            type="text"
-            value={tags.tag3}
-            onChange={handleTagsChange}
-          />
-
-          <label>Tag-4</label>
-          <input
-            name="tag4"
-            type="text"
-            value={tags.tag4}
-            onChange={handleTagsChange}
-          />
-
-          <label>Image URL</label>
-          <input
-            name="strDrinkThumb"
-            value={formData.strDrinkThumb}
-            onChange={handleChange}
-            placeholder="http://..."
-          />
-
+              <label>Tag - 4</label>
+              <input
+                name="tag4"
+                type="text"
+                value={tags.tag4}
+                onChange={handleTagsChange}
+              />
+            </div>
+          </div>
           <label>Instructions</label>
           <textarea
             name="strInstructions"
@@ -304,9 +308,9 @@ function Create() {
             onChange={handleChange}
           ></textarea>
 
-          <label>Ingredients (Max.15)</label>
+          <label id="drink-form-ingredients">Ingredients (Max. 15)</label>
           {ingredientParts.map((item, index) => (
-            <div key={index}>
+            <div className="create-ingredient-wrapper" key={index}>
               <span>{index + 1}</span>
 
               <input
@@ -317,26 +321,27 @@ function Create() {
                   handleIngredientChange(index, "quantity", e.target.value)
                 }
               />
-
-              <select
-                value={item.unit}
-                onChange={(e) =>
-                  handleIngredientChange(index, "unit", e.target.value)
-                }
-              >
-                <option value="oz">oz</option>
-                <option value="ml">ml</option>
-                <option value="cl">cl</option>
-                <option value="tsp">tsp</option>
-                <option value="parts">parts</option>
-                <option value="dash">dash</option>
-                <option value="drop">drop</option>
-                <option value="splash">splash</option>
-              </select>
+              <div className="creation-measurement-dropdown">
+                <select
+                  value={item.unit}
+                  onChange={(e) =>
+                    handleIngredientChange(index, "unit", e.target.value)
+                  }
+                >
+                  <option value="oz">oz</option>
+                  <option value="ml">ml</option>
+                  <option value="cl">cl</option>
+                  <option value="tsp">tsp</option>
+                  <option value="parts">parts</option>
+                  <option value="dash">dash</option>
+                  <option value="drop">drop</option>
+                  <option value="splash">splash</option>
+                </select>
+              </div>
 
               <input
                 type="text"
-                placeholder="ingredient"
+                placeholder="Ingredient Name"
                 value={item.ingredient}
                 onChange={(e) =>
                   handleIngredientChange(index, "ingredient", e.target.value)
@@ -345,38 +350,13 @@ function Create() {
             </div>
           ))}
 
-          <button type="submit">Add to Drink List</button>
+          <button className="button" type="submit">
+            Add to Drink List
+          </button>
         </form>
       </div>
     </div>
   );
 }
-
-const styles = {
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  welcomeText: {
-    color: "#A12F0D",
-    marginTop: "5px",
-  },
-  gardenTitle: {
-    color: "#A12F0D",
-    borderBottom: "2px solid #EFE7DF",
-    paddingBottom: "10px",
-    marginBottom: "20px",
-  },
-  imagePlaceholder: {
-    color: "#999",
-  },
-  emptyMessage: {
-    gridColumn: "1 / -1",
-    textAlign: "center",
-    padding: "40px",
-    color: "#666",
-  },
-};
 
 export default Create;
