@@ -10,10 +10,13 @@ function AccountSettings() {
   const navigate = useNavigate();
   const [userThumbnail, setUserThumbnail] = useState(user?.imageThumb || null); // Add state for thumbnail
 
-  let username = "Guest";
-  username = user?.username || username;
+  const [currentUsername, setCurrentUsername] = useState(
+    user?.username || "Guest",
+  );
+  const usernameDisplay = currentUsername;
 
-  let nickname = user?.nickname || "No nickname set! Set one here";
+  const [currentNickname, setCurrentNickname] = useState(user?.nickname || "");
+  let nicknameDisplay = currentNickname || "No nickname set! Set one here";
 
   useEffect(() => {
     if (!token) {
@@ -27,6 +30,22 @@ function AccountSettings() {
       setUserThumbnail(user.imageThumb);
     }
   }, [user?.imageThumb]);
+
+  //nickname
+  useEffect(() => {
+    if (user?.nickname) {
+      setCurrentNickname(user.nickname);
+    }
+  }, [user?.nickname]);
+
+  //username
+  useEffect(() => {
+    if (user) {
+      setUserThumbnail(user.imageThumb || null);
+      setCurrentNickname(user.nickname || "");
+      setCurrentUsername(user.username || "Guest");
+    }
+  }, [user]);
 
   async function updateThumbnail() {
     const newThumbnail = document.getElementById("updateThumbURL").value;
@@ -78,13 +97,20 @@ function AccountSettings() {
     const newNickname = document.getElementById("nickname").value;
     const newUsername = document.getElementById("username").value;
     const blank = "";
-    const newPassword = (document.getElementById("password").value || "").normalize("NFKC").trim();
-    const confirmNewPassword = (document.getElementById("confirmPassword").value || "").normalize("NFKC").trim();
+    const newPassword = (document.getElementById("password").value || "")
+      .normalize("NFKC")
+      .trim();
+    const confirmNewPassword = (
+      document.getElementById("confirmPassword").value || ""
+    )
+      .normalize("NFKC")
+      .trim();
     const updateData = {};
 
     if (newNickname !== blank) {
       updateData.newNickname = newNickname;
     }
+
     if (newUsername !== blank) {
       updateData.newUsername = newUsername;
     }
@@ -93,7 +119,7 @@ function AccountSettings() {
         alert("Please confirm your new password.");
         return;
       }
-      
+
       if (newPassword !== confirmNewPassword) {
         alert("Passwords do not match!");
         return;
@@ -123,6 +149,19 @@ function AccountSettings() {
         data = { message: text };
       }
       if (res.ok) {
+        if (newNickname !== blank) {
+          setCurrentNickname(newNickname);
+        }
+
+        // Update Username State
+        if (newUsername !== blank) {
+          setCurrentUsername(newUsername);
+          document.getElementById("username").value = "";
+        }
+
+        // Clear password fields
+        document.getElementById("password").value = "";
+        document.getElementById("confirmPassword").value = "";
         alert("User settings updated successfully!");
       } else {
         alert(data.message || "Failed to update user settings.");
@@ -164,9 +203,9 @@ function AccountSettings() {
           </div>
           {/* Title */}
           <header className="user-settings-container">
-            <h1>Account settings</h1>
+            <h1 id="page-h1">Account settings</h1>
             <h2>
-              {username} - {nickname}
+              {usernameDisplay} - {nicknameDisplay}
             </h2>
             <div className="settings-container">
               <div className="icon-settings-wrapper">
