@@ -51,6 +51,12 @@ html {
   transition: all 0.2s;
 }
 
+#page-h1 {
+  color: var(--primary-red);
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
 /* ------------------------------------ */
 /*------------Navigation Header---------*/
 /* ------------------------------------ */
@@ -456,8 +462,18 @@ html {
 .dashboard-stats-wrapper {
   display: flex;
   margin-left: auto;
-  background-color: yellow;
   flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-brown);
+}
+
+.stats-wrapper {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 0;
+  padding: 0;
 }
 
 #logout-button {

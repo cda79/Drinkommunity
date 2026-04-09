@@ -210,7 +210,7 @@ function Create() {
       </div>
 
       {/* main drink creation content */}
-      <h1>Create Drink</h1>
+      <h1 id="page-h1">Create Drink</h1>
       <div className="form-container">
         <form onSubmit={handleSubmit} className="drink-form">
           <div className="creation-row-wrapper">

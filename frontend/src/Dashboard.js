@@ -9,8 +9,7 @@ function Dashboard() {
   const [drinks, setDrinks] = useState([]);
   const { token } = useContext(AuthContext);
   const { user } = useContext(AuthContext);
-  const [otherDrinks, setOtherDrinks] = useState([]);
-  const [ favouritedDrinks, setFavouritedDrinks ] = useState([]);
+  const [favouritedDrinks, setFavouritedDrinks] = useState([]);
   let username = "Guest";
   username = user?.username || username;
 
@@ -31,7 +30,9 @@ function Dashboard() {
       try {
         const drinkPromises = userFavourites.map(async (id) => {
           const isMongo = id.length > 10;
-          const url = isMongo ? `http://localhost:5000/api/drinks/${id}` : `http://localhost:5000/api/proxy/cocktails?i=${id}`;
+          const url = isMongo
+            ? `http://localhost:5000/api/drinks/${id}`
+            : `http://localhost:5000/api/proxy/cocktails?i=${id}`;
 
           const res = await fetch(url);
           const data = await res.json();
@@ -39,33 +40,11 @@ function Dashboard() {
         });
 
         const fullDrinkData = await Promise.all(drinkPromises);
-        setFavouritedDrinks(fullDrinkData.filter(d => d !== null));
+        setFavouritedDrinks(fullDrinkData.filter((d) => d !== null));
       } catch (err) {
         console.error("Error fetching favourites:", err);
       }
-    }
-
-    // fetch public drinks for the user to just view
-    // fetch("http://localhost:5000/api/drinks", { method: "GET" })
-    //   .then((res) => {
-    //     if (!res.ok) throw new Error("Could not retrieve drinks.");
-    //     return res.json();
-    //   })
-    //   .then((data) => {
-    //     if (userId) {
-    //       const filtered = data.filter((d) => {
-    //         const ownerId =
-    //           d.owner && d.owner.toString ? d.owner.toString() : d.owner;
-    //         return ownerId !== userId.toString();
-    //       });
-    //       setOtherDrinks(filtered);
-    //     } else {
-    //       setOtherDrinks(data);
-    //     }
-    //   })
-    //   .catch((err) => console.error("Fetch error (public):", err));
-
-    // if (!token) return;
+    };
 
     // fetch user's own drinks (requires authorization)
     fetch("http://localhost:5000/api/drinks/my-drinks", {
@@ -82,7 +61,7 @@ function Dashboard() {
       .then((data) => setDrinks(data))
       .catch((err) => console.error("Fetch error (my-drinks):", err));
 
-      fetchFavourites();
+    fetchFavourites();
   }, [user?.favourites, token]);
 
   // delete
@@ -178,7 +157,7 @@ function Dashboard() {
             </h2>
           </div>
           <div className="dashboard-stats-wrapper">
-            <div>
+            <div className="stats-wrapper">
               <p>
                 {drinks.length}
                 <br />
@@ -186,7 +165,13 @@ function Dashboard() {
               </p>
             </div>
             <hr className="plain-line" />
-            <p>amount of drinks</p>
+            <div className="stats-wrapper">
+              <p>
+                {" "}
+                {favouritedDrinks.length} <br />
+                Favourites
+              </p>
+            </div>
           </div>
         </header>
       </div>
@@ -237,10 +222,7 @@ function Dashboard() {
 
             {drinks.length === 0 && (
               <div style={styles.emptyMessage}>
-                <p>
-                  Your cocktail library is currently empty. Add a cocktail using
-                  the form on the left!
-                </p>
+                <p>Your cocktail library is currently empty.</p>
               </div>
             )}
           </div>
@@ -294,11 +276,9 @@ function Dashboard() {
               </div>
             ))}
 
-            {otherDrinks.length === 0 && (
+            {favouritedDrinks.length === 0 && (
               <div style={styles.emptyMessage}>
-                <p>
-                  You haven't favourited any drinks yet. Get doomscrolling!
-                </p>
+                <p>You haven't favourited any drinks yet. Get doomscrolling!</p>
               </div>
             )}
           </div>

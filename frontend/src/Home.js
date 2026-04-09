@@ -71,10 +71,6 @@ function Home() {
       let apiDrinks = Array.isArray(apiData.drinks) ? apiData.drinks : [];
       const mongoDrinks = Array.isArray(mongoData) ? mongoData : [];
 
-      // DEBUG: Log the actual data structure
-      console.log("API Drinks sample:", apiDrinks[0]);
-      console.log("MongoDB Drinks sample:", mongoDrinks[0]);
-
       // Alcohol filtering -- seperate URL fetching
       // We grab the ids of the drinks and then cross reference them
       if (alcoholic !== "All") {
