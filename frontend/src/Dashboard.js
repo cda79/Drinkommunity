@@ -46,26 +46,26 @@ function Dashboard() {
     }
 
     // fetch public drinks for the user to just view
-    fetch("http://localhost:5000/api/drinks", { method: "GET" })
-      .then((res) => {
-        if (!res.ok) throw new Error("Could not retrieve drinks.");
-        return res.json();
-      })
-      .then((data) => {
-        if (userId) {
-          const filtered = data.filter((d) => {
-            const ownerId =
-              d.owner && d.owner.toString ? d.owner.toString() : d.owner;
-            return ownerId !== userId.toString();
-          });
-          setOtherDrinks(filtered);
-        } else {
-          setOtherDrinks(data);
-        }
-      })
-      .catch((err) => console.error("Fetch error (public):", err));
+    // fetch("http://localhost:5000/api/drinks", { method: "GET" })
+    //   .then((res) => {
+    //     if (!res.ok) throw new Error("Could not retrieve drinks.");
+    //     return res.json();
+    //   })
+    //   .then((data) => {
+    //     if (userId) {
+    //       const filtered = data.filter((d) => {
+    //         const ownerId =
+    //           d.owner && d.owner.toString ? d.owner.toString() : d.owner;
+    //         return ownerId !== userId.toString();
+    //       });
+    //       setOtherDrinks(filtered);
+    //     } else {
+    //       setOtherDrinks(data);
+    //     }
+    //   })
+    //   .catch((err) => console.error("Fetch error (public):", err));
 
-    if (!token) return;
+    // if (!token) return;
 
     // fetch user's own drinks (requires authorization)
     fetch("http://localhost:5000/api/drinks/my-drinks", {
