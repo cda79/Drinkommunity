@@ -118,9 +118,11 @@ function DrinkDetails() {
 
       if (ingredient && ingredient.trim() !== "") {
         ingredients.push(
-          <li key={i}>
-            {measure} {ingredient}
-          </li>,
+          <tr key={i}>
+            <td>
+              {measure} {ingredient}
+            </td>
+          </tr>,
         );
       }
     }
@@ -218,7 +220,9 @@ function DrinkDetails() {
             </p>
 
             <h3>Ingredients</h3>
-            <ul>{renderIngredients()}</ul>
+            <table>
+              <tbody>{renderIngredients()}</tbody>
+            </table>
           </div>
         </div>
         <button onClick={toggleFavourite}>
