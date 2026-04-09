@@ -214,7 +214,7 @@ function DrinkDetails() {
               <strong>{drinkDetails.strCategory}</strong>
             </small>
             <p>
-              <strong>Tags:</strong> {drinkDetails.strTags}
+              <strong>Tags:</strong> { drinkDetails.strTags ? drinkDetails.strTags : "This Drink has No Tags Assigned" }
             </p>
 
             <h3>Ingredients</h3>
