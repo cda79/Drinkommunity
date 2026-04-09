@@ -15,8 +15,6 @@ function DrinkDetails() {
   const token = localStorage.getItem("token");
 
   const [isFavourited, setIsFavourited] = useState(false);
-  // Other users
-  const userItem = JSON.parse(localStorage.getItem("user"));
   // Current user
   const { user } = useContext(AuthContext);
 
@@ -223,7 +221,11 @@ function DrinkDetails() {
             {drinkDetails.strCategory} - {drinkDetails.strAlcoholic}
             <div className="details-text-wrapper">
               <h2>Tags: </h2>
-              <p>{drinkDetails.strTags}</p>
+              <p>
+                {drinkDetails.strTags
+                  ? drinkDetails.strTags.split(",").join(", ")
+                  : "No tags"}
+              </p>
             </div>
             <h2>Ingredients:</h2>
             <div className="ingredients-grid">{renderIngredients()}</div>

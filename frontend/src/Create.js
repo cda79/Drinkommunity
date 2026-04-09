@@ -7,10 +7,10 @@ import logo from "./assets/logo.png";
 function Create() {
   const [drinks, setDrinks] = useState([]);
   const { token } = useContext(AuthContext);
-  const { user } = useContext(AuthContext);
+  // const { user } = useContext(AuthContext);
   const navigate = useNavigate();
-  let username = "Guest";
-  username = user?.username || username;
+  // let username = "Guest";
+  // username = user?.username || username;
 
   // local state for the form, match models/Drink.js and database
   const [formData, setFormData] = useState({
@@ -215,7 +215,11 @@ function Create() {
         <form onSubmit={handleSubmit} className="drink-form">
           <div className="creation-row-wrapper">
             <div className="creation-row-column-element" style={{ flex: 1 }}>
-              <img src={formData.strDrinkThumb} className="creation-image" />
+              <img
+                src={formData.strDrinkThumb}
+                className="creation-image"
+                alt="None"
+              />
             </div>
             <div className="creation-row-column-element">
               <label>Drink Name</label>

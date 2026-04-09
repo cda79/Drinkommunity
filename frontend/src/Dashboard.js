@@ -18,7 +18,7 @@ function Dashboard() {
   // fetches public drinks as read only and the user's drinks (editable).
   useEffect(() => {
     // determine current user's id from server-provided user
-    const userId = user?.id || null;
+    // const userId = user?.id || null;
     const userFavourites = user?.favourites || [];
 
     if (!token || userFavourites.length === 0) {
