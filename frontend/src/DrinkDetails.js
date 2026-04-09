@@ -118,9 +118,9 @@ function DrinkDetails() {
 
       if (ingredient && ingredient.trim() !== "") {
         ingredients.push(
-          <li key={i}>
+          <ingredient key={i}>
             {measure} {ingredient}
-          </li>,
+          </ingredient>,
         );
       }
     }
@@ -209,68 +209,80 @@ function DrinkDetails() {
             alt={placeholder || drinkDetails.strDrink}
           />
           <div className="details-container-column-wrapper">
-            <h1>{drinkDetails.strDrink}</h1>
-            <small>
-              <strong>{drinkDetails.strCategory}</strong>
-            </small>
-            <p>
-              <strong>Tags:</strong> {drinkDetails.strTags}
-            </p>
-
-            <h3>Ingredients</h3>
-            <ul>{renderIngredients()}</ul>
+            <div className="details-title-wrapper">
+              <h1>{drinkDetails.strDrink}</h1>
+              <div className="details-favourite-wrapper">
+                <button
+                  className={`button ${isFavourited ? "favourited" : ""}`}
+                  onClick={toggleFavourite}
+                >
+                  {isFavourited ? "Favourited" : "Favourite"}
+                </button>
+              </div>
+            </div>
+            {drinkDetails.strCategory} - {drinkDetails.strAlcoholic}
+            <div className="details-text-wrapper">
+              <h2>Tags: </h2>
+              <p>* WORK IN PROGRESS *</p>
+            </div>
+            <h2>Ingredients:</h2>
+            <div className="ingredients-grid">{renderIngredients()}</div>
           </div>
         </div>
-        <button onClick={toggleFavourite}>
-          {isFavourited ? "Favourited" : "Favourite"}
-        </button>
-        <h3>Instructions</h3>
-        <p>{drinkDetails.strInstructions || "No instructions provided."}</p>
-
-        <p>
-          {ownerName === "TheCocktailDB"
-            ? "Provided by TheCocktailDB"
-            : `Uploaded by ${drinkDetails.owner?.username || "Anonymous"}`}
-        </p>
+        <div className="instructions-wrapper">
+          <div className="instructions-element">
+            <h2>Instructions</h2>
+            <p>{drinkDetails.strInstructions || "No instructions provided."}</p>
+          </div>
+          <div className="instructions-element" id="provider-text">
+            <p id="drink-provider-text">
+              {ownerName === "TheCocktailDB"
+                ? "Provided by TheCocktailDB"
+                : `Uploaded by ${drinkDetails.owner?.username || "Anonymous"}`}
+            </p>
+          </div>
+        </div>
       </div>
 
       <div className="writeComment-container">
-        <h3>Comments</h3>
-        {token ? (
-          user?.imageThumb ? (
-            <img
-              src={getCleanImageUrl(user.imageThumb)}
-              crossOrigin="anonymous"
-              alt="User Icon"
-              className="user-icon"
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.src = placeholder;
-              }}
-            />
+        <h1>Comments</h1>
+        <div className="writeComment-wrapper">
+          {token ? (
+            user?.imageThumb ? (
+              <img
+                src={getCleanImageUrl(user.imageThumb)}
+                crossOrigin="anonymous"
+                alt="User Icon"
+                className="user-icon"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = placeholder;
+                }}
+              />
+            ) : (
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
+                alt="No Avatar"
+                className="user-icon"
+              />
+            )
+          ) : null}
+          {token ? (
+            <form onSubmit={handleCommentSubmit}>
+              <textarea
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="Leave Comment"
+                required
+              />
+              <button className="button" type="submit">
+                Post
+              </button>
+            </form>
           ) : (
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
-              alt="No Avatar"
-              className="user-icon"
-            />
-          )
-        ) : null}
-        {token ? (
-          <form onSubmit={handleCommentSubmit}>
-            <textarea
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Leave Comment"
-              required
-            />
-            <button className="button" type="submit">
-              Post
-            </button>
-          </form>
-        ) : (
-          <p>Please log in to leave a comment</p>
-        )}
+            <p>Please log in to leave a comment</p>
+          )}
+        </div>
       </div>
 
       <div className="commentList-container">
@@ -290,7 +302,7 @@ function DrinkDetails() {
               }}
             />
             <div className="comment">
-              <strong>{c.user?.username || "Anon"}:</strong>
+              <h2>{c.user?.username || "Anon"}:</h2>
               <p> {c.text} </p>
               <small>{new Date(c.createdAt).toLocaleDateString()}</small>
             </div>

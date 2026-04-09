@@ -77,6 +77,7 @@ html {
 .plain-line {
   border-left: 1px solid var(--primary-red);
   height: 50px;
+  max-width: 0px;
   margin: 0 10px;
 }
 
@@ -452,6 +453,13 @@ html {
   margin-bottom: 1rem;
 }
 
+.dashboard-stats-wrapper {
+  display: flex;
+  margin-left: auto;
+  background-color: yellow;
+  flex-direction: row;
+}
+
 #logout-button {
   background-color: var(--button-brown);
   color: white;
@@ -552,27 +560,74 @@ html {
 /*------------ Drink Details -----------*/
 /* ------------------------------------ */
 
+.button.favourited {
+  background-color: var(--text-brown);
+}
+
 .details-container {
   display: flex;
   flex-direction: column;
   border: 1px solid var(--gray1);
-  padding: 2rem;
+  padding: 2rem 2rem 0.5rem 2rem;
+  width: 80%;
+}
+
+.details-title-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.details-container p {
+  margin: 0px;
+  padding: 0px 5px;
+  color: var(--text-brown);
+}
+
+.details-container h1 {
+  margin: 0px 0px 0.5rem 0px;
+  padding: 0px;
+  font-weight: 600;
+  color: var(--primary-red);
+}
+
+.details-container h2 {
+  margin: 0px 0px 0.5rem 0px;
+  padding: 0px;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-red);
+}
+
+.details-text-wrapper {
+  display: flex;
+  flex-direction: row;
+  margin: 1rem 0;
 }
 
 .details-container-row-wrapper {
   display: flex;
   flex-direction: row;
+  gap: 2rem;
 }
-
-.details-container-column-wrapper {
-  display: flex;
-  flex-direction: column;
-}
-
 .details-image-container {
-  height: 160px;
-  max-width: 160px;
+  aspect-ratio: 1 / 1;
+
+  background:
+    url("assets/drink-placeholder.png") no-repeat,
+    var(--gray2);
+  background-size: cover;
+
+  display: flex;
+  align-items: center;
+  /* text-align: center; */
+  justify-content: center;
+
+  max-height: 18vw;
+  max-width: 18vw;
   overflow: hidden;
+  object-fit: cover;
+
+  flex: 1;
 
   background:
     url("assets/drink-placeholder.png") no-repeat,
@@ -580,23 +635,97 @@ html {
   background-size: cover;
 }
 
+.details-container-column-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 2;
+}
+
+.details-favourite-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  width: 30%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.ingredients-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  color: var(--text-brown);
+  width: 100%;
+  height: 10vh;
+}
+
+ingredient {
+  display: list-item;
+  margin-left: 1em;
+}
+
+.instructions-wrapper {
+  max-width: 100%;
+  height: 20vh;
+  display: flex;
+  margin: 2rem 0 0.5rem 0;
+  flex-direction: column;
+}
+
+.instructions-wrapper h2 {
+  text-decoration: underline;
+}
+
+.instructions-wrapper p {
+  padding: 0;
+  margin: 0;
+}
+
+#provider-text {
+  margin: auto 0 0 0;
+}
+
+#drink-provider-text {
+  color: var(--gray3);
+}
+
 /* -------- COMMENTS -------- */
 
 .writeComment-container {
-  border-top: solid 1px var(--button-brown);
   width: 80%;
   display: flex;
   flex-direction: column;
+}
+
+.writeComment-container h1 {
+  font-weight: 100;
+  font-size: 1.25rem;
+  margin-top: 2rem;
+}
+
+.writeComment-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.writeComment-container .user-icon {
+  width: 10vh;
+}
+
+.writeComment-container button {
+  margin-left: 1rem;
 }
 
 .writeComment-container form {
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: 80%;
 }
 
 .writeComment-container textarea {
-  width: 30vw;
+  width: 100%;
 }
 
 .commentList-container {
@@ -605,12 +734,46 @@ html {
   flex-direction: column;
   gap: 1rem;
 
-  margin-top: 1rem;
+  margin: 1rem 0px;
 }
 
 .comment-box {
-  border: solid 2px var(--gray2);
+  border: none;
+  display: flex;
+  flex-direction: row;
   padding: 10px;
+  width: 100%;
+  gap: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.comment-box .user-icon {
+  width: 5em;
+  height: 5em;
+  aspect-ratio: 1 / 1;
+}
+
+.comment h2 {
+  font-size: 1rem;
+  font-weight: 100;
+  padding: 0;
+  margin: 0;
+  text-decoration: underline;
+}
+
+.comment p {
+  padding: 0;
+  margin: 0;
+}
+
+.comment small {
+  color: var(--text-brown);
+}
+
+.comment {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 /* --------------------------------------------------------------- */

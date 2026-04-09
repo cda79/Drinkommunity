@@ -125,7 +125,11 @@ function Home() {
             {drink.alcoholicStatus}
           </p>
           <p id="category-text">{category}</p>
-          <p id="id-text">id: {drink.idDrink}</p>
+          <p id="id-text">
+            {drink.idDrink.includes("user")
+              ? " User Creation"
+              : " TheCocktailDB"}
+          </p>
         </div>
         <div className="view-details-container">
           <Link
