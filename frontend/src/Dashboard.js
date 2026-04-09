@@ -11,7 +11,9 @@ function Dashboard() {
   const { user } = useContext(AuthContext);
   const [favouritedDrinks, setFavouritedDrinks] = useState([]);
   let username = "Guest";
+  let nickname = "";
   username = user?.username || username;
+  nickname = user?.nickname;
 
   // initial load
   // fetches public drinks as read only and the user's drinks (editable).
@@ -151,9 +153,9 @@ function Dashboard() {
             )}
           </div>
           <div>
-            <h1>My Drink Library</h1>
+            <h1>{nickname ? (nickname) : (username)}'s Dashboard</h1>
             <h2>
-              <strong>{username}'s</strong> Dashboard
+              <strong>{username}</strong>
             </h2>
           </div>
           <div className="dashboard-stats-wrapper">

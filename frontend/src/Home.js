@@ -325,8 +325,9 @@ function Home() {
           <input
             type="checkbox"
             name="favourited"
-            checked={inputs.favourited}
+            checked={inputs.favourited || false}
             onChange={handleChange}
+            disabled={!token}
           />
         </label>
         <label>
