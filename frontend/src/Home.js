@@ -31,11 +31,12 @@ function Home() {
   const [allDrinks, setAllDrinks] = useState([]); // store everything for filtering
 
   // Login Initializations
-  const [formData, setFormData] = useState({ username: "", password: "" });
-  const [error, setError] = useState("");
+  const [ formData, setFormData ] = useState({ username: "", password: "" });
+  const [ error, setError ] = useState("");
   const { token } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const { login } = useContext(AuthContext);
-  const [inputs, setInputs] = useState({});
+  const [ inputs, setInputs ] = useState({});
 
   // -------------------------------------------------------------------------
   // --------------------------- Functions -----------------------------------
@@ -46,7 +47,16 @@ function Home() {
   // search logic
   const filteredDrinks = allDrinks
     .filter((drink) => {
-      return drink.strDrink.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesSearch = drink.strDrink.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const isUserCreation = drink.idDrink.includes("user");
+      const matchesOfficial = inputs.official ? !isUserCreation : true;
+      const matchesUser = inputs.userSubmitted ? isUserCreation : true;
+
+      const isFavourited = user?.favourites?.some(favouritedId => favouritedId.toString() === drink.idDrink || favouritedId.toString() === drink._id?.toString());
+      const matchesFavourite = inputs.favourited ? isFavourited : true;
+
+      return matchesSearch && matchesOfficial && matchesUser && matchesFavourite
     })
     .slice(0, 10); // Show only top 10 (5 per row)
 
