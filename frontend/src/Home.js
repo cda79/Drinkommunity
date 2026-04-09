@@ -35,6 +35,7 @@ function Home() {
   const [error, setError] = useState("");
   const { token } = useContext(AuthContext);
   const { login } = useContext(AuthContext);
+  const [inputs, setInputs] = useState({});
   const navigate = useNavigate();
 
   // -------------------------------------------------------------------------
@@ -60,7 +61,7 @@ function Home() {
     setAllDrinks([]); // Clear previous results
     try {
       //fetch category URL first
-      const categoryURL = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`;
+      const categoryURL = `http://localhost:5000/api/proxy/cocktails?c=${category}`;
       const apiPromise = await fetch(categoryURL, { method: "GET" });
       const mongoPromise = await fetch(`http://localhost:5000/api/drinks`);
 
@@ -71,10 +72,14 @@ function Home() {
       let apiDrinks = Array.isArray(apiData.drinks) ? apiData.drinks : [];
       const mongoDrinks = Array.isArray(mongoData) ? mongoData : [];
 
+      // DEBUG: Log the actual data structure
+      console.log("API Drinks sample:", apiDrinks[0]);
+      console.log("MongoDB Drinks sample:", mongoDrinks[0]);
+
       // Alcohol filtering -- seperate URL fetching
       // We grab the ids of the drinks and then cross reference them
       if (alcoholic !== "All") {
-        const alchUrl = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=${alcoholic.replace(/ /g, "_")}`;
+        const alchUrl = `http://localhost:5000/api/proxy/cocktails?a=${alcoholic.replace(/ /g, "_")}`;
         const alchRes = await fetch(alchUrl);
         const alchData = await alchRes.json();
 
@@ -89,7 +94,9 @@ function Home() {
           .map((d) => ({ ...d, alcoholicStatus: alcoholic })); //object label
       }
 
-      setAllDrinks([...apiDrinks, ...mongoDrinks]);
+      const allDrinksData = [...apiDrinks, ...mongoDrinks];
+      console.log("Final drinks to display:", allDrinksData);
+      setAllDrinks(allDrinksData);
     } catch (err) {
       console.error("Error fetching drinks:", err);
     }
@@ -99,6 +106,11 @@ function Home() {
   function DrinkCard({ drink }) {
     const statusColor =
       drink.alcoholicStatus === "Non alcoholic" ? "#2e7d32" : "#A12F0D";
+
+    const imageUrl = drink.strDrinkThumb?.includes("thecocktaildb")
+      ? `/api/proxy/image?url=${encodeURIComponent(drink.strDrinkThumb)}`
+      : drink.strDrinkThumb;
+
     return (
       <div className="drink-card">
         <div className="image-container">
@@ -142,6 +154,11 @@ function Home() {
 
   function handleChange(e) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+
+    const target = e.target;
+    const value = target.type === "checkbox" ? target.checked : target.value;
+    const name = target.name;
+    setInputs((values) => ({ ...values, [name]: value }));
   }
 
   // authentication logic
@@ -294,6 +311,38 @@ function Home() {
           </button>
         </div>
       </div>
+
+      {/* ------------------- Checkbox Filters ------------------- */}
+      <form className="checkmark-filter-wrapper">
+        <h3>Filters:</h3>
+        <label>
+          Favourited:
+          <input
+            type="checkbox"
+            name="favourited"
+            checked={inputs.favourited}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+          Official:
+          <input
+            type="checkbox"
+            name="official"
+            checked={inputs.official}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+          User Submitted:
+          <input
+            type="checkbox"
+            name="userSubmitted"
+            checked={inputs.userSubmitted}
+            onChange={handleChange}
+          />
+        </label>
+      </form>
 
       {/* ------------------- Grid ------------------- */}
       <div className="grid-container">

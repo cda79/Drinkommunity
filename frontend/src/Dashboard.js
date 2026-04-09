@@ -3,6 +3,7 @@ import "./App.css";
 import { AuthContext } from "./context/AuthContext";
 import { Link } from "react-router-dom";
 import logo from "./assets/logo.png";
+import placeholder from "./assets/drink-placeholder.png";
 
 function Dashboard() {
   const [drinks, setDrinks] = useState([]);
@@ -129,13 +130,14 @@ function Dashboard() {
                 className="user-icon"
                 onError={(e) => {
                   e.currentTarget.onerror = null;
-                  e.currentTarget.src =
-                    "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
+                  e.currentTarget.src = { placeholder };
                 }}
               />
             ) : (
               <img
-                src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
+                src={
+                  "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
+                }
                 alt="No Avatar"
                 className="user-icon"
               />
@@ -174,8 +176,7 @@ function Dashboard() {
                       alt={drink.strDrink}
                       onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src =
-                          "https://via.placeholder.com/260x180?text=Image+Not+Found";
+                        e.target.src = { placeholder };
                       }}
                     />
                   ) : (
