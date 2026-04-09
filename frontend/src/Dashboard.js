@@ -10,6 +10,7 @@ function Dashboard() {
   const { token } = useContext(AuthContext);
   const { user } = useContext(AuthContext);
   const [otherDrinks, setOtherDrinks] = useState([]);
+  const [ favouritedDrinks, setFavouritedDrinks ] = useState([]);
   let username = "Guest";
   username = user?.username || username;
 
@@ -18,28 +19,53 @@ function Dashboard() {
   useEffect(() => {
     // determine current user's id from server-provided user
     const userId = user?.id || null;
+    const userFavourites = user?.favourites || [];
+
+    if (!token || userFavourites.length === 0) {
+      setFavouritedDrinks([]);
+      return;
+    }
+
+    // fetch favourite drinks
+    const fetchFavourites = async () => {
+      try {
+        const drinkPromises = userFavourites.map(async (id) => {
+          const isMongo = id.length > 10;
+          const url = isMongo ? `http://localhost:5000/api/drinks/${id}` : `http://localhost:5000/api/proxy/cocktails?i=${id}`;
+
+          const res = await fetch(url);
+          const data = await res.json();
+          return isMongo ? data : data.drinks[0];
+        });
+
+        const fullDrinkData = await Promise.all(drinkPromises);
+        setFavouritedDrinks(fullDrinkData.filter(d => d !== null));
+      } catch (err) {
+        console.error("Error fetching favourites:", err);
+      }
+    }
 
     // fetch public drinks for the user to just view
-    fetch("http://localhost:5000/api/drinks", { method: "GET" })
-      .then((res) => {
-        if (!res.ok) throw new Error("Could not retrieve drinks.");
-        return res.json();
-      })
-      .then((data) => {
-        if (userId) {
-          const filtered = data.filter((d) => {
-            const ownerId =
-              d.owner && d.owner.toString ? d.owner.toString() : d.owner;
-            return ownerId !== userId.toString();
-          });
-          setOtherDrinks(filtered);
-        } else {
-          setOtherDrinks(data);
-        }
-      })
-      .catch((err) => console.error("Fetch error (public):", err));
+    // fetch("http://localhost:5000/api/drinks", { method: "GET" })
+    //   .then((res) => {
+    //     if (!res.ok) throw new Error("Could not retrieve drinks.");
+    //     return res.json();
+    //   })
+    //   .then((data) => {
+    //     if (userId) {
+    //       const filtered = data.filter((d) => {
+    //         const ownerId =
+    //           d.owner && d.owner.toString ? d.owner.toString() : d.owner;
+    //         return ownerId !== userId.toString();
+    //       });
+    //       setOtherDrinks(filtered);
+    //     } else {
+    //       setOtherDrinks(data);
+    //     }
+    //   })
+    //   .catch((err) => console.error("Fetch error (public):", err));
 
-    if (!token) return;
+    // if (!token) return;
 
     // fetch user's own drinks (requires authorization)
     fetch("http://localhost:5000/api/drinks/my-drinks", {
@@ -55,7 +81,9 @@ function Dashboard() {
       })
       .then((data) => setDrinks(data))
       .catch((err) => console.error("Fetch error (my-drinks):", err));
-  }, [token]);
+
+      fetchFavourites();
+  }, [user?.favourites, token]);
 
   // delete
   // removes a drink after ownership verification on the server.
@@ -220,11 +248,11 @@ function Dashboard() {
 
         <div className="right-panel">
           <h2 className="library-title">
-            Others' Cocktails ({otherDrinks.length} Cocktails)
+            Favourited Drinks ({favouritedDrinks.length} Cocktails)
           </h2>
 
           <div className="drink-grid">
-            {otherDrinks.map((drink) => (
+            {favouritedDrinks.map((drink) => (
               <div key={drink._id} className="drink-card">
                 <div className="image-container">
                   {drink.strDrinkThumb ? (
@@ -269,8 +297,7 @@ function Dashboard() {
             {otherDrinks.length === 0 && (
               <div style={styles.emptyMessage}>
                 <p>
-                  Others' cocktail library is currently empty. Looks like you
-                  are the first person here!
+                  You haven't favourited any drinks yet. Get doomscrolling!
                 </p>
               </div>
             )}
