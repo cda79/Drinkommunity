@@ -454,6 +454,7 @@ html {
 }
 
 .dashboard-stats-wrapper {
+  display: flex;
   margin-left: auto;
   background-color: yellow;
   flex-direction: row;

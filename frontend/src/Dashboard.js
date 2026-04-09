@@ -150,7 +150,13 @@ function Dashboard() {
             </h2>
           </div>
           <div className="dashboard-stats-wrapper">
-            <p>amount of drinks</p>
+            <div>
+              <p>
+                {drinks.length}
+                <br />
+                Created
+              </p>
+            </div>
             <hr className="plain-line" />
             <p>amount of drinks</p>
           </div>
