@@ -1,6 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import logo from "./assets/logo.svg";
+import placeholder from "./assets/drink-placeholder.png";
+import { AuthContext } from "./context/AuthContext";
 
 function DrinkDetails() {
   const location = useLocation();
@@ -13,7 +15,10 @@ function DrinkDetails() {
   const token = localStorage.getItem("token");
 
   const [isFavourited, setIsFavourited] = useState(false);
-  const user = JSON.parse(localStorage.getItem("user"));
+  // Other users
+  const userItem = JSON.parse(localStorage.getItem("user"));
+  // Current user
+  const { user } = useContext(AuthContext);
 
   // fetch drink details
   useEffect(() => {
@@ -158,6 +163,20 @@ function DrinkDetails() {
     }
   };
 
+  // url cleaner
+  function getCleanImageUrl(url) {
+    if (!url) return null;
+    if (url.includes("search?q=")) {
+      try {
+        const directUrl = url.split("search?q=")[1];
+        return decodeURIComponent(directUrl);
+      } catch (e) {
+        return url;
+      }
+    }
+    return url;
+  }
+
   return (
     <div className="page-container">
       {/* Header */}
@@ -187,6 +206,7 @@ function DrinkDetails() {
           <img
             className="details-image-container"
             src={drinkDetails.strDrinkThumb}
+            alt={placeholder || drinkDetails.strDrink}
           />
           <div className="details-container-column-wrapper">
             <h1>{drinkDetails.strDrink}</h1>
@@ -216,7 +236,26 @@ function DrinkDetails() {
 
       <div className="writeComment-container">
         <h3>Comments</h3>
-
+        {token ? (
+          user?.imageThumb ? (
+            <img
+              src={getCleanImageUrl(user.imageThumb)}
+              crossOrigin="anonymous"
+              alt="User Icon"
+              className="user-icon"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = placeholder;
+              }}
+            />
+          ) : (
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
+              alt="No Avatar"
+              className="user-icon"
+            />
+          )
+        ) : null}
         {token ? (
           <form onSubmit={handleCommentSubmit}>
             <textarea
@@ -236,8 +275,21 @@ function DrinkDetails() {
 
       <div className="commentList-container">
         {comments.map((c) => (
-          <div className="comment-box">
-            <div key={c._id} className="comment">
+          <div key={c._id} className="comment-box">
+            <img
+              src={
+                getCleanImageUrl(c.imageThumb) ||
+                "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
+              }
+              crossOrigin="anonymous"
+              alt="User Icon"
+              className="user-icon"
+              onError={(e) => {
+                e.currentTarget.src =
+                  "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
+              }}
+            />
+            <div className="comment">
               <strong>{c.user?.username || "Anon"}:</strong>
               <p> {c.text} </p>
               <small>{new Date(c.createdAt).toLocaleDateString()}</small>

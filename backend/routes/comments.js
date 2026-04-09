@@ -7,7 +7,7 @@ const verifyToken = require("../middleware/authMiddleware");
 router.get("/:drinkId", async (req, res) => {
   try {
     const comments = await Comment.find({ drinkId: req.params.drinkId })
-      .populate("user", "username") 
+      .populate("user", "username imageThumb")
       .sort({ createdAt: -1 }); // Newest first
     res.json(comments);
   } catch (err) {
@@ -20,12 +20,17 @@ router.post("/", verifyToken, async (req, res) => {
   try {
     const newComment = new Comment({
       drinkId: req.body.drinkId,
+      imageThumb: req.user.imageThumb,
       user: req.userId,
-      text: req.body.text
+      text: req.body.text,
     });
-    const savedComment = await newComment.save();
 
-    const populatedComment = await savedComment.populate("user", "username");
+    const savedComment = await newComment.save();
+    const populatedComment = await savedComment.populate(
+      "user",
+      "username imageThumb",
+    );
+
     res.status(201).json(populatedComment);
   } catch (err) {
     res.status(400).json({ error: err.message });

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState, useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./App.css";
 import { AuthContext } from "./context/AuthContext";
 import logo from "./assets/logo.svg";
@@ -36,7 +36,6 @@ function Home() {
   const { token } = useContext(AuthContext);
   const { login } = useContext(AuthContext);
   const [inputs, setInputs] = useState({});
-  const navigate = useNavigate();
 
   // -------------------------------------------------------------------------
   // --------------------------- Functions -----------------------------------
@@ -106,10 +105,6 @@ function Home() {
   function DrinkCard({ drink }) {
     const statusColor =
       drink.alcoholicStatus === "Non alcoholic" ? "#2e7d32" : "#A12F0D";
-
-    const imageUrl = drink.strDrinkThumb?.includes("thecocktaildb")
-      ? `/api/proxy/image?url=${encodeURIComponent(drink.strDrinkThumb)}`
-      : drink.strDrinkThumb;
 
     return (
       <div className="drink-card">
