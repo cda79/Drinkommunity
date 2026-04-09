@@ -7,7 +7,7 @@ import placeholder from "./assets/drink-placeholder.png";
 
 function Dashboard() {
   const [drinks, setDrinks] = useState([]);
-  const { token, logout } = useContext(AuthContext);
+  const { token } = useContext(AuthContext);
   const { user } = useContext(AuthContext);
   const [otherDrinks, setOtherDrinks] = useState([]);
   let username = "Guest";
@@ -148,14 +148,11 @@ function Dashboard() {
             <h2>
               <strong>{username}'s</strong> Dashboard
             </h2>
-            <button
-              onClick={logout}
-              className="button"
-              id="logout-button"
-              style={styles.logoutBtn}
-            >
-              Logout
-            </button>
+          </div>
+          <div className="dashboard-stats-wrapper">
+            <p>amount of drinks</p>
+            <hr className="plain-line" />
+            <p>amount of drinks</p>
           </div>
         </header>
       </div>
@@ -250,6 +247,15 @@ function Dashboard() {
                   </p>
                   <p>{drink.strAlcoholic || "N/A"}</p>
                   {/* Read-only: no deleting others' drinks!!!!!!!! */}
+                </div>
+                <div className="view-details-container">
+                  <Link
+                    className="details-link"
+                    to="/details"
+                    state={{ drinkData: drink }}
+                  >
+                    View <div>Details</div>
+                  </Link>
                 </div>
               </div>
             ))}
