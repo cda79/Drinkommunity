@@ -214,7 +214,7 @@ function DrinkDetails() {
               <strong>{drinkDetails.strCategory}</strong>
             </small>
             <p>
-              <strong>Tags:</strong> * WORK IN PROGRESS *
+              <strong>Tags:</strong> {drinkDetails.strTags}
             </p>
 
             <h3>Ingredients</h3>
