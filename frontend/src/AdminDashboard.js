@@ -196,8 +196,7 @@ function AdminDashboard() {
             {drinks.length === 0 && (
               <div style={styles.emptyMessage}>
                 <p>
-                  The cocktail library is currently empty. Add a cocktail using
-                  the form on the left!
+                  The cocktail library is currently empty.
                 </p>
               </div>
             )}
