@@ -20,19 +20,19 @@ router.get("/", async (req, res) => {
 // adds an owner using the ID extracted
 // from the JWT token.
 
-// Generate a unique ID based on date and random string
-const timestamp = Date.now();
-const randomSuffix = Math.random().toString(36).substring(2, 8);
-const generatedId = `user-${timestamp}-${randomSuffix}`;
-
 router.post("/", verifyToken, async (req, res) => {
   try {
+    // Generate a unique ID based on date and random string
+    const timestamp = Date.now();
+    const randomSuffix = Math.random().toString(36).substring(2, 8);
+    const generatedId = `user-${timestamp}-${randomSuffix}`;
+
     // explicitly mapping incoming request body to the schema
     const drink = new Drink({
       // the 'owner' must always come from the trusted decoded JWT, never the body
       owner: req.userId,
       // generate unique drink ID if not provided
-      idDrink: req.body.idDrink || generatedId,
+      idDrink: generatedId,
       // Unique fields
       strDrink: req.body.strDrink,
       strTags: req.body.strTags,

@@ -105,7 +105,7 @@ function Create() {
     });
 
     const filledTags = Object.values(tags).filter((t) => t.trim() !== "");
-    finalSubmissionData.strTags = filledTags.join(",");
+    finalSubmissionData.strTags = filledTags.join(", ");
 
     try {
       const res = await fetch("http://localhost:5000/api/drinks", {
