@@ -66,9 +66,6 @@ Here is the clean, structured markdown text representation of the Drinkommunity 
 * `nickname` (String)
 
 
-* `__v` (Int)
-
-
 * *Relationship:* Maintains a 1-to-many relationship with the **Drinks** collection through the `owner` foreign key.
 
 
@@ -110,9 +107,6 @@ Here is the clean, structured markdown text representation of the Drinkommunity 
 * `strMeasure1` through `strMeasure15` (String)
 
 
-* `__v` (Int)
-
-
 * *Relationship:* Maintains a 1-to-many relationship with the **Comments** collection through the `drinkid` field.
 
 
@@ -139,9 +133,6 @@ Here is the clean, structured markdown text representation of the Drinkommunity 
 * `updatedAt` (Date)
 
 
-* `__v` (Int)
-
----
 ---
 
 ## API Endpoints Summary
