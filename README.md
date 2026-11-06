@@ -1,7 +1,7 @@
 # Drinkommunity
-(IAT459 final project)
+> (IAT459 final project)
 
-> A full-stack web application for cocktail enthusiasts and mixologists to explore, customize, and share drink recipes.
+A full-stack web application for cocktail enthusiasts and mixologists to explore, customize, and share drink recipes.
 
 ---
 
